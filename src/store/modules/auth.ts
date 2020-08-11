@@ -12,17 +12,17 @@ const module: Module<State, any> = {
   },
 
   getters: {
-    loggedIn(state): boolean {
+    loggedIn(state: State): boolean {
       return !!state.user;
     },
-    user(state) {
+    user(state: State): any {
       return state.user;
     },
   },
 
   actions: {
     async login(
-      { commit, dispatch, state, getters },
+      { commit, dispatch, getters },
       logInDetails: LogInDetails
     ): Promise<any> {
       // If user already logged in only validate user.
@@ -45,11 +45,11 @@ const module: Module<State, any> = {
       return Promise.resolve();
     },
 
-    logOut({ commit }) {
+    logOut({ commit }): void {
       commit("SET_USER", null);
     },
 
-    async validate({ commit, state }) {
+    async validate({ commit, state }): Promise<any> {
       const token = getSavedState("auth.token");
       commit("SET_TOKEN", token);
 
@@ -64,11 +64,11 @@ const module: Module<State, any> = {
   },
 
   mutations: {
-    SET_USER(state, user) {
+    SET_USER(state: State, user: any): void {
       state.user = user;
       saveState("auth.user", user);
     },
-    SET_TOKEN(state, token: string) {
+    SET_TOKEN(state: State, token: string): void {
       saveState("auth.token", token);
       setDefaultAuthHeaders(token);
     },
