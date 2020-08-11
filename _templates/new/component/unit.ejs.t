@@ -1,7 +1,12 @@
 ---
-to: "tests/unit/<%= h.changeCase.camel(name) %>.spec.ts"
+to: "tests/unit/<%= h.changeCase.kebab(name).toLowerCase().slice(0, 5) === 'base-' ? '_' : '' %><%= h.changeCase.camel(name) %>.spec.ts"
 ---
-import <%= h.changeCase.pascal(name) %> from "@/components/<%= name %>.vue";
+<%
+  let fileName = name
+  if (h.changeCase.kebab(name).toLowerCase().slice(0, 5) === 'base-') {
+    fileName = '_' + fileName
+  }
+%>import <%= name %> from "@/components/<%= fileName %>.vue";
 
 describe("@components/<%= name %>.vue", () => {
   it("exports a valid component", () => {

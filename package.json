@@ -20,6 +20,8 @@
   },
   "main": "background.js",
   "dependencies": {
+    "axios": "^0.19.2",
+    "axios-auth-refresh": "^2.2.8",
     "core-js": "^3.6.5",
     "tailwindcss": "^1.6.2",
     "vue": "^3.0.0-0",

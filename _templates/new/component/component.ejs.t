@@ -1,5 +1,5 @@
 ---
-to: "src/components/<%= name %>.vue"
+to: "src/components/<%= h.changeCase.kebab(name).toLowerCase().slice(0, 5) === 'base-' ? '_' : '' %><%= name %>.vue"
 ---
 <template>
   <div />
@@ -12,4 +12,3 @@ export default defineComponent({
   name: "<%= name %>",
 });
 </script>
-}

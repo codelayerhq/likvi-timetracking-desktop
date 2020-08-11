@@ -12,4 +12,3 @@ export default defineComponent({
   name: "<%= name %>",
 });
 </script>
-}
