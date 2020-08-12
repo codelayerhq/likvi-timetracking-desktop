@@ -13,7 +13,7 @@ const refreshAuthLogic = (failedRequest: AxiosError) =>
       },
     } = tokenRefreshResponse;
 
-    localStorage.setItem("auth.token", token);
+    window.localStorage.setItem("auth.token", JSON.stringify(token));
 
     if (failedRequest.response) {
       failedRequest.response.config.headers["Authorization"] =
