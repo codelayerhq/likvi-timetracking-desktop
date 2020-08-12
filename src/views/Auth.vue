@@ -65,24 +65,33 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { mapActions } from "vuex";
+import { defineComponent, ref } from "vue";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Auth",
-  data() {
-    return {
-      email: null,
-      password: null,
-    };
-  },
-  methods: {
-    ...mapActions("auth", ["login"]),
-    async handleLogin() {
-      await this.login({ email: this.email, password: this.password });
+  setup() {
+    const email = ref(null);
+    const password = ref(null);
 
-      this.$router.push({ name: "home" });
-    },
+    const store = useStore();
+    const router = useRouter();
+
+    async function handleLogin() {
+      await store.dispatch("auth/login", {
+        email: email.value,
+        password: password.value,
+      });
+
+      router.push({ name: "home" });
+    }
+
+    return {
+      email,
+      password,
+      handleLogin,
+    };
   },
 });
 </script>
