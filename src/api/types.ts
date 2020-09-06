@@ -217,17 +217,17 @@ export interface Project {
 export interface TimeEntry {
   readonly id: number;
   readonly team_id: number;
-  customer_id: number;
+  customer_id: number | null;
   readonly user_id: number;
-  project_id: number;
-  invoice_id: number;
+  project_id: number | null;
+  invoice_id: number | null;
   description: string;
   billable: boolean;
   billed: boolean;
   started_at: DateObject;
-  stopped_at: DateObject;
+  stopped_at: DateObject | null;
   readonly duration: number;
-  created_at: DateObject;
-  updated_at: DateObject;
-  deleted_at: DateObject;
+  created_at: DateObject | null;
+  updated_at: DateObject | null;
+  deleted_at: DateObject | null;
 }

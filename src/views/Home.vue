@@ -1,17 +1,29 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen min-w-screen">
-    Logged in
+  <div
+    class="grid max-h-screen min-h-screen grid-cols-1 bg-gray-100 grid-rows-layout min-w-screen"
+  >
+    <default-header />
+    <time-entry-list class="h-full max-h-full overflow-y-scroll" />
+    <action-bar />
   </div>
+
+  <selected-time-entry-modal />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { mapGetters } from "vuex";
+import DefaultHeader from "@/components/DefaultHeader.vue";
+import TimeEntryList from "@/components/TimeEntryList.vue";
+import ActionBar from "@/components/ActionBar.vue";
+import SelectedTimeEntryModal from "@/components/SelectedTimeEntryModal.vue";
 
 export default defineComponent({
   name: "Home",
-  computed: {
-    ...mapGetters("auth", ["user"]),
+  components: {
+    DefaultHeader,
+    TimeEntryList,
+    ActionBar,
+    SelectedTimeEntryModal,
   },
 });
 </script>
