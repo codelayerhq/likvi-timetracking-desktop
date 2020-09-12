@@ -19,7 +19,11 @@
     </template>
 
     <div class="flex flex-col justify-between h-full">
-      <form v-if="hasSelectedTimeEntry">
+      <form
+        v-if="hasSelectedTimeEntry"
+        id="selected-time-entry-form"
+        @submit.prevent="handleSave"
+      >
         <h2 class="mb-6 font-semibold text-gray-800">Details</h2>
 
         <base-input
@@ -59,40 +63,42 @@
           ]"
         />
 
-        <div class="flex mb-4 -mx-2">
-          <base-input
-            v-model="formData.startedAt"
-            type="datetime-local"
-            name="startedAt"
-            label="Started at"
-            placeholder="Started at"
-            class="w-1/2 px-2"
-          />
+        <base-input
+          v-model="formData.startedAt"
+          type="datetime-local"
+          name="startedAt"
+          label="Started at"
+          placeholder="Started at"
+          class="mb-4"
+          :max="startedAtMax"
+          required
+        />
 
-          <base-input
-            v-model="formData.stoppedAt"
-            type="datetime-local"
-            name="StoppedAt"
-            label="Stopped at"
-            placeholder="Stopped at"
-            class="w-1/2 px-2"
-          />
-        </div>
+        <base-input
+          v-model="formData.stoppedAt"
+          type="datetime-local"
+          name="StoppedAt"
+          label="Stopped at"
+          placeholder="Stopped at"
+        />
       </form>
 
       <footer>
-        <base-button>Save</base-button>
+        <base-button type="submit" form="selected-time-entry-form">
+          Save
+        </base-button>
       </footer>
     </div>
   </base-modal>
 </template>
 
 <script lang="ts">
-import { defineComponent, watch, ref, reactive } from "vue";
+import { defineComponent, watch, ref, reactive, computed } from "vue";
 import useSelectedTimeEntry from "@/composables/useSelectedTimeEntry";
 import { TimeEntry } from "@/api/types";
-import { format, parse } from "date-fns";
+import { format, parse, subMinutes } from "date-fns";
 import _BaseModalVue from "./_BaseModal.vue";
+import store from "@/store";
 
 interface InitialFormData {
   description: string | null;
@@ -138,19 +144,56 @@ export default defineComponent({
           ? toDateTimeInputString(timeEntry.stopped_at.date)
           : null;
     }
+
+    const startedAtMax = computed(() =>
+      formData.stoppedAt
+        ? format(
+            subMinutes(
+              parse(formData.stoppedAt, "yyyy-MM-dd'T'HH:mm", new Date()),
+              1
+            ),
+            "yyyy-MM-dd'T'HH:mm"
+          )
+        : null
+    );
+
     function handleCloseClick() {
       setSelectedTimeEntry(null);
+    }
+
+    async function handleSave() {
+      const data = {
+        description: formData.description,
+        project_id: formData.projectId,
+        customer_id: formData.customerId,
+        billable: formData.billable,
+        started_at: formData.startedAt
+          ? format(
+              parse(formData.startedAt, "yyyy-MM-dd'T'HH:mm", new Date()),
+              "yyyy-MM-dd HH:mm:ss"
+            )
+          : null,
+        stopped_at: formData.stoppedAt
+          ? format(
+              parse(formData.stoppedAt, "yyyy-MM-dd'T'HH:mm", new Date()),
+              "yyyy-MM-dd HH:mm:ss"
+            )
+          : null,
+      };
+
+      await store.dispatch("updateSelectedTimeEntry", data);
+      store.dispatch("fetchTimeEntries");
     }
 
     function toDateTimeInputString(date: string): string {
       return format(
         parse(date, "yyyy-MM-dd HH:mm:ss", new Date()),
-        "yyyy-MM-dd'T'HH:mm:ss"
+        "yyyy-MM-dd'T'HH:mm"
       );
     }
 
     watch(hasSelectedTimeEntry, function (hasSelectedTimeEntry) {
-      if (hasSelectedTimeEntry) {
+      if (hasSelectedTimeEntry && modal.value.getOpenState() !== true) {
         modal.value.open();
         hydrateForm(selectedTimeEntry.value);
       } else {
@@ -164,6 +207,8 @@ export default defineComponent({
       selectedTimeEntry,
       hasSelectedTimeEntry,
       formData,
+      handleSave,
+      startedAtMax,
     };
   },
 });

@@ -25,6 +25,10 @@ export default defineComponent({
       "bg-black",
     ];
 
+    function getOpenState() {
+      return dialog.value.open;
+    }
+
     function open() {
       dialog.value.showModal();
       applyAppElementTransform();
@@ -51,6 +55,7 @@ export default defineComponent({
       dialog,
       open,
       close,
+      getOpenState,
     };
   },
 });

@@ -12,6 +12,7 @@
           class="form-radio"
           :name="name"
           :value="option.value"
+          :checked="modelValue === option.value"
           @input="handleInput"
         />
         <span class="ml-2">{{ option.label }}</span>

@@ -89,6 +89,17 @@ export default createStore<RootState>({
 
       return commit("SET_ACTIVE_TIME_ENTRY", timeEntry);
     },
+    async updateSelectedTimeEntry({ commit, state }, data: unknown) {
+      if (state.selectedTimeEntry === null) {
+        return;
+      }
+
+      const timeEntry = await new TimeEntriesService()
+        .include(...DEFAULT_INCLUDES)
+        .update(state.selectedTimeEntry.id, data);
+
+      return commit("SET_SELECTED_TIME_ENTRY", timeEntry);
+    },
   },
   mutations: {
     SET_START_DATE(state, date: Date) {
