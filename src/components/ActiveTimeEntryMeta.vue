@@ -6,14 +6,13 @@
     <span class="block mb-1 text-sm font-semibold text-white">
       {{ description }}
     </span>
-    <project-indicator :project="dummyProject" />
+    <project-indicator :project="project" />
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import ProjectIndicator from "@/components/ProjectIndicator.vue";
-import { dummyProject } from "@/api/dummy-data";
 import { TimeEntry } from "@/api/types";
 import useTimeEntryData from "@/composables/useTimeEntryData";
 
@@ -30,13 +29,14 @@ export default defineComponent({
   },
   setup(props) {
     const activeTimeEntry = computed(() => props.activeTimeEntry);
+    const project = computed(() => activeTimeEntry.value?.project?.data);
 
     const { durationHumanReadable, description } = useTimeEntryData(
       activeTimeEntry
     );
 
     return {
-      dummyProject,
+      project,
       durationHumanReadable,
       description,
     };

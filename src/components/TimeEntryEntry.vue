@@ -8,7 +8,7 @@
       <span class="block text-xs font-bold text-gray-900">
         {{ description }}
       </span>
-      <project-indicator :project="dummyProject" />
+      <project-indicator :project="project" />
     </div>
 
     <span class="block text-sm text-gray-600">
@@ -22,7 +22,6 @@ import { defineComponent, PropType, computed } from "vue";
 import { TimeEntry } from "@/api/types";
 import { secondsToHours } from "@/utils/format";
 import ProjectIndicator from "@/components/ProjectIndicator.vue";
-import { dummyProject } from "@/api/dummy-data";
 import useSelectedTimeEntry from "@/composables/useSelectedTimeEntry";
 
 export default defineComponent({
@@ -39,6 +38,7 @@ export default defineComponent({
   setup(props) {
     const duration = computed(() => secondsToHours(props.timeEntry.duration));
     const description = computed(() => props.timeEntry.description);
+    const project = computed(() => props.timeEntry?.project?.data);
     const { setSelectedTimeEntry } = useSelectedTimeEntry();
 
     function handleTimeEntryEntryClick() {
@@ -48,8 +48,8 @@ export default defineComponent({
     return {
       duration,
       description,
-      dummyProject,
       handleTimeEntryEntryClick,
+      project,
     };
   },
 });

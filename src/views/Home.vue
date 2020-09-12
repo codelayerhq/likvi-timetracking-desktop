@@ -16,6 +16,7 @@ import DefaultHeader from "@/components/DefaultHeader.vue";
 import TimeEntryList from "@/components/TimeEntryList.vue";
 import ActionBar from "@/components/ActionBar.vue";
 import SelectedTimeEntryModal from "@/components/SelectedTimeEntryModal.vue";
+import { useStore } from "vuex";
 
 export default defineComponent({
   name: "Home",
@@ -24,6 +25,12 @@ export default defineComponent({
     TimeEntryList,
     ActionBar,
     SelectedTimeEntryModal,
+  },
+  setup() {
+    const store = useStore();
+
+    store.dispatch("fetchActiveTimeEntry");
+    store.dispatch("fetchTimeEntries");
   },
 });
 </script>

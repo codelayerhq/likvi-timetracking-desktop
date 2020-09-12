@@ -15,7 +15,7 @@ interface ReturnObject {
 export default function useTimeEntryData(
   timeEntry: Ref<TimeEntry>
 ): ReturnObject {
-  const { date: now } = useCurrentDate();
+  const now = useCurrentDate();
 
   const startedAtDate = computed(
     (): Date => parseISO(timeEntry.value.started_at.date)

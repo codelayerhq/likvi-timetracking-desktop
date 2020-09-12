@@ -2,7 +2,7 @@
   <base-modal
     ref="modal"
     class="bottom-0 w-full px-8 py-6"
-    style="height: 95vh;"
+    style="height: 95vh"
   >
     <template #header>
       <header class="absolute top-0 right-0 mt-4 mr-4">
@@ -91,7 +91,8 @@
 import { defineComponent, watch, ref, reactive } from "vue";
 import useSelectedTimeEntry from "@/composables/useSelectedTimeEntry";
 import { TimeEntry } from "@/api/types";
-import { parseISO, format } from "date-fns";
+import { format, parse } from "date-fns";
+import _BaseModalVue from "./_BaseModal.vue";
 
 interface InitialFormData {
   description: string | null;
@@ -105,7 +106,7 @@ interface InitialFormData {
 export default defineComponent({
   name: "SelectedTimeEntryModal",
   setup() {
-    const modal = ref(null);
+    const modal = ref(_BaseModalVue);
     const {
       selectedTimeEntry,
       hasSelectedTimeEntry,
@@ -142,7 +143,10 @@ export default defineComponent({
     }
 
     function toDateTimeInputString(date: string): string {
-      return format(parseISO(date), "yyyy-MM-dd'T'hh:mm:ss");
+      return format(
+        parse(date, "yyyy-MM-dd HH:mm:ss", new Date()),
+        "yyyy-MM-dd'T'HH:mm:ss"
+      );
     }
 
     watch(hasSelectedTimeEntry, function (hasSelectedTimeEntry) {

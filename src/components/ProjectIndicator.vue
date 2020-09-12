@@ -22,13 +22,14 @@ export default defineComponent({
   name: "ProjectIndicator",
   props: {
     project: {
-      type: Object as PropType<Project>,
-      required: true,
+      type: Object as PropType<Project | undefined>,
+      required: false,
+      default: undefined,
     },
   },
   setup(props) {
-    const name = computed(() => props.project.name);
-    const color = computed(() => props.project.color_hex);
+    const name = computed(() => props?.project?.name || "No Project");
+    const color = computed(() => props?.project?.color_hex || "#676767");
 
     return {
       name,

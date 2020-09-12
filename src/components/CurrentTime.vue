@@ -9,7 +9,7 @@ import useCurrentDate from "@/composables/useCurrentDate";
 export default defineComponent({
   name: "CurrentTime",
   setup() {
-    const { date } = useCurrentDate();
+    const date = useCurrentDate();
     const humanReadable = computed(() => date.value.toLocaleTimeString());
 
     return {

@@ -1,7 +1,5 @@
 <template>
-  <label for="newTimeEntry" class="sr-only">
-    What are you working on?
-  </label>
+  <label for="newTimeEntry" class="sr-only">What are you working on?</label>
   <input
     list="recentTimeEntries"
     name="newTimeEntry"

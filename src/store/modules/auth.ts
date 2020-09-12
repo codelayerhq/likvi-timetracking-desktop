@@ -4,11 +4,13 @@ import axios from "@/api/axios";
 
 interface State {
   user: any;
+  currentTeamId: number;
 }
 
 const module: Module<State, any> = {
   state: {
     user: getSavedState("auth.user"),
+    currentTeamId: getSavedState("auth.currentTeamId"),
   },
 
   getters: {
@@ -17,6 +19,9 @@ const module: Module<State, any> = {
     },
     user(state: State): any {
       return state.user;
+    },
+    currentTeamId(state: State): number {
+      return state.currentTeamId;
     },
   },
 
@@ -41,6 +46,7 @@ const module: Module<State, any> = {
 
       commit("SET_USER", user);
       commit("SET_TOKEN", token);
+      commit("SET_CURRENT_TEAM_ID", user.current_team_id);
 
       return Promise.resolve();
     },
@@ -71,6 +77,10 @@ const module: Module<State, any> = {
     SET_TOKEN(state: State, token: string): void {
       saveState("auth.token", token);
       setDefaultAuthHeaders(token);
+    },
+    SET_CURRENT_TEAM_ID(state: State, currentTeamId: number): void {
+      saveState("auth.currentTeamId", currentTeamId);
+      state.currentTeamId = currentTeamId;
     },
   },
 

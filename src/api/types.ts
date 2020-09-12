@@ -230,4 +230,11 @@ export interface TimeEntry {
   created_at: DateObject | null;
   updated_at: DateObject | null;
   deleted_at: DateObject | null;
+  project?: ApiResponse<Project>;
+  user?: ApiResponse<User>;
+  customer?: ApiResponse<Person> | ApiResponse<Company>;
+}
+
+export interface ApiResponse<T> {
+  data: T;
 }

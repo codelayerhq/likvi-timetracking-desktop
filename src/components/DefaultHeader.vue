@@ -77,6 +77,7 @@ export default defineComponent({
       const newEndDate = subWeeks(endDate.value, 1);
       store.dispatch("setStartDate", newStartDate);
       store.dispatch("setEndDate", newEndDate);
+      store.dispatch("fetchTimeEntries");
     };
 
     const handleNextWeek = () => {
@@ -84,6 +85,7 @@ export default defineComponent({
       const newEndDate = addWeeks(endDate.value, 1);
       store.dispatch("setStartDate", newStartDate);
       store.dispatch("setEndDate", newEndDate);
+      store.dispatch("fetchTimeEntries");
     };
 
     return {

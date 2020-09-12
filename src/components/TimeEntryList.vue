@@ -11,7 +11,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import TimeEntryEntry from "@/components/TimeEntryEntry.vue";
-import { dummyTimeEntry } from "@/api/dummy-data";
+import useSortedTimeEntries from "@/composables/useSortedTimeEntries";
 
 export default defineComponent({
   name: "TimeEntryList",
@@ -19,17 +19,10 @@ export default defineComponent({
     TimeEntryEntry,
   },
   setup() {
+    const timeEntries = useSortedTimeEntries();
+
     return {
-      timeEntries: [
-        dummyTimeEntry,
-        dummyTimeEntry,
-        dummyTimeEntry,
-        dummyTimeEntry,
-        dummyTimeEntry,
-        dummyTimeEntry,
-        dummyTimeEntry,
-        dummyTimeEntry,
-      ],
+      timeEntries,
     };
   },
 });
