@@ -99,6 +99,8 @@ import { TimeEntry } from "@/api/types";
 import { format, parse, subMinutes } from "date-fns";
 import _BaseModalVue from "./_BaseModal.vue";
 import store from "@/store";
+import { DateTimeStr, toDateTimeStr } from "@/utils/dateTimeStr";
+import { ActionTypes } from "@/store/actions";
 
 interface InitialFormData {
   description: string | null;
@@ -130,19 +132,21 @@ export default defineComponent({
 
     const formData = reactive(initialFormData);
 
-    function hydrateForm(timeEntry: TimeEntry) {
-      formData.description = timeEntry.description;
-      formData.projectId = timeEntry.project_id;
-      formData.customerId = timeEntry.customer_id;
-      formData.billable = timeEntry.billable;
-      formData.startedAt =
-        timeEntry.started_at !== null
-          ? toDateTimeInputString(timeEntry.started_at.date)
-          : null;
-      formData.stoppedAt =
-        timeEntry.stopped_at !== null
-          ? toDateTimeInputString(timeEntry.stopped_at.date)
-          : null;
+    function hydrateForm(timeEntry: TimeEntry | null) {
+      if (timeEntry !== null) {
+        formData.description = timeEntry.description;
+        formData.projectId = timeEntry.project_id;
+        formData.customerId = timeEntry.customer_id;
+        formData.billable = timeEntry.billable;
+        formData.startedAt =
+          timeEntry.started_at !== null
+            ? toDateTimeInputString(timeEntry.started_at.date)
+            : null;
+        formData.stoppedAt =
+          timeEntry.stopped_at !== null
+            ? toDateTimeInputString(timeEntry.stopped_at.date)
+            : null;
+      }
     }
 
     const startedAtMax = computed(() =>
@@ -168,25 +172,23 @@ export default defineComponent({
         customer_id: formData.customerId,
         billable: formData.billable,
         started_at: formData.startedAt
-          ? format(
-              parse(formData.startedAt, "yyyy-MM-dd'T'HH:mm", new Date()),
-              "yyyy-MM-dd HH:mm:ss"
+          ? toDateTimeStr(
+              parse(formData.startedAt, "yyyy-MM-dd'T'HH:mm", new Date())
             )
           : null,
         stopped_at: formData.stoppedAt
-          ? format(
-              parse(formData.stoppedAt, "yyyy-MM-dd'T'HH:mm", new Date()),
-              "yyyy-MM-dd HH:mm:ss"
+          ? toDateTimeStr(
+              parse(formData.stoppedAt, "yyyy-MM-dd'T'HH:mm", new Date())
             )
           : null,
       };
 
-      await store.dispatch("updateSelectedTimeEntry", data);
-      store.dispatch("fetchTimeEntries");
-      store.dispatch("fetchStatistics");
+      await store.dispatch(ActionTypes.UPDATE_SELECTED_TIME_ENTRY, data);
+      store.dispatch(ActionTypes.FETCH_TIME_ENTRIES);
+      store.dispatch(ActionTypes.FETCH_STATISTICS);
     }
 
-    function toDateTimeInputString(date: string): string {
+    function toDateTimeInputString(date: DateTimeStr): string {
       return format(
         parse(date, "yyyy-MM-dd HH:mm:ss", new Date()),
         "yyyy-MM-dd'T'HH:mm"

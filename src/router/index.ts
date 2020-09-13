@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import store from "@/store";
 import Home from "@/views/Home.vue";
 import Auth from "@/views/Auth.vue";
+import { ActionTypes } from "@/store/actions";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -38,7 +39,7 @@ router.beforeEach((routeTo, routeFrom, next) => {
   // If auth is required and the user is logged in...
   if (store.getters["auth/loggedIn"]) {
     // Validate the local user token...
-    return store.dispatch("auth/validate").then((validUser) => {
+    return store.dispatch(`auth/${ActionTypes.VALIDATE}`).then((validUser) => {
       // Then continue if the token still represents a valid user,
       // otherwise redirect to login.
       validUser ? next() : redirectToLogin();

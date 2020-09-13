@@ -68,6 +68,7 @@
 import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { RootState } from "@/store";
 
 export default defineComponent({
   name: "Auth",
@@ -75,7 +76,7 @@ export default defineComponent({
     const email = ref(null);
     const password = ref(null);
 
-    const store = useStore();
+    const store = useStore<RootState>();
     const router = useRouter();
 
     async function handleLogin() {

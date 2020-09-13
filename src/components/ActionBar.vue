@@ -17,6 +17,8 @@ import StartStopButton from "@/components/StartStopButton.vue";
 import ActiveTimeEntryMeta from "@/components/ActiveTimeEntryMeta.vue";
 import { useStore } from "vuex";
 import NewTimeEntryInput from "@/components/NewTimeEntryInput.vue";
+import { ActionTypes } from "@/store/actions";
+import { RootState } from "@/store";
 
 export default defineComponent({
   name: "ActionBar",
@@ -26,7 +28,7 @@ export default defineComponent({
     NewTimeEntryInput,
   },
   setup() {
-    const store = useStore();
+    const store = useStore<RootState>();
 
     const description = ref("");
 
@@ -35,9 +37,9 @@ export default defineComponent({
 
     function handleStartStop(): void {
       if (isRunning.value) {
-        store.dispatch("stopActiveTimeEntry", null);
+        store.dispatch(ActionTypes.STOP_ACTIVE_TIME_ENTRY, null);
       } else {
-        store.dispatch("startNewTimeEntry", description.value);
+        store.dispatch(ActionTypes.START_NEW_TIME_ENTRY, description.value);
       }
     }
 

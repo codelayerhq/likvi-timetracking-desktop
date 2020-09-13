@@ -17,6 +17,8 @@ import TimeEntryList from "@/components/TimeEntryList.vue";
 import ActionBar from "@/components/ActionBar.vue";
 import SelectedTimeEntryModal from "@/components/SelectedTimeEntryModal.vue";
 import { useStore } from "vuex";
+import { ActionTypes } from "@/store/actions";
+import { RootState } from "@/store";
 
 export default defineComponent({
   name: "Home",
@@ -27,11 +29,11 @@ export default defineComponent({
     SelectedTimeEntryModal,
   },
   setup() {
-    const store = useStore();
+    const store = useStore<RootState>();
 
-    store.dispatch("fetchActiveTimeEntry");
-    store.dispatch("fetchTimeEntries");
-    store.dispatch("fetchStatistics");
+    store.dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
+    store.dispatch(ActionTypes.FETCH_TIME_ENTRIES);
+    store.dispatch(ActionTypes.FETCH_STATISTICS);
   },
 });
 </script>

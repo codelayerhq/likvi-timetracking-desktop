@@ -1,5 +1,7 @@
+import { DateTimeStr } from "@/utils/dateTimeStr";
+
 export interface DateObject {
-  date: string;
+  date: DateTimeStr;
   timezone_type: number;
   timezone: string;
 }
@@ -33,6 +35,9 @@ export interface Team {
   readonly created_at: DateObject;
   readonly updated_at: DateObject;
   readonly role_id: number;
+  readonly owner?: ApiResponse<User>;
+  readonly settings?: ApiResponse<TeamSetting>;
+  readonly members?: ApiResponse<User[]>;
 }
 
 export interface TeamSetting {
@@ -59,7 +64,7 @@ export interface TeamSetting {
   default_quote_deadline: number;
   readonly pdf_template_upload_url: string;
   readonly pdf_template_set: boolean;
-  pdf_settings: object;
+  pdf_settings: Record<string, unknown>;
   reset_invoice_numbers: number;
   reset_quote_numbers: number;
   current_accounts_payable_number: string;
@@ -189,6 +194,10 @@ export interface Person {
   deleted_at: DateObject;
 }
 
+interface Customer extends Company, Person {
+  type: "company" | "person";
+}
+
 export enum ProjectType {
   TIME_AND_MATERIALS = "time_and_materials",
   FIXED_FEE = "fixed_fee",
@@ -212,6 +221,7 @@ export interface Project {
   created_at: DateObject;
   updated_at: DateObject;
   deleted_at: DateObject;
+  readonly customer?: ApiResponse<Customer>;
 }
 
 export interface TimeEntry {
@@ -230,9 +240,9 @@ export interface TimeEntry {
   created_at: DateObject | null;
   updated_at: DateObject | null;
   deleted_at: DateObject | null;
-  project?: ApiResponse<Project>;
-  user?: ApiResponse<User>;
-  customer?: ApiResponse<Person> | ApiResponse<Company>;
+  readonly project?: ApiResponse<Project>;
+  readonly user?: ApiResponse<User>;
+  readonly customer?: ApiResponse<Customer>;
 }
 
 export interface Statistic {

@@ -11,6 +11,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import { secondsToHours } from "@/utils/format";
 import { useStore } from "vuex";
 import { Statistic } from "@/api/types";
+import { RootState } from "@/store";
 
 /*
  * From https://github.com/jedtrow/Chart.js-Rounded-Bar-Charts
@@ -170,7 +171,7 @@ export default defineComponent({
     },
   },
   setup() {
-    const store = useStore();
+    const store = useStore<RootState>();
     const timeEntriesStatistic = computed(
       () => store.getters.timeEntriesStatistic
     );

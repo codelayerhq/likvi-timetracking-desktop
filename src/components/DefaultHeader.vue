@@ -58,6 +58,8 @@ import CurrentTime from "./CurrentTime.vue";
 import TimeSpan from "@/components/TimeSpan.vue";
 import { useStore } from "vuex";
 import { subWeeks, addWeeks } from "date-fns";
+import { ActionTypes } from "@/store/actions";
+import { RootState } from "@/store";
 
 export default defineComponent({
   name: "DefaultHeader",
@@ -67,7 +69,7 @@ export default defineComponent({
     TimeSpan,
   },
   setup() {
-    const store = useStore();
+    const store = useStore<RootState>();
 
     const startDate = computed(() => store.state.startDate);
     const endDate = computed(() => store.state.endDate);
@@ -85,10 +87,10 @@ export default defineComponent({
     };
 
     function fetchData(newStartDate: Date, newEndDate: Date) {
-      store.dispatch("setStartDate", newStartDate);
-      store.dispatch("setEndDate", newEndDate);
-      store.dispatch("fetchTimeEntries");
-      store.dispatch("fetchStatistics");
+      store.dispatch(ActionTypes.SET_START_DATE, newStartDate);
+      store.dispatch(ActionTypes.SET_END_DATE, newEndDate);
+      store.dispatch(ActionTypes.FETCH_TIME_ENTRIES);
+      store.dispatch(ActionTypes.FETCH_STATISTICS);
     }
 
     return {
