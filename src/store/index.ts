@@ -112,8 +112,8 @@ const actions: ActionTree<RootState, RootState> & Actions = {
     } = await new TimeEntriesService()
       .include(...DEFAULT_INCLUDES)
       .filter([
-        ["started_at", ">", toDateStr(startOfDay(state.startDate))],
-        ["started_at", "<", toDateStr(endOfDay(state.endDate))],
+        ["started_at", ">=", toDateStr(startOfDay(state.startDate))],
+        ["started_at", "<=", toDateStr(endOfDay(state.endDate))],
         ["running", "=", "false"],
       ])
       .list();
