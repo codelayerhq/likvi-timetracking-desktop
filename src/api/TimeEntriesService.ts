@@ -1,13 +1,13 @@
 import ApiService from "./ApiService";
 import { AxiosPromise } from "axios";
 
-const BASE_URL = "/time-entries";
+const BASE_URL = "time-entries";
 
 export default class TimeEntriesService extends ApiService {
   constructor() {
     super();
 
-    this.baseUrl = `teams/${this.currentTeamId.value}/time-entries`;
+    this.baseUrl = `teams/${this.currentTeamId.value}/${BASE_URL}`;
   }
 
   /**

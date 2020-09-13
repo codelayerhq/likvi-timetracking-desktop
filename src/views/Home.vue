@@ -31,6 +31,7 @@ export default defineComponent({
 
     store.dispatch("fetchActiveTimeEntry");
     store.dispatch("fetchTimeEntries");
+    store.dispatch("fetchStatistics");
   },
 });
 </script>

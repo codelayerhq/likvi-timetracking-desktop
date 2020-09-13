@@ -1,8 +1,9 @@
 import { createStore } from "vuex";
 import auth from "./modules/auth";
 import { startOfWeek, endOfWeek, format, startOfDay, endOfDay } from "date-fns";
-import { TimeEntry } from "@/api/types";
+import { Statistic, TimeEntry } from "@/api/types";
 import TimeEntriesService from "@/api/TimeEntriesService";
+import StatisticsService from "@/api/StatisticsService";
 
 const DEFAULT_INCLUDES = ["project", "user", "customer"];
 
@@ -12,6 +13,7 @@ export interface RootState {
   activeTimeEntry: TimeEntry | null;
   selectedTimeEntry: TimeEntry | null;
   timeEntries: TimeEntry[];
+  statistics: Statistic[];
 }
 
 export default createStore<RootState>({
@@ -21,6 +23,13 @@ export default createStore<RootState>({
     activeTimeEntry: null,
     selectedTimeEntry: null,
     timeEntries: [],
+    statistics: [],
+  },
+  getters: {
+    timeEntriesStatistic: (state) =>
+      state.statistics.find((statistic) => statistic.name === "time_entries"),
+    projectSecondsStatistic: (state) =>
+      state.statistics.find((statistic) => statistic.name === "time_entries"),
   },
   actions: {
     setStartDate({ commit }, date: Date) {
@@ -100,6 +109,32 @@ export default createStore<RootState>({
 
       return commit("SET_SELECTED_TIME_ENTRY", timeEntry);
     },
+    async fetchStatistics({ commit, state }) {
+      const {
+        data: { data: statistics },
+      } = await new StatisticsService().list({
+        statistics: [
+          {
+            name: "time_entries",
+            options: {
+              unit: "day",
+              start_date: format(state.startDate, "yyyy-MM-dd"),
+              end_date: format(state.endDate, "yyyy-MM-dd"),
+            },
+          },
+          {
+            name: "project_seconds",
+            options: {
+              unit: "day",
+              start_date: format(state.startDate, "yyyy-MM-dd"),
+              end_date: format(state.endDate, "yyyy-MM-dd"),
+            },
+          },
+        ],
+      });
+
+      commit("SET_STATISTICS", statistics);
+    },
   },
   mutations: {
     SET_START_DATE(state, date: Date) {
@@ -116,6 +151,9 @@ export default createStore<RootState>({
     },
     SET_TIME_ENTRIES(state, timeEntries: TimeEntry[]) {
       state.timeEntries = timeEntries;
+    },
+    SET_STATISTICS(state, statistics: Statistic[]) {
+      state.statistics = statistics;
     },
   },
   modules: {

@@ -183,6 +183,7 @@ export default defineComponent({
 
       await store.dispatch("updateSelectedTimeEntry", data);
       store.dispatch("fetchTimeEntries");
+      store.dispatch("fetchStatistics");
     }
 
     function toDateTimeInputString(date: string): string {

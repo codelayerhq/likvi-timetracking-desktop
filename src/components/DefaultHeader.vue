@@ -75,18 +75,21 @@ export default defineComponent({
     const handlePreviousWeek = () => {
       const newStartDate = subWeeks(startDate.value, 1);
       const newEndDate = subWeeks(endDate.value, 1);
-      store.dispatch("setStartDate", newStartDate);
-      store.dispatch("setEndDate", newEndDate);
-      store.dispatch("fetchTimeEntries");
+      fetchData(newStartDate, newEndDate);
     };
 
     const handleNextWeek = () => {
       const newStartDate = addWeeks(startDate.value, 1);
       const newEndDate = addWeeks(endDate.value, 1);
+      fetchData(newStartDate, newEndDate);
+    };
+
+    function fetchData(newStartDate: Date, newEndDate: Date) {
       store.dispatch("setStartDate", newStartDate);
       store.dispatch("setEndDate", newEndDate);
       store.dispatch("fetchTimeEntries");
-    };
+      store.dispatch("fetchStatistics");
+    }
 
     return {
       startDate,

@@ -235,6 +235,14 @@ export interface TimeEntry {
   customer?: ApiResponse<Person> | ApiResponse<Company>;
 }
 
+export interface Statistic {
+  name: string;
+  options: {
+    [key: string]: string;
+  };
+  value: unknown;
+}
+
 export interface ApiResponse<T> {
   data: T;
 }
