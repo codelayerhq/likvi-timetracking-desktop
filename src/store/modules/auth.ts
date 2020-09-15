@@ -51,7 +51,7 @@ const actions: ActionTree<State, RootState> & Actions = {
   ): Promise<unknown> {
     // If user already logged in only validate user.
     if (getters.loggedIn) {
-      dispatch(`auth/${ActionTypes.VALIDATE}`);
+      dispatch(ActionTypes.VALIDATE);
     }
 
     const {
