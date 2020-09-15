@@ -5,24 +5,24 @@ const instance = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL,
 });
 
-const refreshAuthLogic = (failedRequest: AxiosError) =>
-  instance.post("/refresh-token").then((tokenRefreshResponse) => {
-    const {
-      data: {
-        data: { token },
-      },
-    } = tokenRefreshResponse;
+const refreshAuthLogic = async (failedRequest: AxiosError) => {
+  const {
+    data: {
+      data: { token },
+    },
+  } = await instance.post("/refresh-token");
 
-    window.localStorage.setItem("auth.token", JSON.stringify(token));
+  window.localStorage.setItem("auth.token", JSON.stringify(token));
 
-    if (failedRequest.response) {
-      failedRequest.response.config.headers["Authorization"] =
-        "Bearer " + token;
-    }
+  if (failedRequest.response) {
+    failedRequest.response.config.headers["Authorization"] = "Bearer " + token;
+  }
 
-    return Promise.resolve();
-  });
+  return;
+};
 
-createAuthRefreshInterceptor(instance, refreshAuthLogic);
+createAuthRefreshInterceptor(instance, refreshAuthLogic, {
+  pauseInstanceWhileRefreshing: true,
+});
 
 export default instance;
