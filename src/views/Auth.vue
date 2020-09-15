@@ -69,6 +69,7 @@ import { defineComponent, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { RootState } from "@/store";
+import { ActionTypes } from "@/store/actions";
 
 export default defineComponent({
   name: "Auth",
@@ -80,7 +81,7 @@ export default defineComponent({
     const router = useRouter();
 
     async function handleLogin() {
-      await store.dispatch("auth/login", {
+      await store.dispatch(`auth/${ActionTypes.LOGIN}`, {
         email: email.value,
         password: password.value,
       });
