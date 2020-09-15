@@ -24,6 +24,7 @@ export interface RootState {
   selectedTimeEntry: TimeEntry | null;
   timeEntries: TimeEntry[];
   statistics: Statistic[];
+  systemIdleTime: number;
 }
 
 interface Mutations<S = RootState> {
@@ -39,6 +40,7 @@ interface Mutations<S = RootState> {
   ): void;
   [MutationTypes.SET_TIME_ENTRIES](state: S, timeEntries: TimeEntry[]): void;
   [MutationTypes.SET_STATISTICS](state: S, statistics: Statistic[]): void;
+  [MutationTypes.SET_SYSTEM_IDLE_TIME](state: S, idleSeconds: number): void;
 }
 
 interface Actions<S = RootState, R = RootState> {
@@ -82,6 +84,10 @@ interface Actions<S = RootState, R = RootState> {
     commit,
     state,
   }: AugmentedActionContext<S, R>): void;
+  [ActionTypes.SET_SYSTEM_IDLE_TIME](
+    { commit }: AugmentedActionContext<S, R>,
+    idleSeconds: number
+  ): void;
 }
 
 const state: RootState = {
@@ -91,6 +97,7 @@ const state: RootState = {
   selectedTimeEntry: null,
   timeEntries: [],
   statistics: [],
+  systemIdleTime: 0,
 };
 
 const actions: ActionTree<RootState, RootState> & Actions = {
@@ -196,6 +203,10 @@ const actions: ActionTree<RootState, RootState> & Actions = {
 
     commit(MutationTypes.SET_STATISTICS, statistics);
   },
+
+  [ActionTypes.SET_SYSTEM_IDLE_TIME]({ commit }, idleSeconds) {
+    commit(MutationTypes.SET_SYSTEM_IDLE_TIME, idleSeconds);
+  },
 };
 
 const mutations: MutationTree<RootState> & Mutations = {
@@ -222,6 +233,9 @@ const mutations: MutationTree<RootState> & Mutations = {
   },
   [MutationTypes.SET_STATISTICS](state: RootState, statistics: Statistic[]) {
     state.statistics = statistics;
+  },
+  [MutationTypes.SET_SYSTEM_IDLE_TIME](state: RootState, idleSeconds: number) {
+    state.systemIdleTime = idleSeconds;
   },
 };
 

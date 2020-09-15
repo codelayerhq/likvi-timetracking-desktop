@@ -7,6 +7,9 @@
       <div class="text-sm leading-tight text-gray-700">
         <time-span :start-date="startDate" :end-date="endDate" />
       </div>
+      <div class="text-sm leading-tight text-gray-700">
+        Idle Seconds: {{ idleSeconds }}
+      </div>
     </div>
 
     <div class="flex justify-between align-center">
@@ -73,6 +76,7 @@ export default defineComponent({
 
     const startDate = computed(() => store.state.startDate);
     const endDate = computed(() => store.state.endDate);
+    const idleSeconds = computed(() => store.state.systemIdleTime);
 
     const handlePreviousWeek = () => {
       const newStartDate = subWeeks(startDate.value, 1);
@@ -98,6 +102,7 @@ export default defineComponent({
       endDate,
       handlePreviousWeek,
       handleNextWeek,
+      idleSeconds,
     };
   },
 });

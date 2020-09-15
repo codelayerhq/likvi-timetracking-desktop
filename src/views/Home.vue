@@ -19,6 +19,7 @@ import SelectedTimeEntryModal from "@/components/SelectedTimeEntryModal.vue";
 import { useStore } from "vuex";
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
+import { IpcRenderer } from "electron";
 
 export default defineComponent({
   name: "Home",
@@ -34,6 +35,17 @@ export default defineComponent({
     store.dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
     store.dispatch(ActionTypes.FETCH_TIME_ENTRIES);
     store.dispatch(ActionTypes.FETCH_STATISTICS);
+
+    // @ts-ignore
+    const ipcRenderer = window.ipcRenderer as IpcRenderer;
+
+    setInterval(() => {
+      ipcRenderer.send("getIdle");
+    }, 1000);
+
+    ipcRenderer.on("getIdleResponse", (_, idleSeconds: number) => {
+      store.dispatch(ActionTypes.SET_SYSTEM_IDLE_TIME, idleSeconds);
+    });
   },
 });
 </script>
