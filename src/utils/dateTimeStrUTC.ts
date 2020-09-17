@@ -3,20 +3,18 @@
  * From https://spin.atomicobject.com/2017/06/19/strongly-typed-date-string-typescript/
  */
 
-import { format } from "date-fns";
-
 enum DateStrBrand {}
 
-export type DateTimeStr = string & DateStrBrand;
+export type DateTimeStrUTC = string & DateStrBrand;
 
-function checkValidDateStr(str: string): str is DateTimeStr {
+function checkValidDateStr(str: string): str is DateTimeStrUTC {
   return (
     str.match(/^\d{4}-\d{2}-\d{2} ([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/) !==
     null
   );
 }
 
-export function toDateTimeStr(date: Date | string): DateTimeStr {
+export function toDateTimeStrUTC(date: Date | string): DateTimeStrUTC {
   if (typeof date === "string") {
     if (checkValidDateStr(date)) {
       return date;
@@ -24,7 +22,8 @@ export function toDateTimeStr(date: Date | string): DateTimeStr {
       throw new Error(`Invalid date time string: ${date}`);
     }
   } else {
-    const dateString = format(date, "yyyy-MM-dd HH:mm:ss");
+    const isoDate = date.toISOString();
+    const dateString = `${isoDate.substr(0, 10)} ${isoDate.substr(11, 8)}`;
     if (checkValidDateStr(dateString)) {
       return dateString;
     }

@@ -6,7 +6,7 @@ import { secondsToHours } from "@/utils/format";
 
 interface ReturnObject {
   startedAtDate: ComputedRef<Date>;
-  stoppedAtDate: ComputedRef<Date>;
+  stoppedAtDate: ComputedRef<Date | null>;
   durationInSec: ComputedRef<number>;
   durationHumanReadable: ComputedRef<string>;
   description: ComputedRef<string>;
@@ -18,15 +18,20 @@ export default function useTimeEntryData(
   const now = useCurrentDate();
 
   const startedAtDate = computed(
-    (): Date => parseISO(timeEntry.value.started_at.date)
+    // Append "Z" to interpret as UTC date
+    (): Date => parseISO(timeEntry.value.started_at.date + "Z")
   );
   const stoppedAtDate = computed(
-    (): Date => {
-      return parseISO(timeEntry.value.started_at.date);
-    }
+    // Append "Z" to interpret as UTC date
+    (): Date | null =>
+      timeEntry.value.stopped_at
+        ? parseISO(timeEntry.value.stopped_at.date + "Z")
+        : null
   );
   const durationInSec = computed((): number => {
-    const end = timeEntry.value.stopped_at === null ? now : stoppedAtDate;
+    const end = (stoppedAtDate.value !== null ? stoppedAtDate : now) as Ref<
+      Date
+    >;
     return differenceInSeconds(end.value, startedAtDate.value);
   });
   const durationHumanReadable = computed((): string =>

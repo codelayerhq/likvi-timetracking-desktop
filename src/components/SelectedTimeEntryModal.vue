@@ -99,8 +99,9 @@ import { TimeEntry } from "@/api/types";
 import { format, parse, subMinutes } from "date-fns";
 import _BaseModalVue from "./_BaseModal.vue";
 import store from "@/store";
-import { DateTimeStr, toDateTimeStr } from "@/utils/dateTimeStr";
+import { DateTimeStrUTC, toDateTimeStrUTC } from "@/utils/dateTimeStrUTC";
 import { ActionTypes } from "@/store/actions";
+import { parseISO } from "date-fns/esm/fp";
 
 interface InitialFormData {
   description: string | null;
@@ -140,11 +141,15 @@ export default defineComponent({
         formData.billable = timeEntry.billable;
         formData.startedAt =
           timeEntry.started_at !== null
-            ? toDateTimeInputString(timeEntry.started_at.date)
+            ? //@ts-ignore Because of the strictly typed time string we can not append without the compiler warning us
+              //Append "Z" to interpret as UTC
+              toDateTimeInputString(timeEntry.started_at.date + "Z")
             : null;
         formData.stoppedAt =
           timeEntry.stopped_at !== null
-            ? toDateTimeInputString(timeEntry.stopped_at.date)
+            ? //@ts-ignore Because of the strictly typed time string we can not append without the compiler warning us
+              //Append "Z" to interpret as UTC
+              toDateTimeInputString(timeEntry.stopped_at.date + "Z")
             : null;
       }
     }
@@ -172,12 +177,12 @@ export default defineComponent({
         customer_id: formData.customerId,
         billable: formData.billable,
         started_at: formData.startedAt
-          ? toDateTimeStr(
+          ? toDateTimeStrUTC(
               parse(formData.startedAt, "yyyy-MM-dd'T'HH:mm", new Date())
             )
           : null,
         stopped_at: formData.stoppedAt
-          ? toDateTimeStr(
+          ? toDateTimeStrUTC(
               parse(formData.stoppedAt, "yyyy-MM-dd'T'HH:mm", new Date())
             )
           : null,
@@ -188,11 +193,8 @@ export default defineComponent({
       store.dispatch(ActionTypes.FETCH_STATISTICS);
     }
 
-    function toDateTimeInputString(date: DateTimeStr): string {
-      return format(
-        parse(date, "yyyy-MM-dd HH:mm:ss", new Date()),
-        "yyyy-MM-dd'T'HH:mm"
-      );
+    function toDateTimeInputString(date: DateTimeStrUTC): string {
+      return format(parseISO(date), "yyyy-MM-dd'T'HH:mm");
     }
 
     watch(hasSelectedTimeEntry, function (hasSelectedTimeEntry) {

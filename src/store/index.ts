@@ -1,12 +1,13 @@
 import { ActionContext, ActionTree, createStore, MutationTree } from "vuex";
 import auth from "./modules/auth";
-import { startOfWeek, endOfWeek, format, startOfDay, endOfDay } from "date-fns";
+import { startOfWeek, endOfWeek, startOfDay, endOfDay } from "date-fns";
 import { Statistic, TimeEntry } from "@/api/types";
 import TimeEntriesService from "@/api/TimeEntriesService";
 import StatisticsService from "@/api/StatisticsService";
 import { toDateStr } from "@/utils/dateStr";
 import { MutationTypes } from "./mutation-types";
 import { ActionTypes } from "./actions";
+import { toDateTimeStrUTC } from "@/utils/dateTimeStrUTC";
 
 const DEFAULT_INCLUDES = ["project", "user", "customer"];
 
@@ -143,7 +144,7 @@ const actions: ActionTree<RootState, RootState> & Actions = {
       const id = state.activeTimeEntry.id;
 
       await new TimeEntriesService().include(...DEFAULT_INCLUDES).update(id, {
-        stopped_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+        stopped_at: toDateTimeStrUTC(new Date()),
       });
 
       commit(MutationTypes.SET_ACTIVE_TIME_ENTRY, null);
@@ -156,7 +157,7 @@ const actions: ActionTree<RootState, RootState> & Actions = {
       data: { data: timeEntry },
     } = await new TimeEntriesService().include(...DEFAULT_INCLUDES).create({
       description,
-      started_at: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+      started_at: toDateTimeStrUTC(new Date()),
     });
 
     return commit(MutationTypes.SET_ACTIVE_TIME_ENTRY, timeEntry);

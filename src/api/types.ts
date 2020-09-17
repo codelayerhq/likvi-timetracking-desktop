@@ -1,7 +1,7 @@
-import { DateTimeStr } from "@/utils/dateTimeStr";
+import { DateTimeStrUTC } from "@/utils/dateTimeStrUTC";
 
 export interface DateObject {
-  date: DateTimeStr;
+  date: DateTimeStrUTC;
   timezone_type: number;
   timezone: string;
 }

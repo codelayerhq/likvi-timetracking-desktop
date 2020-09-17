@@ -10,7 +10,6 @@ import Chart, { ChartConfiguration } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { secondsToHours } from "@/utils/format";
 import { useStore } from "vuex";
-import { Statistic } from "@/api/types";
 import { RootState } from "@/store";
 
 /*
