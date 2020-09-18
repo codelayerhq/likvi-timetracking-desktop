@@ -8,6 +8,7 @@ import { toDateStr } from "@/utils/dateStr";
 import { MutationTypes } from "./mutation-types";
 import { ActionTypes } from "./actions";
 import { toDateTimeStrUTC } from "@/utils/dateTimeStrUTC";
+import { timeEntryToPayload } from "@/utils/timeEntryToPayload";
 
 const DEFAULT_INCLUDES = ["project", "user", "customer"];
 
@@ -88,6 +89,10 @@ interface Actions<S = RootState, R = RootState> {
   [ActionTypes.SET_SYSTEM_IDLE_TIME](
     { commit }: AugmentedActionContext<S, R>,
     idleSeconds: number
+  ): void;
+  [ActionTypes.RESUME_TIME_ENTRY](
+    { state, dispatch }: AugmentedActionContext<S, R>,
+    timeEntry: TimeEntry
   ): void;
 }
 
@@ -204,9 +209,19 @@ const actions: ActionTree<RootState, RootState> & Actions = {
 
     commit(MutationTypes.SET_STATISTICS, statistics);
   },
-
   [ActionTypes.SET_SYSTEM_IDLE_TIME]({ commit }, idleSeconds) {
     commit(MutationTypes.SET_SYSTEM_IDLE_TIME, idleSeconds);
+  },
+  async [ActionTypes.RESUME_TIME_ENTRY]({ state, dispatch }, timeEntry) {
+    if (state.activeTimeEntry) {
+      await dispatch(ActionTypes.STOP_ACTIVE_TIME_ENTRY);
+    }
+
+    const payload = timeEntryToPayload(timeEntry);
+
+    await new TimeEntriesService().include(...DEFAULT_INCLUDES).create(payload);
+
+    return dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
   },
 };
 
