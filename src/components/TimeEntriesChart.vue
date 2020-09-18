@@ -238,6 +238,7 @@ export default defineComponent({
                 },
               ],
             },
+            onClick: handleChartClick,
           },
           data: {
             labels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
@@ -262,6 +263,13 @@ export default defineComponent({
 
         chart = new Chart(ctx, config);
       }
+    }
+
+    function handleChartClick(event: MouseEvent, activeElements: {}[]) {
+      const mousePoint = Chart.helpers.getRelativePosition(event, chart);
+
+      //@ts-ignore
+      const barIndex = chart.scales["x-axis-0"].getValueForPixel(mousePoint.x);
     }
 
     onMounted(initalizeChart);
