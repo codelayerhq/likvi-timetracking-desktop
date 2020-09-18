@@ -1,6 +1,5 @@
 import type { ActionContext, ActionTree, Module, MutationTree } from "vuex";
 import { LogInDetails, login, validate } from "@/api/AuthService";
-import axios from "@/api/axios";
 import { User } from "@/api/types";
 import { RootState } from "..";
 import { MutationTypes } from "../mutation-types";
@@ -98,7 +97,6 @@ const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.SET_TOKEN](state: State, token: string): void {
     saveState("auth.token", token);
-    setDefaultAuthHeaders(token);
   },
   [MutationTypes.SET_CURRENT_TEAM_ID](
     state: State,
@@ -138,10 +136,6 @@ function getSavedState(key: string) {
 
 function saveState(key: string, state: unknown) {
   window.localStorage.setItem(key, JSON.stringify(state));
-}
-
-function setDefaultAuthHeaders(token: string) {
-  axios.defaults.headers.common.Authorization = "Bearer " + token;
 }
 
 export default module;
