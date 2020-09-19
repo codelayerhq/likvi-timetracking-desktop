@@ -1,5 +1,5 @@
 <template>
-  <header class="px-8 py-6 bg-gray-200">
+  <header class="px-8 py-6 bg-gray-100">
     <div class="mb-8">
       <div class="text-sm font-bold leading-tight text-gray-800">
         <current-time />

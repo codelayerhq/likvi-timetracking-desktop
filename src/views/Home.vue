@@ -3,7 +3,9 @@
     class="grid max-h-screen min-h-screen grid-cols-1 bg-gray-100 grid-rows-layout min-w-screen"
   >
     <default-header />
-    <time-entry-list class="h-full max-h-full overflow-y-scroll" />
+    <time-entry-list
+      class="h-full max-h-full px-4 pb-4 overflow-y-scroll bg-gray-200"
+    />
     <action-bar />
   </div>
 
