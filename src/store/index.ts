@@ -120,18 +120,30 @@ const actions: ActionTree<RootState, RootState> & Actions = {
     commit(MutationTypes.SET_SELECTED_TIME_ENTRY, timeEntry);
   },
   async [ActionTypes.FETCH_TIME_ENTRIES]({ commit, state }) {
-    const {
-      data: { data: timeEntries },
-    } = await new TimeEntriesService()
-      .include(...DEFAULT_INCLUDES)
-      .filter([
-        ["started_at", ">=", toDateStr(startOfDay(state.startDate))],
-        ["started_at", "<=", toDateStr(endOfDay(state.endDate))],
-        ["running", "=", "false"],
-      ])
-      .list();
+    let page = 1;
+    let totalPages = 1;
+    let timeEntriesResult: TimeEntry[] = [];
 
-    commit(MutationTypes.SET_TIME_ENTRIES, timeEntries);
+    do {
+      const {
+        data: { data: timeEntries, meta },
+      } = await new TimeEntriesService()
+        .page(page)
+        .include(...DEFAULT_INCLUDES)
+        .filter([
+          ["started_at", ">=", toDateStr(startOfDay(state.startDate))],
+          ["started_at", "<=", toDateStr(endOfDay(state.endDate))],
+          ["running", "=", "false"],
+        ])
+        .list();
+
+      totalPages = meta.pagination.total_pages;
+      page = meta.pagination.current_page + 1;
+
+      timeEntriesResult = timeEntriesResult.concat(timeEntries);
+    } while (page <= totalPages);
+
+    commit(MutationTypes.SET_TIME_ENTRIES, timeEntriesResult);
   },
   async [ActionTypes.FETCH_ACTIVE_TIME_ENTRY]({ commit }) {
     try {
