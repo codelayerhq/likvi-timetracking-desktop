@@ -1,5 +1,11 @@
 import ApiService from "./ApiService";
 import { AxiosPromise } from "axios";
+import {
+  CollectionResponse,
+  ItemResponse,
+  TimeEntry,
+  TimeEntryPayload,
+} from "./types";
 
 const BASE_URL = "time-entries";
 
@@ -13,35 +19,38 @@ export default class TimeEntriesService extends ApiService {
   /**
    * Get a list of all time entries for the current company
    */
-  list(): AxiosPromise {
+  list(): AxiosPromise<CollectionResponse<TimeEntry>> {
     return this.call("get", this.baseUrl);
   }
 
   /**
    * Show the specified time entries
    */
-  get(...id: number[]): AxiosPromise {
+  get(...id: number[]): AxiosPromise<ItemResponse<TimeEntry>> {
     return this.call("get", `${this.baseUrl}/${this.parseAndJoin(id)}`);
   }
 
   /**
    * Create a new time entry
    */
-  create(data: unknown): AxiosPromise {
+  create(data: TimeEntryPayload): AxiosPromise<ItemResponse<TimeEntry>> {
     return this.call("post", this.baseUrl, data);
   }
 
   /**
    * Update an existing time entry
    */
-  update(timeEntryId: number, data: unknown): AxiosPromise {
+  update(
+    timeEntryId: number,
+    data: TimeEntryPayload
+  ): AxiosPromise<ItemResponse<TimeEntry>> {
     return this.call("patch", `${this.baseUrl}/${timeEntryId}`, data);
   }
 
   /**
    * Delete the specified time entries
    */
-  destroy(...timeEntryId: number[]): AxiosPromise {
+  destroy(...timeEntryId: number[]): AxiosPromise<ItemResponse<TimeEntry>> {
     return this.call(
       "delete",
       `${this.baseUrl}/${this.parseAndJoin(timeEntryId)}`
@@ -51,7 +60,7 @@ export default class TimeEntriesService extends ApiService {
   /**
    * Search for time entries
    */
-  search(query: string): AxiosPromise {
+  search(query: string): AxiosPromise<ItemResponse<TimeEntry>> {
     this.params.q = query;
 
     return this.call("get", `${this.baseUrl}/search`);
@@ -60,7 +69,7 @@ export default class TimeEntriesService extends ApiService {
   /**
    * Suggest time entries
    */
-  suggest(query: string): AxiosPromise {
+  suggest(query: string): AxiosPromise<ItemResponse<TimeEntry>> {
     this.params.q = query;
 
     return this.call("get", `${this.baseUrl}/suggest`);
@@ -69,7 +78,7 @@ export default class TimeEntriesService extends ApiService {
   /**
    * Get the active time entry of the current user
    */
-  active(): AxiosPromise {
+  active(): AxiosPromise<ItemResponse<TimeEntry>> {
     return this.call("get", `${this.baseUrl}/active`);
   }
 }

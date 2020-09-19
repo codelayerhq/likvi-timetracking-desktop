@@ -12,8 +12,13 @@ export interface User {
   first_name: string;
   last_name: string;
   email: string;
-  readonly current_team_id: number;
-  readonly avatar_url: string;
+  readonly current_team_id?: number;
+  readonly avatar_url?: string;
+  readonly current_team?: DataResponse<unknown>;
+  readonly teams?: DataResponse<unknown>;
+  readonly invites?: DataResponse<unknown>;
+  readonly settings?: DataResponse<unknown>;
+  readonly notification_settings?: DataResponse<unknown>;
 }
 
 export interface Team {
@@ -35,9 +40,12 @@ export interface Team {
   readonly created_at: DateObject;
   readonly updated_at: DateObject;
   readonly role_id: number;
-  readonly owner?: ApiResponse<User>;
-  readonly settings?: ApiResponse<TeamSetting>;
-  readonly members?: ApiResponse<User[]>;
+  readonly members?: DataResponse<User[]>;
+  readonly invites?: DataResponse<unknown>;
+  readonly open_invites?: DataResponse<unknown>;
+  readonly settings?: DataResponse<TeamSetting>;
+  readonly owner?: DataResponse<User>;
+  readonly subscription?: DataResponse<unknown>;
 }
 
 export interface TeamSetting {
@@ -70,6 +78,14 @@ export interface TeamSetting {
   current_accounts_payable_number: string;
   current_accounts_receivable_number: string;
   wants_monthly_repost: boolean;
+  readonly default_email_address?: DataResponse<unknown>;
+  readonly email_addresses?: DataResponse<unknown>;
+  readonly default_address?: DataResponse<unknown>;
+  readonly addresses?: DataResponse<unknown>;
+  readonly default_phone_number?: DataResponse<unknown>;
+  readonly phone_numbers?: DataResponse<unknown>;
+  readonly default_bank_details?: DataResponse<unknown>;
+  readonly bank_details?: DataResponse<unknown>;
 }
 
 export interface Address {
@@ -163,6 +179,21 @@ export interface Company {
   created_at: DateObject;
   updated_at: DateObject;
   deleted_at: DateObject;
+  readonly persons?: DataResponse<Person[]>;
+  readonly default_email_address?: DataResponse<EmailAddress | null>;
+  readonly email_addresses?: DataResponse<EmailAddress[]>;
+  readonly default_address?: DataResponse<Address | null>;
+  readonly addresses?: DataResponse<Address[]>;
+  readonly default_phone_number?: DataResponse<PhoneNumber | null>;
+  readonly phone_numbers?: DataResponse<PhoneNumber[]>;
+  readonly notes?: DataResponse<unknown>;
+  readonly statistics?: DataResponse<unknown>;
+  readonly recurring_invoices?: DataResponse<unknown>;
+  readonly user?: DataResponse<User | null>;
+  readonly invoices?: DataResponse<unknown>;
+  readonly expenses?: DataResponse<unknown>;
+  readonly bank_details?: DataResponse<BankDetails[]>;
+  readonly default_bank_details?: DataResponse<BankDetails | null>;
 }
 
 export interface Person {
@@ -192,6 +223,22 @@ export interface Person {
   created_at: DateObject;
   updated_at: DateObject;
   deleted_at: DateObject;
+  readonly company?: DataResponse<Company | null>;
+  readonly persons?: DataResponse<Person[]>;
+  readonly default_email_address?: DataResponse<EmailAddress | null>;
+  readonly email_addresses?: DataResponse<EmailAddress[]>;
+  readonly default_address?: DataResponse<Address | null>;
+  readonly addresses?: DataResponse<Address[]>;
+  readonly default_phone_number?: DataResponse<PhoneNumber | null>;
+  readonly phone_numbers?: DataResponse<PhoneNumber[]>;
+  readonly notes?: DataResponse<unknown>;
+  readonly statistics?: DataResponse<unknown>;
+  readonly recurring_invoices?: DataResponse<unknown>;
+  readonly user?: DataResponse<User | null>;
+  readonly invoices?: DataResponse<unknown>;
+  readonly expenses?: DataResponse<unknown>;
+  readonly bank_details?: DataResponse<BankDetails[]>;
+  readonly default_bank_details?: DataResponse<BankDetails | null>;
 }
 
 interface Customer extends Company, Person {
@@ -221,7 +268,11 @@ export interface Project {
   created_at: DateObject;
   updated_at: DateObject;
   deleted_at: DateObject;
-  readonly customer?: ApiResponse<Customer>;
+  readonly customer?: DataResponse<Customer>;
+  readonly invoices?: DataResponse<unknown>;
+  readonly quotes?: DataResponse<unknown>;
+  readonly statistics?: DataResponse<unknown>;
+  readonly expenses?: DataResponse<unknown>;
 }
 
 export interface TimeEntry {
@@ -240,9 +291,21 @@ export interface TimeEntry {
   created_at: DateObject | null;
   updated_at: DateObject | null;
   deleted_at: DateObject | null;
-  readonly project?: ApiResponse<Project>;
-  readonly user?: ApiResponse<User>;
-  readonly customer?: ApiResponse<Customer>;
+  readonly customer?: DataResponse<Customer>;
+  readonly project?: DataResponse<Project>;
+  readonly invoice?: DataResponse<unknown>;
+  readonly user?: DataResponse<User>;
+}
+
+export interface TimeEntryPayload {
+  customer_id?: number | null;
+  project_id?: number | null;
+  invoice_id?: number | null;
+  description?: string | null;
+  billable?: boolean;
+  billed?: boolean;
+  started_at?: DateTimeStrUTC;
+  stopped_at?: DateTimeStrUTC | null;
 }
 
 export interface Statistic {
@@ -253,6 +316,36 @@ export interface Statistic {
   value: unknown;
 }
 
-export interface ApiResponse<T> {
+export interface LoginResponse {
+  token: string;
+  readonly user: DataResponse<User>;
+}
+
+interface DataResponse<T> {
+  data: T;
+}
+
+interface PaginationLinks {
+  previous: string;
+  next: string;
+}
+
+export interface Pagination {
+  total: number;
+  count: number;
+  per_page: number;
+  current_page: number;
+  total_pages: number;
+  links: PaginationLinks | [];
+}
+
+export interface CollectionResponse<T> {
+  data: T;
+  meta: {
+    pagination: Pagination;
+  };
+}
+
+export interface ItemResponse<T> {
   data: T;
 }

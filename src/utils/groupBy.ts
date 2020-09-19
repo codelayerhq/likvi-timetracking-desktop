@@ -8,21 +8,21 @@
 export function groupBy<T>(
   arr: Array<T>,
   criteria: string | ((item: T) => string)
-) {
+): { [key: string]: Array<T> } {
   return arr.reduce(function (obj: { [key: string]: Array<T> }, item: T) {
     // Check if the criteria is a function to run on the item or a property of it
     const key =
       typeof criteria === "function"
         ? criteria(item)
-        : item[criteria as keyof object];
+        : item[criteria as keyof T];
 
     // If the key doesn't exist yet, create it
-    if (!obj.hasOwnProperty(key)) {
-      obj[key] = [];
+    if (!Object.prototype.hasOwnProperty.call(obj, key as string)) {
+      obj[key as string] = [];
     }
 
     // Push the value to the object
-    obj[key].push(item);
+    obj[key as string].push(item);
 
     // Return the object to the next item in the loop
     return obj;

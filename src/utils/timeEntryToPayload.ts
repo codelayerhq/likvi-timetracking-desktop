@@ -1,7 +1,7 @@
-import { TimeEntry } from "@/api/types";
+import { TimeEntry, TimeEntryPayload } from "@/api/types";
 import { toDateTimeStrUTC } from "./dateTimeStrUTC";
 
-export function timeEntryToPayload(timeEntry: TimeEntry): unknown {
+export function timeEntryToPayload(timeEntry: TimeEntry): TimeEntryPayload {
   return {
     customer_id: timeEntry.customer_id,
     project_id: timeEntry.project_id,

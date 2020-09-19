@@ -1,7 +1,7 @@
 import { ActionContext, ActionTree, createStore, MutationTree } from "vuex";
 import auth from "./modules/auth";
 import { startOfWeek, endOfWeek, startOfDay, endOfDay } from "date-fns";
-import { Statistic, TimeEntry } from "@/api/types";
+import { Statistic, TimeEntry, TimeEntryPayload } from "@/api/types";
 import TimeEntriesService from "@/api/TimeEntriesService";
 import StatisticsService from "@/api/StatisticsService";
 import { toDateStr } from "@/utils/dateStr";
@@ -181,7 +181,7 @@ const actions: ActionTree<RootState, RootState> & Actions = {
   },
   async [ActionTypes.UPDATE_SELECTED_TIME_ENTRY](
     { commit, state },
-    data: unknown
+    data: TimeEntryPayload
   ) {
     if (state.selectedTimeEntry === null) {
       return;

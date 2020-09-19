@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, watch } from "vue";
+import { computed, defineComponent } from "vue";
 import TimeEntryEntry from "@/components/TimeEntryEntry.vue";
 import GroupedTimeEntryEntry from "@/components/GroupedTimeEntryEntry.vue";
 import useSortedTimeEntries from "@/composables/useSortedTimeEntries";
