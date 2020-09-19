@@ -4,7 +4,7 @@
       <h2 class="px-2 py-2 text-xs font-bold text-gray-700">{{ day }}</h2>
       <section
         v-for="(timeEntries, description) in groupedTimeEntries"
-        :key="`${day}_${description}_${timeEntries.length}`"
+        :key="`${day}_${description}`"
         class="overflow-hidden rounded-md"
       >
         <grouped-time-entry-entry
