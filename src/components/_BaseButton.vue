@@ -28,6 +28,7 @@ export default defineComponent({
   },
   setup(props) {
     const state = reactive({
+      // Todo: Colors not used elewhere will be purged by PurgeCSS
       buttonClasses: computed(() => [
         `hover:bg-${
           props.color === "brand" ? "brand-light" : props.color.concat("-500")
