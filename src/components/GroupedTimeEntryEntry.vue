@@ -16,6 +16,7 @@
         <span class="block text-xs font-bold text-gray-900">
           {{ description }}
         </span>
+        <project-indicator :project="project" />
       </div>
 
       <span class="block text-sm text-gray-600">
@@ -70,11 +71,13 @@ import { secondsToHours } from "@/utils/format";
 import { useStore } from "vuex";
 import { RootState } from "@/store";
 import { ActionTypes } from "@/store/actions";
+import ProjectIndicator from "@/components/ProjectIndicator.vue";
 
 export default defineComponent({
   name: "GroupedTimeEntryEntry",
   components: {
     TimeEntryEntry,
+    ProjectIndicator,
   },
   props: {
     timeEntries: {
@@ -90,6 +93,8 @@ export default defineComponent({
     const description = computed(
       () => referenceTimeEntry.value?.description ?? ""
     );
+
+    const project = computed(() => referenceTimeEntry.value.project?.data);
 
     const summedDuration = computed(() =>
       secondsToHours(
@@ -113,6 +118,7 @@ export default defineComponent({
 
     return {
       description,
+      project,
       summedDuration,
       visible,
       handleShowDetailsClick,
