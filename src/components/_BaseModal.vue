@@ -30,7 +30,8 @@ export default defineComponent({
     }
 
     function open() {
-      dialog.value.showModal();
+      // Todo: dialog.value.showModal(); breaks the autocomplete component
+      dialog.value.show();
       applyAppElementTransform();
     }
 

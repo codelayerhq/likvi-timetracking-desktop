@@ -34,14 +34,7 @@
           class="mb-4"
         />
 
-        <base-select
-          v-model="formData.projectId"
-          name="project"
-          label="Project"
-          placeholder="Project"
-          class="mb-4"
-          :options="[{ label: 'foo', value: 'bar' }]"
-        />
+        <project-select v-model="formData.project" class="mb-4" />
 
         <base-select
           v-model="formData.customerId"
@@ -95,13 +88,14 @@
 <script lang="ts">
 import { defineComponent, watch, ref, reactive, computed } from "vue";
 import useSelectedTimeEntry from "@/composables/useSelectedTimeEntry";
-import { TimeEntry } from "@/api/types";
+import { Project, TimeEntry } from "@/api/types";
 import { format, parse, subMinutes } from "date-fns";
 import _BaseModalVue from "./_BaseModal.vue";
 import store from "@/store";
 import { DateTimeStrUTC, toDateTimeStrUTC } from "@/utils/dateTimeStrUTC";
 import { ActionTypes } from "@/store/actions";
 import { parseISO } from "date-fns/esm/fp";
+import ProjectSelect from "@/components/ProjectSelect.vue";
 
 interface InitialFormData {
   description: string | null;
@@ -110,10 +104,14 @@ interface InitialFormData {
   billable: boolean | null;
   startedAt: string | null;
   stoppedAt: string | null;
+  project: Project | null;
 }
 
 export default defineComponent({
   name: "SelectedTimeEntryModal",
+  components: {
+    ProjectSelect,
+  },
   setup() {
     const modal = ref(_BaseModalVue);
     const {
@@ -129,6 +127,7 @@ export default defineComponent({
       billable: false,
       startedAt: null,
       stoppedAt: null,
+      project: null,
     };
 
     const formData = reactive(initialFormData);
@@ -151,6 +150,9 @@ export default defineComponent({
               //Append "Z" to interpret as UTC
               toDateTimeInputString(timeEntry.stopped_at.date + "Z")
             : null;
+        formData.project = selectedTimeEntry.value?.project
+          ? { ...selectedTimeEntry.value.project.data }
+          : null;
       }
     }
 
@@ -173,7 +175,7 @@ export default defineComponent({
     async function handleSave() {
       const data = {
         description: formData.description,
-        project_id: formData.projectId,
+        project_id: formData.project?.id ?? null,
         customer_id: formData.customerId,
         billable: formData.billable,
         started_at: formData.startedAt

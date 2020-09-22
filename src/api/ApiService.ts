@@ -13,6 +13,7 @@ interface Params {
   sort?: string;
   page?: string;
   q?: string;
+  mode?: string;
 }
 
 export default class ApiService {

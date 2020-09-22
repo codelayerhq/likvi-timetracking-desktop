@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ color }" class="flex items-center select-none">
+  <div :style="{ color }" class="flex items-center text-xs select-none">
     <svg
       width="10"
       height="10"
@@ -10,7 +10,7 @@
     >
       <circle cx="5" cy="5" r="5" class="fill-current" />
     </svg>
-    <span class="block text-xs">{{ name }}</span>
+    <span class="block">{{ name }}</span>
   </div>
 </template>
 
