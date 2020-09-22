@@ -22,7 +22,7 @@
       <project-indicator :project="modelValue" class="text-base" />
       <button
         type="button"
-        class="h-full text-gray-500 bg-transparent border-transparent form-item sm:text-sm sm:leading-5"
+        class="h-full p-1 text-gray-500 bg-transparent border-transparent form-item sm:text-sm sm:leading-5"
         @click="handleReset"
       >
         <svg

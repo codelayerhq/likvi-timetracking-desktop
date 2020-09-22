@@ -241,7 +241,7 @@ export interface Person {
   readonly default_bank_details?: DataResponse<BankDetails | null>;
 }
 
-interface Customer extends Company, Person {
+export interface Customer extends Company, Person {
   type: "company" | "person";
 }
 
@@ -340,7 +340,7 @@ export interface Pagination {
 }
 
 export interface CollectionResponse<T> {
-  data: T;
+  data: T[];
   meta: {
     pagination: Pagination;
   };

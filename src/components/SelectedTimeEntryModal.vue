@@ -36,14 +36,7 @@
 
         <project-select v-model="formData.project" class="mb-4" />
 
-        <base-select
-          v-model="formData.customerId"
-          name="project"
-          label="Customer"
-          placeholder="Customer"
-          class="mb-4"
-          :options="[{ label: 'foo', value: 'bar' }]"
-        />
+        <customer-select v-model="formData.customer" class="mb-4" />
 
         <base-radio
           v-model="formData.billable"
@@ -88,7 +81,7 @@
 <script lang="ts">
 import { defineComponent, watch, ref, reactive, computed } from "vue";
 import useSelectedTimeEntry from "@/composables/useSelectedTimeEntry";
-import { Project, TimeEntry } from "@/api/types";
+import { Customer, Project, TimeEntry } from "@/api/types";
 import { format, parse, subMinutes } from "date-fns";
 import _BaseModalVue from "./_BaseModal.vue";
 import store from "@/store";
@@ -96,6 +89,7 @@ import { DateTimeStrUTC, toDateTimeStrUTC } from "@/utils/dateTimeStrUTC";
 import { ActionTypes } from "@/store/actions";
 import { parseISO } from "date-fns/esm/fp";
 import ProjectSelect from "@/components/ProjectSelect.vue";
+import CustomerSelect from "@/components/CustomerSelect.vue";
 
 interface InitialFormData {
   description: string | null;
@@ -105,12 +99,14 @@ interface InitialFormData {
   startedAt: string | null;
   stoppedAt: string | null;
   project: Project | null;
+  customer: Customer | null;
 }
 
 export default defineComponent({
   name: "SelectedTimeEntryModal",
   components: {
     ProjectSelect,
+    CustomerSelect,
   },
   setup() {
     const modal = ref(_BaseModalVue);
@@ -128,6 +124,7 @@ export default defineComponent({
       startedAt: null,
       stoppedAt: null,
       project: null,
+      customer: null,
     };
 
     const formData = reactive(initialFormData);
@@ -153,6 +150,9 @@ export default defineComponent({
         formData.project = selectedTimeEntry.value?.project
           ? { ...selectedTimeEntry.value.project.data }
           : null;
+        formData.customer = selectedTimeEntry.value?.customer
+          ? { ...selectedTimeEntry.value.customer.data }
+          : null;
       }
     }
 
@@ -176,7 +176,7 @@ export default defineComponent({
       const data = {
         description: formData.description,
         project_id: formData.project?.id ?? null,
-        customer_id: formData.customerId,
+        customer_id: formData.customer?.id ?? null,
         billable: formData.billable,
         started_at: formData.startedAt
           ? toDateTimeStrUTC(
