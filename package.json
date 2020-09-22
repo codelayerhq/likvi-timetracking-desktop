@@ -4,7 +4,7 @@
     "name": "codelayer GmbH",
     "email": "mail@codelayer.de"
   },
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
