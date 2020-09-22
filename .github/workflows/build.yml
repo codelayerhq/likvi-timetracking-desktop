@@ -29,3 +29,5 @@ jobs:
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
           skip_build: true
           use_vue_cli: true
+        env:
+          VUE_APP_API_BASE_URL: https://app.likvi.de/api
