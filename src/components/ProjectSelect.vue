@@ -4,7 +4,7 @@
       for="project-select"
       class="block text-sm font-medium leading-5 text-gray-700"
     >
-      Project
+      {{ t("projectSelect.label") }}
     </label>
     <input
       v-show="!hasProject"
@@ -12,7 +12,7 @@
       ref="input"
       :value="modelValue ? modelValue.name : ''"
       class="relative block w-full mt-1 rounded-md shadow-sm px-7 form-input sm:text-sm sm:leading-5"
-      placeholder="Search for a project"
+      :placeholder="t('projectSelect.placeholder')"
       type="search"
     />
     <div
@@ -59,6 +59,7 @@ import autocomplete, { AutocompleteResult } from "autocompleter";
 import ProjectsService from "@/api/ProjectsService";
 import { Project } from "@/api/types";
 import ProjectIndicator from "@/components/ProjectIndicator.vue";
+import { useI18n } from "vue-i18n";
 
 interface ProjectAutocompleteItem {
   label: string;
@@ -78,6 +79,7 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
+    const { t } = useI18n();
     const input = ref() as Ref<HTMLInputElement>;
     const inputValue = ref();
     const hasProject = computed(() => props.modelValue !== null);
@@ -91,7 +93,7 @@ export default defineComponent({
     onMounted(() => {
       autocompleteInstance = autocomplete<ProjectAutocompleteItem>({
         input: input.value,
-        emptyMsg: "No projects found",
+        emptyMsg: t("projectSelect.noProjectsFound"),
         minLength: 1,
         debounceWaitMs: 100,
         fetch: async (text, callback) => {
@@ -164,6 +166,7 @@ export default defineComponent({
     });
 
     return {
+      t,
       input,
       inputValue,
       hasProject,

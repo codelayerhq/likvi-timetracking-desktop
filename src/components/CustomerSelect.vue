@@ -4,14 +4,14 @@
       for="customer-select"
       class="block text-sm font-medium leading-5 text-gray-700"
     >
-      Customer
+      {{ t("customerSelect.label") }}
     </label>
     <input
       id="customer-select"
       ref="input"
       :value="displayValue"
       class="relative block w-full mt-1 rounded-md shadow-sm px-7 form-input sm:text-sm sm:leading-5"
-      placeholder="Search for a customer"
+      :placeholder="t('customerSelect.placeholder')"
       type="search"
       @search="handleSearchEvent"
     />
@@ -33,6 +33,7 @@ import autocomplete, { AutocompleteResult } from "autocompleter";
 import CustomersService from "@/api/CustomersService";
 import { Customer } from "@/api/types";
 import { getCustomerName } from "@/utils/getCustomerName";
+import { useI18n } from "vue-i18n";
 
 interface CustomerAutocompleteItem {
   label: string;
@@ -49,6 +50,7 @@ export default defineComponent({
   },
   emits: ["update:modelValue"],
   setup(props, { emit }) {
+    const { t } = useI18n();
     const input = ref() as Ref<HTMLInputElement>;
     const inputValue = ref();
     const displayValue = computed(() =>
@@ -73,7 +75,7 @@ export default defineComponent({
     onMounted(() => {
       autocompleteInstance = autocomplete<CustomerAutocompleteItem>({
         input: input.value,
-        emptyMsg: "No customers found",
+        emptyMsg: t("customerSelect.noCustomersFound"),
         minLength: 1,
         debounceWaitMs: 100,
         fetch: async (text, callback) => {
@@ -102,6 +104,7 @@ export default defineComponent({
     });
 
     return {
+      t,
       input,
       inputValue,
       displayValue,

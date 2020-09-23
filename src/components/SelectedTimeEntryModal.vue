@@ -24,13 +24,15 @@
         id="selected-time-entry-form"
         @submit.prevent="handleSave"
       >
-        <h2 class="mb-6 font-semibold text-gray-800">Details</h2>
+        <h2 class="mb-6 font-semibold text-gray-800">
+          {{ t("activeTimeEntryModal.details") }}
+        </h2>
 
         <base-input
           v-model="formData.description"
           name="description"
-          label="Description"
-          placeholder="Description"
+          :label="t('activeTimeEntryModal.description')"
+          :placeholder="t('activeTimeEntryModal.description')"
           class="mb-4"
         />
 
@@ -41,11 +43,11 @@
         <base-radio
           v-model="formData.billable"
           name="billable"
-          label="Billable"
+          :label="t('activeTimeEntryModal.billable')"
           class="mb-4"
           :options="[
-            { label: 'Billable', value: true },
-            { label: 'Not billable', value: false },
+            { label: t('activeTimeEntryModal.billable'), value: true },
+            { label: t('activeTimeEntryModal.notBillable'), value: false },
           ]"
         />
 
@@ -53,8 +55,8 @@
           v-model="formData.startedAt"
           type="datetime-local"
           name="startedAt"
-          label="Started at"
-          placeholder="Started at"
+          :label="t('activeTimeEntryModal.billable')"
+          :placeholder="t('activeTimeEntryModal.billable')"
           class="mb-4"
           :max="startedAtMax"
           required
@@ -64,14 +66,14 @@
           v-model="formData.stoppedAt"
           type="datetime-local"
           name="StoppedAt"
-          label="Stopped at"
-          placeholder="Stopped at"
+          :label="t('activeTimeEntryModal.billable')"
+          :placeholder="t('activeTimeEntryModal.billable')"
         />
       </form>
 
       <footer>
         <base-button type="submit" form="selected-time-entry-form">
-          Save
+          {{ t("activeTimeEntryModal.save") }}
         </base-button>
       </footer>
     </div>
@@ -90,6 +92,7 @@ import { ActionTypes } from "@/store/actions";
 import { parseISO } from "date-fns/esm/fp";
 import ProjectSelect from "@/components/ProjectSelect.vue";
 import CustomerSelect from "@/components/CustomerSelect.vue";
+import { useI18n } from "vue-i18n";
 
 interface InitialFormData {
   description: string | null;
@@ -209,6 +212,7 @@ export default defineComponent({
     });
 
     return {
+      ...useI18n(),
       modal,
       handleCloseClick,
       selectedTimeEntry,

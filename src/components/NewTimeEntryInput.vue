@@ -1,10 +1,12 @@
 <template>
-  <label for="newTimeEntry" class="sr-only">What are you working on?</label>
+  <label for="newTimeEntry" class="sr-only">
+    {{ t("actionBar.what_are_you_working_on") }}
+  </label>
   <input
     list="recentTimeEntries"
     name="newTimeEntry"
     class="block w-full placeholder-gray-600 bg-gray-300 form-input px-7 sm:text-sm sm:leading-5 focus:bg-white"
-    placeholder="What are you working on?"
+    :placeholder="t('actionBar.what_are_you_working_on')"
     v-bind="$attrs"
     @input="handleInput"
   />
@@ -22,6 +24,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import useSuggestedTimeEntries from "@/composables/useSuggestedTimeEntries";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "NewTimeEntryInput",
@@ -45,6 +48,7 @@ export default defineComponent({
     return {
       handleInput,
       suggestedTimeEntries,
+      ...useI18n(),
     };
   },
 });

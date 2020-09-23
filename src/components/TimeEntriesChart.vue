@@ -11,6 +11,7 @@ import ChartDataLabels from "chartjs-plugin-datalabels";
 import { secondsToHours } from "@/utils/format";
 import { useStore } from "vuex";
 import { RootState } from "@/store";
+import { useI18n } from "vue-i18n";
 
 /*
  * From https://github.com/jedtrow/Chart.js-Rounded-Bar-Charts
@@ -176,6 +177,8 @@ export default defineComponent({
     );
     let chart = null as Chart | null;
 
+    const { tm } = useI18n();
+
     watch(
       timeEntriesStatistic,
       function (timeEntriesStatistic) {
@@ -241,7 +244,7 @@ export default defineComponent({
             onClick: handleChartClick,
           },
           data: {
-            labels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
+            labels: tm("chart.labels") as string[],
             datasets: [
               {
                 data: [],

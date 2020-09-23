@@ -1,11 +1,24 @@
 import { createApp } from "vue";
+import { createI18n } from "vue-i18n";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./styles/tailwind.css";
+import de from "@/i18n/de";
+import en from "@/i18n/en";
 
 const app = createApp(App);
-app.use(store).use(router).mount("#app");
+
+const i18n = createI18n({
+  locale: navigator.language,
+  messages: {
+    en,
+    de,
+  },
+  fallbackLocale: "en",
+});
+
+app.use(store).use(router).use(i18n).mount("#app");
 
 // Globally register all base components
 const requireComponent = require.context(
