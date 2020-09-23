@@ -25,4 +25,7 @@ export default {
     placeholder: "Search for a customer",
     noCustomersFound: "No customers found",
   },
+  header: {
+    timespan: "Timespan",
+  },
 };
