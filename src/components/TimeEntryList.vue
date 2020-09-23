@@ -42,7 +42,10 @@ export default defineComponent({
       // Group time entries by day when the timer started
       const groupedByDay = groupBy(timeEntries.value, (timeEntry) =>
         // Append Z to interpret as UTC
-        parseISO(timeEntry.started_at.date + "Z").toLocaleDateString()
+        parseISO(timeEntry.started_at.date + "Z").toLocaleDateString(
+          undefined,
+          { weekday: "long", year: "numeric", month: "2-digit", day: "2-digit" }
+        )
       );
 
       // Group time entries in each day by description and project_id of the time entry
