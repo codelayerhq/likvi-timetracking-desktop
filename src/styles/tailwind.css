@@ -3,3 +3,26 @@
 @tailwind components;
 
 @tailwind utilities;
+
+/* purgecss start ignore */
+.autocomplete {
+  @apply z-50 mt-2 overflow-auto text-sm bg-white border border-gray-300 rounded shadow-sm;
+  max-height: 200px !important;
+}
+
+.autocomplete > div {
+  @apply px-2 py-2;
+}
+
+.autocomplete .group {
+  background: #eee;
+}
+
+.autocomplete > div:hover:not(.group) {
+  @apply bg-gray-100 cursor-pointer;
+}
+
+.autocomplete > div.selected {
+  @apply bg-gray-100;
+}
+/* purgecss end ignore */

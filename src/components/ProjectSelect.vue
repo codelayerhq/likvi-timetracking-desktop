@@ -122,7 +122,7 @@ export default defineComponent({
           );
           const span = document.createElement("span");
 
-          const name = item.value?.name || "No Project";
+          const name = item.value?.name || t("projectIndicator.noProject");
           const color = item.value?.color_hex || "#676767";
 
           [
@@ -130,6 +130,7 @@ export default defineComponent({
             "items-center",
             "select-none",
             "text-gray-900",
+            "text-sm",
           ].forEach((eleClass) => wrapper.classList.add(eleClass));
 
           svg.setAttribute("width", "10");
@@ -175,26 +176,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style>
-.autocomplete {
-  @apply bg-white z-50 overflow-auto mt-2 border border-gray-300 rounded shadow-sm;
-  max-height: 200px !important;
-}
-
-.autocomplete > div {
-  @apply px-2 py-2;
-}
-
-.autocomplete .group {
-  background: #eee;
-}
-
-.autocomplete > div:hover:not(.group) {
-  @apply bg-gray-100 cursor-pointer;
-}
-
-.autocomplete > div.selected {
-  @apply bg-gray-100;
-}
-</style>

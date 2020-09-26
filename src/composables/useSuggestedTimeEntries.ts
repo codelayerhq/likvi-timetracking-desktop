@@ -1,5 +1,5 @@
 import { ref, Ref } from "vue";
-import { suggestedTimeEntries as dummy } from "@/api/dummy-data";
+import TimeEntriesService from "@/api/TimeEntriesService";
 
 interface ReturnObject {
   suggestedTimeEntries: Ref;
@@ -10,7 +10,11 @@ const suggestedTimeEntries = ref();
 
 export default function useSuggestedTimeEntries(): ReturnObject {
   async function fetchSuggestedTimeEntries(): Promise<void> {
-    suggestedTimeEntries.value = await dummy;
+    const {
+      data: { data: timeEntries },
+    } = await new TimeEntriesService().suggest("");
+
+    suggestedTimeEntries.value = timeEntries;
 
     return Promise.resolve();
   }

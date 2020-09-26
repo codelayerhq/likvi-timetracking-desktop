@@ -69,7 +69,7 @@ export default class TimeEntriesService extends ApiService {
   /**
    * Suggest time entries
    */
-  suggest(query: string): AxiosPromise<ItemResponse<TimeEntry>> {
+  suggest(query: string): AxiosPromise<ItemResponse<TimeEntry[]>> {
     this.params.q = query;
 
     return this.call("get", `${this.baseUrl}/suggest`);

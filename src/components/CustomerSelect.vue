@@ -121,25 +121,4 @@ export default defineComponent({
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a0aec0' class='w-4 h-4' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12' /%3E%3C/svg%3E");
   @apply w-4 h-4 opacity-100 cursor-pointer;
 }
-
-.autocomplete {
-  @apply bg-white z-50 overflow-auto mt-2 border border-gray-300 rounded shadow-sm;
-  max-height: 200px !important;
-}
-
-.autocomplete > div {
-  @apply px-2 py-2;
-}
-
-.autocomplete .group {
-  background: #eee;
-}
-
-.autocomplete > div:hover:not(.group) {
-  @apply bg-gray-100 cursor-pointer;
-}
-
-.autocomplete > div.selected {
-  @apply bg-gray-100;
-}
 </style>

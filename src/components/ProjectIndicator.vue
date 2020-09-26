@@ -17,6 +17,7 @@
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
 import { Project } from "@/api/types";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "ProjectIndicator",
@@ -28,7 +29,11 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const name = computed(() => props?.project?.name || "No Project");
+    const { t } = useI18n();
+
+    const name = computed(
+      () => props?.project?.name || t("projectIndicator.noProject")
+    );
     const color = computed(() => props?.project?.color_hex || "#676767");
 
     return {

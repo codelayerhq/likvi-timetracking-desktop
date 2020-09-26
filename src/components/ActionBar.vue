@@ -6,7 +6,10 @@
       :active-time-entry="activeTimeEntry"
     />
     <div v-else class="w-full">
-      <new-time-entry-input v-model="description" />
+      <new-time-entry-input
+        v-model="description"
+        @time-entry-selected="handleTimeEntrySelected"
+      />
     </div>
   </div>
 </template>
@@ -19,6 +22,7 @@ import { useStore } from "vuex";
 import NewTimeEntryInput from "@/components/NewTimeEntryInput.vue";
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
+import { TimeEntry } from "@/api/types";
 
 export default defineComponent({
   name: "ActionBar",
@@ -43,11 +47,16 @@ export default defineComponent({
       }
     }
 
+    function handleTimeEntrySelected(timeEntry: TimeEntry) {
+      store.dispatch(ActionTypes.RESUME_TIME_ENTRY, timeEntry);
+    }
+
     return {
       activeTimeEntry,
       isRunning,
       handleStartStop,
       description,
+      handleTimeEntrySelected,
     };
   },
 });

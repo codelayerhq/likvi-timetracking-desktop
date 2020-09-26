@@ -25,7 +25,13 @@ export default {
     placeholder: "Suche nach einem Kunden",
     noCustomersFound: "Keine Kunden gefunden",
   },
+  timeEntrySelect: {
+    noTimeEntriesFound: "Keine Zeiteinträge gefunden",
+  },
   header: {
     timespan: "Zeitspanne",
+  },
+  projectIndicator: {
+    noProject: "Kein Projekt",
   },
 };
