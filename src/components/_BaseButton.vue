@@ -37,7 +37,7 @@ export default defineComponent({
         `focus:border-${
           props.color === "brand" ? "brand-dark" : props.color.concat("-700")
         }`,
-        `active:bg--${
+        `active:bg-${
           props.color === "brand" ? "brand-dark" : props.color.concat("-700")
         }`,
         `focus:shadow-outline-${

@@ -1,4 +1,4 @@
-import axios from "./axios";
+import axios from "./axiosInstance";
 import { computed, ComputedRef } from "vue";
 import { Store } from "vuex";
 import { Method, AxiosPromise } from "axios";

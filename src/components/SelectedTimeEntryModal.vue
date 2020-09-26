@@ -89,7 +89,7 @@ import _BaseModalVue from "./_BaseModal.vue";
 import store from "@/store";
 import { DateTimeStrUTC, toDateTimeStrUTC } from "@/utils/dateTimeStrUTC";
 import { ActionTypes } from "@/store/actions";
-import { parseISO } from "date-fns/esm/fp";
+import { parseISO } from "date-fns";
 import ProjectSelect from "@/components/ProjectSelect.vue";
 import CustomerSelect from "@/components/CustomerSelect.vue";
 import { useI18n } from "vue-i18n";
