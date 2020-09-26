@@ -1,14 +1,14 @@
 <template>
-  <header class="px-8 py-6 bg-gray-100">
+  <header class="z-10 px-8 py-6 bg-gray-100 shadow-sm">
     <div class="mb-8">
-      <div class="text-sm font-bold leading-tight text-gray-800">
-        <current-time />
-      </div>
       <div class="text-sm leading-tight text-gray-700">
-        <time-span :start-date="startDate" :end-date="endDate" />
-      </div>
-      <div class="text-sm leading-tight text-gray-700">
-        Idle Seconds: {{ idleSeconds }}
+        <label for="timeSpan block">{{ t("header.timespan") }}</label>
+        <time-span
+          :start-date="startDate"
+          :end-date="endDate"
+          class="block mt-1 font-semibold"
+          name="timeSpan"
+        />
       </div>
     </div>
 
@@ -57,18 +57,17 @@
 <script lang="ts">
 import { defineComponent, computed } from "vue";
 import TimeEntriesChart from "@/components/TimeEntriesChart.vue";
-import CurrentTime from "./CurrentTime.vue";
 import TimeSpan from "@/components/TimeSpan.vue";
 import { useStore } from "vuex";
 import { subWeeks, addWeeks } from "date-fns";
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "DefaultHeader",
   components: {
     TimeEntriesChart,
-    CurrentTime,
     TimeSpan,
   },
   setup() {
@@ -76,7 +75,6 @@ export default defineComponent({
 
     const startDate = computed(() => store.state.startDate);
     const endDate = computed(() => store.state.endDate);
-    const idleSeconds = computed(() => store.state.systemIdleTime);
 
     const handlePreviousWeek = () => {
       const newStartDate = subWeeks(startDate.value, 1);
@@ -98,11 +96,11 @@ export default defineComponent({
     }
 
     return {
+      ...useI18n(),
       startDate,
       endDate,
       handlePreviousWeek,
       handleNextWeek,
-      idleSeconds,
     };
   },
 });

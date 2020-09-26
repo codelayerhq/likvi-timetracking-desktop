@@ -13,7 +13,7 @@
       </div>
 
       <div class="w-full">
-        <span class="block text-xs font-bold text-gray-900">
+        <span class="block text-xs font-semibold text-gray-800">
           {{ description }}
         </span>
         <project-indicator :project="project" />
