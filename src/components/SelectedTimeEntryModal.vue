@@ -55,8 +55,8 @@
           v-model="formData.startedAt"
           type="datetime-local"
           name="startedAt"
-          :label="t('activeTimeEntryModal.billable')"
-          :placeholder="t('activeTimeEntryModal.billable')"
+          :label="t('activeTimeEntryModal.startedAt')"
+          :placeholder="t('activeTimeEntryModal.startedAt')"
           class="mb-4"
           :max="startedAtMax"
           required
@@ -66,8 +66,8 @@
           v-model="formData.stoppedAt"
           type="datetime-local"
           name="StoppedAt"
-          :label="t('activeTimeEntryModal.billable')"
-          :placeholder="t('activeTimeEntryModal.billable')"
+          :label="t('activeTimeEntryModal.stoppedAt')"
+          :placeholder="t('activeTimeEntryModal.stoppedAt')"
         />
       </form>
 
