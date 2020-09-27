@@ -4,6 +4,10 @@ module.exports = {
       preload: "src/preload.ts",
       builderOptions: {
         productName: "likvi Zeiterfassung",
+        appId: "de.likvi.timetracking",
+        mac: {
+          category: "public.app-category.productivit",
+        },
       },
     },
   },

@@ -4,6 +4,10 @@
     "name": "codelayer GmbH",
     "email": "mail@codelayer.de"
   },
+  "homepage": "https://likvi.de",
+  "repository": {
+    "url": "https://github.com/codelayerhq/likvi-timetracking-desktop"
+  },
   "version": "1.0.0-alpha.5",
   "private": true,
   "scripts": {
@@ -54,6 +58,7 @@
     "@vue/test-utils": "^2.0.0-0",
     "electron": "^10.1.1",
     "electron-devtools-installer": "^3.1.0",
+    "electron-icon-builder": "^1.0.2",
     "eslint": "^7.6.0",
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-vue": "^7.0.0-0",
