@@ -5,6 +5,10 @@ import { RootState } from "..";
 import { MutationTypes } from "../mutation-types";
 import { ActionTypes } from "../actions";
 
+export interface LoginResult {
+  result: "ok" | "2fa" | "not ok";
+}
+
 type AugmentedActionContext<S, R> = {
   commit<K extends keyof Mutations>(
     key: K,
@@ -47,26 +51,36 @@ const actions: ActionTree<State, RootState> & Actions = {
   async [ActionTypes.LOGIN](
     { commit, dispatch, getters }: ActionContext<State, RootState>,
     logInDetails: LogInDetails
-  ): Promise<unknown> {
+  ): Promise<LoginResult> {
     // If user already logged in only validate user.
     if (getters.loggedIn) {
       dispatch(ActionTypes.VALIDATE);
     }
 
-    const {
-      data: {
+    try {
+      const {
         data: {
-          token,
-          user: { data: user },
+          data: {
+            token,
+            user: { data: user },
+          },
         },
-      },
-    } = await login(logInDetails);
+      } = await login(logInDetails);
 
-    commit(MutationTypes.SET_USER, user);
-    commit(MutationTypes.SET_TOKEN, token);
-    commit(MutationTypes.SET_CURRENT_TEAM_ID, user.current_team_id);
+      commit(MutationTypes.SET_USER, user);
+      commit(MutationTypes.SET_TOKEN, token);
+      commit(MutationTypes.SET_CURRENT_TEAM_ID, user.current_team_id);
 
-    return Promise.resolve();
+      return {
+        result: "ok",
+      };
+    } catch (error) {
+      if (error.response.data.error_code === "2FA_REQUIRED") {
+        return { result: "2fa" };
+      }
+
+      return { result: "not ok" };
+    }
   },
 
   [ActionTypes.LOGOUT]({ commit }: ActionContext<State, RootState>): void {
