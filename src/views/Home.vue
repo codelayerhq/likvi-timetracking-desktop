@@ -48,6 +48,11 @@ export default defineComponent({
     ipcRenderer.on("getIdleResponse", (_, idleSeconds: number) => {
       store.dispatch(ActionTypes.SET_SYSTEM_IDLE_TIME, idleSeconds);
     });
+
+    // Poll for active time entry
+    setInterval(() => {
+      store.dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
+    }, 1000 * 5);
   },
 });
 </script>

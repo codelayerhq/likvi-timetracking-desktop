@@ -68,6 +68,7 @@ interface Actions<S = RootState, R = RootState> {
   }: ActionContext<S, S>): void;
   [ActionTypes.FETCH_ACTIVE_TIME_ENTRY]({
     commit,
+    dispatch,
   }: AugmentedActionContext<S, R>): void;
   [ActionTypes.STOP_ACTIVE_TIME_ENTRY]({
     commit,
@@ -145,7 +146,7 @@ const actions: ActionTree<RootState, RootState> & Actions = {
 
     commit(MutationTypes.SET_TIME_ENTRIES, timeEntriesResult);
   },
-  async [ActionTypes.FETCH_ACTIVE_TIME_ENTRY]({ commit }) {
+  async [ActionTypes.FETCH_ACTIVE_TIME_ENTRY]({ commit, dispatch }) {
     try {
       const {
         data: { data: timeEntry },
@@ -153,7 +154,14 @@ const actions: ActionTree<RootState, RootState> & Actions = {
 
       return commit(MutationTypes.SET_ACTIVE_TIME_ENTRY, timeEntry);
     } catch (error) {
-      return;
+      console.log(error.response.status);
+      if (error.response.status === 404) {
+        // No active time entry, not truely an error
+        if (state.activeTimeEntry !== null) {
+          commit(MutationTypes.SET_ACTIVE_TIME_ENTRY, null);
+          dispatch(ActionTypes.FETCH_TIME_ENTRIES);
+        }
+      }
     }
   },
   async [ActionTypes.STOP_ACTIVE_TIME_ENTRY]({ commit, state, dispatch }) {
