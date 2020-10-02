@@ -202,6 +202,12 @@ export default defineComponent({
       const element = document.getElementById("myChart") as HTMLCanvasElement;
       const ctx = element.getContext("2d");
 
+      // Todo: vuei18n tm function does not respect fallback locale,
+      // so we manually fall back to english labels.
+      const labels: string[] = Array.isArray(tm("chart.labels"))
+        ? (tm("chart.labels") as string[])
+        : ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+
       if (ctx) {
         const config: ChartConfiguration = {
           type: "bar",
@@ -244,7 +250,7 @@ export default defineComponent({
             onClick: handleChartClick,
           },
           data: {
-            labels: tm("chart.labels") as string[],
+            labels: labels,
             datasets: [
               {
                 data: [],
