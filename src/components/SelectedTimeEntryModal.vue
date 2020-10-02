@@ -83,7 +83,7 @@
 <script lang="ts">
 import { defineComponent, watch, ref, reactive, computed } from "vue";
 import useSelectedTimeEntry from "@/composables/useSelectedTimeEntry";
-import { Customer, Project, TimeEntry } from "@/api/types";
+import { Customer, Project, TimeEntry, TimeEntryPayload } from "@/api/types";
 import { format, parse, subMinutes } from "date-fns";
 import _BaseModalVue from "./_BaseModal.vue";
 import store from "@/store";
@@ -176,25 +176,26 @@ export default defineComponent({
     }
 
     async function handleSave() {
-      const data = {
+      const data: TimeEntryPayload = {
         description: formData.description,
         project_id: formData.project?.id ?? null,
         customer_id: formData.customer?.id ?? null,
-        billable: formData.billable,
+        billable: formData.billable ?? undefined,
         started_at: formData.startedAt
           ? toDateTimeStrUTC(
               parse(formData.startedAt, "yyyy-MM-dd'T'HH:mm", new Date())
             )
-          : null,
+          : undefined,
         stopped_at: formData.stoppedAt
           ? toDateTimeStrUTC(
               parse(formData.stoppedAt, "yyyy-MM-dd'T'HH:mm", new Date())
             )
-          : null,
+          : undefined,
       };
 
       await store.dispatch(ActionTypes.UPDATE_SELECTED_TIME_ENTRY, data);
       store.dispatch(ActionTypes.FETCH_TIME_ENTRIES);
+      store.dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
       store.dispatch(ActionTypes.FETCH_STATISTICS);
     }
 

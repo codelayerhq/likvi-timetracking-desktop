@@ -4,6 +4,8 @@
     <active-time-entry-meta
       v-if="isRunning"
       :active-time-entry="activeTimeEntry"
+      class="cursor-pointer"
+      @click="handleSelectActiveTimeEntry"
     />
     <div v-else class="w-full">
       <new-time-entry-input
@@ -51,12 +53,20 @@ export default defineComponent({
       store.dispatch(ActionTypes.RESUME_TIME_ENTRY, timeEntry);
     }
 
+    function handleSelectActiveTimeEntry() {
+      store.dispatch(
+        ActionTypes.SET_SELECTED_TIME_ENTRY,
+        activeTimeEntry.value
+      );
+    }
+
     return {
       activeTimeEntry,
       isRunning,
       handleStartStop,
       description,
       handleTimeEntrySelected,
+      handleSelectActiveTimeEntry,
     };
   },
 });
