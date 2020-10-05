@@ -41,12 +41,14 @@ export default defineComponent({
     }
 
     function applyAppElementTransform() {
+      document.body.classList.add("bg-black");
       if (appElement !== null) {
         appElement.classList.add(...appElementModalOpendClasses);
       }
     }
 
     function removeAppElementTransform() {
+      document.body.classList.remove("bg-black");
       if (appElement !== null) {
         appElement.classList.remove(...appElementModalOpendClasses);
       }
