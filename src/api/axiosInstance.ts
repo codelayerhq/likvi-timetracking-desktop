@@ -1,5 +1,7 @@
 import axios, { AxiosError } from "axios";
-import createAuthRefreshInterceptor from "axios-auth-refresh";
+import createAuthRefreshInterceptor, {
+  AxiosAuthRefreshRequestConfig,
+} from "axios-auth-refresh";
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL,
@@ -27,7 +29,9 @@ const refreshAuthLogic = async (failedRequest: AxiosError) => {
     data: {
       data: { token },
     },
-  } = await instance.post("/refresh-token", { skipAuthRefresh: true });
+  } = await instance.post("/refresh-token", null, {
+    skipAuthRefresh: true,
+  } as AxiosAuthRefreshRequestConfig);
 
   window.localStorage.setItem("auth.token", JSON.stringify(token));
 
