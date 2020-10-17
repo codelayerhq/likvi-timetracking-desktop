@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="hasTimeEntries">
     <div v-for="(groupedTimeEntries, day) in timeEntriesGrouped" :key="day">
       <h2 class="px-2 py-2 text-xs font-semibold text-gray-700">{{ day }}</h2>
       <section
@@ -15,6 +15,16 @@
       </section>
     </div>
   </div>
+
+  <div v-else class="flex flex-col items-center justify-center">
+    <img src="@/assets/empty-state.png" width="220" class="block mb-8" />
+    <h3 class="mb-1 font-semibold text-gray-700">
+      {{ t("timeEntriesEmptyState.heading") }}
+    </h3>
+    <span class="text-sm text-gray-600">
+      {{ t("timeEntriesEmptyState.text") }}
+    </span>
+  </div>
 </template>
 
 <script lang="ts">
@@ -24,6 +34,7 @@ import GroupedTimeEntryEntry from "@/components/GroupedTimeEntryEntry.vue";
 import useSortedTimeEntries from "@/composables/useSortedTimeEntries";
 import { groupBy } from "@/utils/groupBy";
 import { parseISO } from "date-fns";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "TimeEntryList",
@@ -60,7 +71,11 @@ export default defineComponent({
       );
     });
 
+    const hasTimeEntries = computed(() => timeEntries.value.length > 0);
+
     return {
+      ...useI18n(),
+      hasTimeEntries,
       timeEntriesGrouped,
     };
   },

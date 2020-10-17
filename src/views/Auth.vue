@@ -195,7 +195,6 @@ export default defineComponent({
       showOTP,
       handleLogin,
       handleOTPBack,
-      forgotPasswordURL,
     };
   },
 });

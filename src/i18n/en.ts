@@ -34,4 +34,8 @@ export default {
   projectIndicator: {
     noProject: "Kein Projekt",
   },
+  timeEntriesEmptyState: {
+    heading: "No Time Entries",
+    text: "You did not track any time entries this week.",
+  },
 };

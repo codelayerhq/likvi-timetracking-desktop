@@ -43,4 +43,8 @@ export default {
     back: "Zurück",
     loginFailed: "Anmedlung fehlgeschlagen",
   },
+  timeEntriesEmptyState: {
+    heading: "Keine Zeiteinträge",
+    text: "Diese Woche hast du noch keine Zeiteinträge erfasst.",
+  },
 };
