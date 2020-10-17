@@ -6,6 +6,8 @@ import store from "./store";
 import "./styles/tailwind.css";
 import de from "@/i18n/de";
 import en from "@/i18n/en";
+import Toast from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 const app = createApp(App);
 
@@ -20,7 +22,7 @@ const i18n = createI18n({
   fallbackLocale: "en",
 });
 
-app.use(store).use(router).use(i18n).mount("#app");
+app.use(store).use(router).use(i18n).use(Toast).mount("#app");
 
 // Globally register all base components
 const requireComponent = require.context(

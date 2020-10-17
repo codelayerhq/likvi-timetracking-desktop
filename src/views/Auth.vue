@@ -11,23 +11,23 @@
         <div>
           <input
             v-model="email"
-            aria-label="Email address"
+            :aria-label="t('auth.email')"
             name="email"
             type="email"
             required
             class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-            placeholder="Email address"
+            :placeholder="t('auth.email')"
           />
         </div>
         <div class="-mt-px">
           <input
             v-model="password"
-            aria-label="Password"
+            :aria-label="t('auth.password')"
             name="password"
             type="password"
             required
             class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-            placeholder="Password"
+            :placeholder="t('auth.password')"
           />
         </div>
       </div>
@@ -38,7 +38,7 @@
             href="#"
             class="font-medium transition duration-150 ease-in-out text-brand hover:text-brand-light focus:outline-none focus:underline"
           >
-            Forgot your password?
+            {{ t("auth.forgotPassword") }}
           </a>
         </div>
       </div>
@@ -58,7 +58,7 @@
               />
             </svg>
           </span>
-          Sign in
+          {{ t("auth.signIn") }}
         </base-button>
       </div>
     </form>
@@ -74,13 +74,13 @@
         <div>
           <input
             v-model="otp"
-            aria-label="One-Time Password"
+            :aria-label="t('auth.otp')"
             name="otp"
             type="text"
             inputmode="numeric"
             pattern="[0-9]*"
             autocomplete="one-time-code"
-            placeholder="One-Time Password"
+            :placeholder="t('auth.otp')"
             class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
             required
           />
@@ -94,7 +94,7 @@
             class="font-medium transition duration-150 ease-in-out text-brand hover:text-brand-light focus:outline-none focus:underline"
             @click="handleOTPBack"
           >
-            Back
+            {{ t("auth.back") }}
           </a>
         </div>
       </div>
@@ -114,7 +114,7 @@
               />
             </svg>
           </span>
-          Sign in
+          {{ t("auth.signIn") }}
         </base-button>
       </div>
     </form>
@@ -128,10 +128,14 @@ import { useRouter } from "vue-router";
 import { RootState } from "@/store";
 import { ActionTypes } from "@/store/actions";
 import { LoginResult } from "@/store/modules/auth";
+import { POSITION, useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: "Auth",
   setup() {
+    const { t } = useI18n();
+
     const email = ref(null);
     const password = ref(null);
     const otp = ref(null);
@@ -139,6 +143,8 @@ export default defineComponent({
 
     const store = useStore<RootState>();
     const router = useRouter();
+
+    const toast = useToast();
 
     async function handleLogin() {
       const result: LoginResult = await store.dispatch(
@@ -158,7 +164,10 @@ export default defineComponent({
           showOTPForm();
           break;
         default:
-          console.log("not ok");
+          toast.error(t("auth.loginFailed"), {
+            timeout: 5000,
+            position: POSITION.TOP_CENTER,
+          });
           break;
       }
     }
@@ -179,12 +188,14 @@ export default defineComponent({
     }
 
     return {
+      ...useI18n(),
       email,
       password,
       otp,
       showOTP,
       handleLogin,
       handleOTPBack,
+      forgotPasswordURL,
     };
   },
 });

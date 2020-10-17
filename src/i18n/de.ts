@@ -34,4 +34,13 @@ export default {
   projectIndicator: {
     noProject: "Kein Projekt",
   },
+  auth: {
+    email: "E-Mail Adresse",
+    password: "Passwort",
+    forgotPassword: "Passwort vergessen?",
+    signIn: "Anmelden",
+    otp: "Einmalkennwort",
+    back: "Zurück",
+    loginFailed: "Anmedlung fehlgeschlagen",
+  },
 };
