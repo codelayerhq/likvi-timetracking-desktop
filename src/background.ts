@@ -198,5 +198,7 @@ setInterval(() => {
     } else {
       idleWin.loadURL("app://./index.html/#/idle");
     }
+
+    idleWin.setAlwaysOnTop(true);
   }
 }, 1000);
