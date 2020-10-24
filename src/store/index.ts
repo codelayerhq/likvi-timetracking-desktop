@@ -189,7 +189,7 @@ const actions: ActionTree<RootState, RootState> & Actions = {
 
       commit(MutationTypes.SET_ACTIVE_TIME_ENTRY, null);
 
-      return dispatch(ActionTypes.FETCH_TIME_ENTRIES);
+      return dispatch(ActionTypes.FETCH_DATA);
     }
   },
   async [ActionTypes.START_NEW_TIME_ENTRY]({ commit }, description: string) {
