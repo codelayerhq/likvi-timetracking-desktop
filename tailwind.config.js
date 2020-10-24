@@ -3,7 +3,18 @@ module.exports = {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true,
   },
-  purge: ["./src/**/*.html", "./src/**/*.vue", "./src/**/*.jsx"],
+  purge: {
+    content: ["./src/**/*.html", "./src/**/*.vue", "./src/**/*.jsx"],
+    options: {
+      whitelist: [
+        "hover:bg-gray-500",
+        "bg-gray-600",
+        "focus:border-gray-700",
+        "active:bg-gray-700",
+        "focus:shadow-outline-gray-700",
+      ],
+    },
+  },
   theme: {
     extend: {
       colors: {

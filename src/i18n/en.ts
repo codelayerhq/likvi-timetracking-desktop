@@ -38,4 +38,10 @@ export default {
     heading: "No Time Entries",
     text: "You did not track any time entries this week.",
   },
+  idle: {
+    youAreIdleFor: "You are idle since",
+    minutes: "mnutes",
+    stopAndRemoveInaktive: "Stop and remove idle time",
+    keepInaktive: "Keep idle time",
+  },
 };

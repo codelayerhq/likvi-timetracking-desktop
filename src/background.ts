@@ -10,8 +10,6 @@ import {
   ipcMain,
   Tray,
   Menu,
-  MenuItem,
-  KeyboardEvent,
 } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
@@ -19,10 +17,11 @@ import path from "path";
 import { User } from "./api/types";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-// Keep a global reference of the window and tray object, if you don't, the window will
+// Keep a global reference of the window, idle window and tray object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win: BrowserWindow | null;
-let tray: Tray | null;
+let win: BrowserWindow | null = null;
+let tray: Tray | null = null;
+let idleWin: BrowserWindow | null = null;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -151,6 +150,8 @@ function handleLoggedOut() {
   }
 }
 
+let hasRunningTimeEntry = false;
+
 ipcMain.on("getIdle", (event) => {
   event.reply("getIdleResponse", powerMonitor.getSystemIdleTime());
 });
@@ -158,3 +159,44 @@ ipcMain.on("getIdle", (event) => {
 ipcMain.on("loggedIn", (_, user: User) => handleLoggedIn(user));
 
 ipcMain.on("loggedOut", () => handleLoggedOut());
+
+ipcMain.on("activeTimeEntry", () => {
+  hasRunningTimeEntry = true;
+});
+
+ipcMain.on("noActiveTimeEntry", () => {
+  hasRunningTimeEntry = false;
+});
+
+ipcMain.on("idleWindow.removeStopped", (event, idleSince) => {
+  if (win !== null) {
+    win.webContents.send("idle.stopActive", idleSince);
+  }
+});
+
+setInterval(() => {
+  const idleTime = powerMonitor.getSystemIdleTime();
+
+  if (idleTime > 60 && idleWin === null && hasRunningTimeEntry) {
+    idleWin = new BrowserWindow({
+      width: 350,
+      height: 500,
+      webPreferences: {
+        nodeIntegration: (process.env
+          .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
+
+        preload: path.join(__dirname, "preload.js"),
+      },
+    });
+    idleWin.on("close", () => {
+      idleWin = null;
+    });
+
+    if (process.env.WEBPACK_DEV_SERVER_URL) {
+      idleWin.loadURL(process.env.WEBPACK_DEV_SERVER_URL + "/#/idle");
+      if (!process.env.IS_TEST) idleWin.webContents.openDevTools();
+    } else {
+      idleWin.loadURL("app://./index.html/#/idle");
+    }
+  }
+}, 1000);

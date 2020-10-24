@@ -179,12 +179,15 @@ const actions: ActionTree<RootState, RootState> & Actions = {
       }
     }
   },
-  async [ActionTypes.STOP_ACTIVE_TIME_ENTRY]({ commit, state, dispatch }) {
+  async [ActionTypes.STOP_ACTIVE_TIME_ENTRY](
+    { commit, state, dispatch },
+    stoppedDate?: Date
+  ) {
     if (state.activeTimeEntry !== null) {
       const id = state.activeTimeEntry.id;
 
       await new TimeEntriesService().include(...DEFAULT_INCLUDES).update(id, {
-        stopped_at: toDateTimeStrUTC(new Date()),
+        stopped_at: toDateTimeStrUTC(stoppedDate ?? new Date()),
       });
 
       commit(MutationTypes.SET_ACTIVE_TIME_ENTRY, null);

@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onUnmounted } from "vue";
+import { computed, defineComponent, onUnmounted, watch } from "vue";
 import DefaultHeader from "@/components/DefaultHeader.vue";
 import TimeEntryList from "@/components/TimeEntryList.vue";
 import ActionBar from "@/components/ActionBar.vue";
@@ -21,8 +21,11 @@ import SelectedTimeEntryModal from "@/components/SelectedTimeEntryModal.vue";
 import { useStore } from "vuex";
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
-import { IpcRenderer } from "electron";
+import { IpcRenderer, IpcRendererEvent } from "electron";
 import { useRouter } from "vue-router";
+
+// @ts-ignore
+const ipcRenderer = window.ipcRenderer as IpcRenderer;
 
 export default defineComponent({
   name: "Home",
@@ -38,15 +41,13 @@ export default defineComponent({
 
     store.dispatch(ActionTypes.FETCH_DATA);
 
-    // @ts-ignore
-    const ipcRenderer = window.ipcRenderer as IpcRenderer;
-
-    setInterval(() => {
-      ipcRenderer.send("getIdle");
-    }, 1000);
-
-    ipcRenderer.on("getIdleResponse", (_, idleSeconds: number) => {
-      store.dispatch(ActionTypes.SET_SYSTEM_IDLE_TIME, idleSeconds);
+    const activeTimeEntry = computed(() => store.state.activeTimeEntry);
+    watch(activeTimeEntry, () => {
+      if (activeTimeEntry.value === null) {
+        ipcRenderer.send("noActiveTimeEntry");
+      } else {
+        ipcRenderer.send("activeTimeEntry");
+      }
     });
 
     ipcRenderer.on("tray.newTimeEntry", () => {
@@ -56,6 +57,14 @@ export default defineComponent({
     ipcRenderer.on("tray.logOut", () => {
       store.dispatch(`auth/${ActionTypes.LOGOUT}`);
       router.replace({ name: "login" });
+    });
+
+    ipcRenderer.on("idle.stopActive", (_, idleSince: Date) => {
+      store.dispatch(ActionTypes.STOP_ACTIVE_TIME_ENTRY, idleSince);
+    });
+
+    ipcRenderer.on("timeEntry.getActive", (event: IpcRendererEvent) => {
+      console.log(event);
     });
 
     // Poll for active time entry

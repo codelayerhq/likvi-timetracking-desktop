@@ -47,4 +47,10 @@ export default {
     heading: "Keine Zeiteinträge",
     text: "Diese Woche hast du noch keine Zeiteinträge erfasst.",
   },
+  idle: {
+    youAreIdleFor: "Du bist inaktiv seit",
+    minutes: "Minuten",
+    stopAndRemoveInaktive: "Stoppen und inaktive Zeit abziehen",
+    keepInaktive: "Inaktive Zeit behalten",
+  },
 };

@@ -7,6 +7,7 @@ import {
 import store from "@/store";
 import Home from "@/views/Home.vue";
 import Auth from "@/views/Auth.vue";
+import Idle from "@/views/Idle.vue";
 import { ActionTypes } from "@/store/actions";
 
 const routes: Array<RouteRecordRaw> = [
@@ -22,6 +23,11 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       authRequired: true,
     },
+  },
+  {
+    path: "/idle",
+    name: "idle",
+    component: Idle,
   },
 ];
 
