@@ -194,9 +194,9 @@ export default defineComponent({
       };
 
       await store.dispatch(ActionTypes.UPDATE_SELECTED_TIME_ENTRY, data);
-      store.dispatch(ActionTypes.FETCH_TIME_ENTRIES);
-      store.dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
-      store.dispatch(ActionTypes.FETCH_STATISTICS);
+      store.dispatch(ActionTypes.FETCH_DATA);
+
+      setSelectedTimeEntry(null);
     }
 
     function toDateTimeInputString(date: DateTimeStrUTC): string {

@@ -91,8 +91,7 @@ export default defineComponent({
     function fetchData(newStartDate: Date, newEndDate: Date) {
       store.dispatch(ActionTypes.SET_START_DATE, newStartDate);
       store.dispatch(ActionTypes.SET_END_DATE, newEndDate);
-      store.dispatch(ActionTypes.FETCH_TIME_ENTRIES);
-      store.dispatch(ActionTypes.FETCH_STATISTICS);
+      store.dispatch(ActionTypes.FETCH_DATA);
     }
 
     return {

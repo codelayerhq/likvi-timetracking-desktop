@@ -256,7 +256,7 @@ const actions: ActionTree<RootState, RootState> & Actions = {
 
     await new TimeEntriesService().include(...DEFAULT_INCLUDES).create(payload);
 
-    return dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
+    return dispatch(ActionTypes.FETCH_DATA);
   },
   async [ActionTypes.DELETE_TIME_ENTRY]({ dispatch }, timeEntry) {
     await new TimeEntriesService().destroy(timeEntry.id);

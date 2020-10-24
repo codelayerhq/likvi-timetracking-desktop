@@ -34,9 +34,7 @@ export default defineComponent({
   setup() {
     const store = useStore<RootState>();
 
-    store.dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
-    store.dispatch(ActionTypes.FETCH_TIME_ENTRIES);
-    store.dispatch(ActionTypes.FETCH_STATISTICS);
+    store.dispatch(ActionTypes.FETCH_DATA);
 
     // @ts-ignore
     const ipcRenderer = window.ipcRenderer as IpcRenderer;
