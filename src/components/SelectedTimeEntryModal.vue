@@ -98,7 +98,7 @@ interface InitialFormData {
   description: string | null;
   projectId: number | null;
   customerId: number | null;
-  billable: boolean | null;
+  billable: string | boolean | null;
   startedAt: string | null;
   stoppedAt: string | null;
   project: Project | null;
@@ -180,7 +180,7 @@ export default defineComponent({
         description: formData.description,
         project_id: formData.project?.id ?? null,
         customer_id: formData.customer?.id ?? null,
-        billable: formData.billable ?? undefined,
+        billable: formData.billable === "true",
         started_at: formData.startedAt
           ? toDateTimeStrUTC(
               parse(formData.startedAt, "yyyy-MM-dd'T'HH:mm", new Date())
