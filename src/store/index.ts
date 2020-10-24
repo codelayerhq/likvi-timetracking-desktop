@@ -46,6 +46,10 @@ interface Mutations<S = RootState> {
 }
 
 interface Actions<S = RootState, R = RootState> {
+  [ActionTypes.FETCH_DATA](
+    { commit }: AugmentedActionContext<S, R>,
+    date: Date
+  ): void;
   [ActionTypes.SET_START_DATE](
     { commit }: AugmentedActionContext<S, R>,
     date: Date
@@ -95,6 +99,10 @@ interface Actions<S = RootState, R = RootState> {
     { state, dispatch }: AugmentedActionContext<S, R>,
     timeEntry: TimeEntry
   ): void;
+  [ActionTypes.DELETE_TIME_ENTRY](
+    { state, dispatch }: AugmentedActionContext<S, R>,
+    timeEntry: TimeEntry
+  ): void;
 }
 
 const state: RootState = {
@@ -108,6 +116,13 @@ const state: RootState = {
 };
 
 const actions: ActionTree<RootState, RootState> & Actions = {
+  async [ActionTypes.FETCH_DATA]({ dispatch }) {
+    return Promise.all([
+      dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY),
+      dispatch(ActionTypes.FETCH_TIME_ENTRIES),
+      dispatch(ActionTypes.FETCH_STATISTICS),
+    ]);
+  },
   [ActionTypes.SET_START_DATE]({ commit }, date: Date) {
     commit(MutationTypes.SET_START_DATE, date);
   },
@@ -242,6 +257,11 @@ const actions: ActionTree<RootState, RootState> & Actions = {
     await new TimeEntriesService().include(...DEFAULT_INCLUDES).create(payload);
 
     return dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
+  },
+  async [ActionTypes.DELETE_TIME_ENTRY]({ dispatch }, timeEntry) {
+    await new TimeEntriesService().destroy(timeEntry.id);
+
+    return dispatch(ActionTypes.FETCH_DATA);
   },
 };
 

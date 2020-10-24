@@ -23,7 +23,7 @@
         {{ summedDuration }}
       </span>
 
-      <div>
+      <div class="flex">
         <base-icon-button
           class="p-2"
           tabindex="2"

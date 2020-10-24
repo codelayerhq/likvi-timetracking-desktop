@@ -15,7 +15,28 @@
       {{ duration }}
     </span>
 
-    <div>
+    <div class="flex">
+      <base-icon-button
+        class="p-2"
+        tabindex="2"
+        @click.stop="handleDeleteTimeEntryClick"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          class="w-6 h-6"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          />
+        </svg>
+      </base-icon-button>
+
       <base-icon-button
         class="p-2"
         tabindex="2"
@@ -82,11 +103,16 @@ export default defineComponent({
       store.dispatch(ActionTypes.RESUME_TIME_ENTRY, props.timeEntry);
     }
 
+    function handleDeleteTimeEntryClick() {
+      store.dispatch(ActionTypes.DELETE_TIME_ENTRY, props.timeEntry);
+    }
+
     return {
       duration,
       description,
       handleTimeEntryEntryClick,
       handleResumeTimeEntryClick,
+      handleDeleteTimeEntryClick,
       project,
     };
   },
