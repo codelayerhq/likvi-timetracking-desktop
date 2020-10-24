@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, onUnmounted } from "vue";
 import DefaultHeader from "@/components/DefaultHeader.vue";
 import TimeEntryList from "@/components/TimeEntryList.vue";
 import ActionBar from "@/components/ActionBar.vue";
@@ -22,6 +22,7 @@ import { useStore } from "vuex";
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
 import { IpcRenderer } from "electron";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "Home",
@@ -33,6 +34,7 @@ export default defineComponent({
   },
   setup() {
     const store = useStore<RootState>();
+    const router = useRouter();
 
     store.dispatch(ActionTypes.FETCH_DATA);
 
@@ -47,10 +49,23 @@ export default defineComponent({
       store.dispatch(ActionTypes.SET_SYSTEM_IDLE_TIME, idleSeconds);
     });
 
+    ipcRenderer.on("tray.newTimeEntry", () => {
+      store.dispatch(ActionTypes.START_NEW_TIME_ENTRY);
+    });
+
+    ipcRenderer.on("tray.logOut", () => {
+      store.dispatch(`auth/${ActionTypes.LOGOUT}`);
+      router.replace({ name: "login" });
+    });
+
     // Poll for active time entry
-    setInterval(() => {
+    const poll = setInterval(() => {
       store.dispatch(ActionTypes.FETCH_ACTIVE_TIME_ENTRY);
     }, 1000 * 5);
+
+    onUnmounted(() => {
+      clearInterval(poll);
+    });
   },
 });
 </script>

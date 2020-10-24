@@ -1,14 +1,28 @@
 "use strict";
 
-import { app, protocol, BrowserWindow, powerMonitor, ipcMain } from "electron";
+declare const __static: string;
+
+import {
+  app,
+  protocol,
+  BrowserWindow,
+  powerMonitor,
+  ipcMain,
+  Tray,
+  Menu,
+  MenuItem,
+  KeyboardEvent,
+} from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
+import { User } from "./api/types";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
-// Keep a global reference of the window object, if you don't, the window will
+// Keep a global reference of the window and tray object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win: BrowserWindow | null;
+let tray: Tray | null;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -49,6 +63,10 @@ function createWindow() {
   });
 }
 
+function createTray() {
+  tray = new Tray(path.join(__static, "trayTemplate.png"));
+}
+
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {
   // On macOS it is common for applications and their menu bar
@@ -79,6 +97,7 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+  createTray();
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -96,6 +115,46 @@ if (isDevelopment) {
   }
 }
 
+function handleLoggedIn(user: User) {
+  if (tray !== null) {
+    const contextMenu = Menu.buildFromTemplate([
+      { label: user.email, type: "normal", enabled: false },
+      { type: "separator" },
+      {
+        // Todo: Translate
+        label: "Starte neuen Zeiteintrag",
+        accelerator: "CmdOrCtrl+N",
+        click: () => {
+          if (win !== null) {
+            win.webContents.send("tray.newTimeEntry");
+          }
+        },
+      },
+      { type: "separator" },
+      {
+        // Todo: Translate
+        label: "Abmelden",
+        click: () => {
+          if (win !== null) {
+            win.webContents.send("tray.logOut");
+          }
+        },
+      },
+    ]);
+    tray.setContextMenu(contextMenu);
+  }
+}
+
+function handleLoggedOut() {
+  if (tray !== null) {
+    tray.setContextMenu(null);
+  }
+}
+
 ipcMain.on("getIdle", (event) => {
   event.reply("getIdleResponse", powerMonitor.getSystemIdleTime());
 });
+
+ipcMain.on("loggedIn", (_, user: User) => handleLoggedIn(user));
+
+ipcMain.on("loggedOut", () => handleLoggedOut());

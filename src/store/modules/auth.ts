@@ -4,6 +4,7 @@ import { User } from "@/api/types";
 import { RootState } from "..";
 import { MutationTypes } from "../mutation-types";
 import { ActionTypes } from "../actions";
+import { IpcRenderer } from "electron";
 
 export interface LoginResult {
   result: "ok" | "2fa" | "not ok";
@@ -85,6 +86,12 @@ const actions: ActionTree<State, RootState> & Actions = {
 
   [ActionTypes.LOGOUT]({ commit }: ActionContext<State, RootState>): void {
     commit(MutationTypes.SET_USER, null);
+    commit(MutationTypes.SET_TOKEN, null);
+    commit(MutationTypes.SET_CURRENT_TEAM_ID, null);
+
+    // @ts-ignore
+    const ipcRenderer = window.ipcRenderer as IpcRenderer;
+    ipcRenderer.send("loggedOut");
   },
 
   async [ActionTypes.VALIDATE]({
@@ -96,6 +103,10 @@ const actions: ActionTree<State, RootState> & Actions = {
 
     return validate()
       .then(() => {
+        // @ts-ignore
+        const ipcRenderer = window.ipcRenderer as IpcRenderer;
+        ipcRenderer.send("loggedIn", { email: state.user.email });
+
         return Promise.resolve(state.user);
       })
       .catch(() => {
