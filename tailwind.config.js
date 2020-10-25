@@ -18,9 +18,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brand: "#ff5e62",
-        "brand-light": "#ff777a",
-        "brand-dark": "#ff353a",
+        brand: "#F24C27",
+        "brand-light": "#F56F52",
+        "brand-dark": "#D8320D",
       },
       gridTemplateRows: {
         layout: "250px 1fr 80px",
