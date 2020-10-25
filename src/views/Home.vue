@@ -4,7 +4,7 @@
   >
     <default-header />
     <time-entry-list
-      class="h-full max-h-full px-4 pb-4 overflow-y-scroll bg-gray-200"
+      class="h-full max-h-full px-4 pb-4 overflow-y-auto bg-gray-200"
     />
     <action-bar />
   </div>
