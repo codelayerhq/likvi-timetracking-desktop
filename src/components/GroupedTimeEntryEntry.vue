@@ -2,6 +2,7 @@
   <div>
     <div
       class="flex items-center justify-between h-16 py-2 pl-4 pr-4 space-x-2 bg-gray-100 border-b border-gray-200 cursor-pointer hover:bg-white focus:bg-white focus:outline-none"
+      @click="handleShowDetailsClick"
     >
       <div class="w-6">
         <button
