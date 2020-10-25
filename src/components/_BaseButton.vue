@@ -31,17 +31,39 @@ export default defineComponent({
       // Todo: Colors not used elewhere will be purged by PurgeCSS
       buttonClasses: computed(() => [
         `hover:bg-${
-          props.color === "brand" ? "brand-light" : props.color.concat("-500")
+          props.color === "brand"
+            ? "brand-light"
+            : props.color === "brand-secondary"
+            ? "brand-secondary-light"
+            : props.color.concat("-500")
         }`,
-        `bg-${props.color === "brand" ? "brand" : props.color.concat("-600")}`,
+        `bg-${
+          props.color === "brand"
+            ? "brand"
+            : props.color === "brand-secondary"
+            ? "brand-secondary"
+            : props.color.concat("-600")
+        }`,
         `focus:border-${
-          props.color === "brand" ? "brand-dark" : props.color.concat("-700")
+          props.color === "brand"
+            ? "brand-dark"
+            : props.color === "brand-secondary"
+            ? "brand-secondary-dark"
+            : props.color.concat("-700")
         }`,
         `active:bg-${
-          props.color === "brand" ? "brand-dark" : props.color.concat("-700")
+          props.color === "brand"
+            ? "brand-dark"
+            : props.color === "brand-secondary"
+            ? "brand-secondary-dark"
+            : props.color.concat("-700")
         }`,
         `focus:shadow-outline-${
-          props.color === "brand" ? "brand-light" : props.color.concat("-500")
+          props.color === "brand"
+            ? "brand-light"
+            : props.color === "brand-secondary-light"
+            ? "brand-secondary-light"
+            : props.color.concat("-500")
         }`,
       ]),
     });

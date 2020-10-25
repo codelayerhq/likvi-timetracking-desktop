@@ -21,6 +21,9 @@ module.exports = {
         brand: "#F24C27",
         "brand-light": "#F56F52",
         "brand-dark": "#D8320D",
+        "brand-secondary": "#030140",
+        "brand-secondary-light": "#0F0D5D",
+        "brand-secondary-dark": "#03022D",
       },
       gridTemplateRows: {
         layout: "250px 1fr 80px",

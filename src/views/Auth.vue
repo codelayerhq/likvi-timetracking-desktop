@@ -1,5 +1,8 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen px-4 py-6">
+  <div
+    class="flex flex-col items-center justify-center min-h-screen px-4 py-6 bg-gradient-to-b from-brand to-brand-light"
+  >
+    <img src="@/assets/logo-font.svg" class="mb-20" />
     <form
       v-if="!showOTP"
       action="#"
@@ -32,19 +35,8 @@
         </div>
       </div>
 
-      <div class="flex items-center justify-end mt-6">
-        <div class="text-sm leading-5">
-          <a
-            href="#"
-            class="font-medium transition duration-150 ease-in-out text-brand hover:text-brand-light focus:outline-none focus:underline"
-          >
-            {{ t("auth.forgotPassword") }}
-          </a>
-        </div>
-      </div>
-
       <div class="mt-6">
-        <base-button type="submit">
+        <base-button type="submit" color="brand-secondary">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3">
             <svg
               class="w-5 h-5 text-white transition duration-150 ease-in-out"
