@@ -16,6 +16,8 @@ const i18n = createI18n({
   messages: {
     en,
     de,
+    "de-DE": de,
+    "de-AT": de,
     "en-GB": en,
     "en-US": en,
   },
