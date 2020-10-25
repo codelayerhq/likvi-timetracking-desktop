@@ -16,7 +16,7 @@ export default {
     save: "Save",
   },
   projectSelect: {
-    label: "Projectt",
+    label: "Project",
     placeholder: "Search for a project",
     noProjectsFound: "No projects found",
   },
@@ -32,7 +32,7 @@ export default {
     timespan: "Timespan",
   },
   projectIndicator: {
-    noProject: "Kein Projekt",
+    noProject: "No Project",
   },
   timeEntriesEmptyState: {
     heading: "No Time Entries",
