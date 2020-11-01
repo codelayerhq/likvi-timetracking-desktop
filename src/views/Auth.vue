@@ -157,8 +157,8 @@ export default defineComponent({
           break;
         default:
           toast.error(t("auth.loginFailed"), {
-            timeout: 5000,
             position: POSITION.TOP_CENTER,
+            hideProgressBar: true,
           });
           break;
       }
