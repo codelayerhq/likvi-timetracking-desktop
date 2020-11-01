@@ -15,7 +15,7 @@ export interface User {
   readonly current_team_id?: number;
   readonly avatar_url?: string;
   readonly current_team?: DataResponse<unknown>;
-  readonly teams?: DataResponse<unknown>;
+  readonly teams?: DataResponse<Team[]>;
   readonly invites?: DataResponse<unknown>;
   readonly settings?: DataResponse<unknown>;
   readonly notification_settings?: DataResponse<unknown>;

@@ -63,6 +63,11 @@ export default defineComponent({
       store.dispatch(ActionTypes.STOP_ACTIVE_TIME_ENTRY);
     });
 
+    ipcRenderer.on("tray.switchTeam", (_, teamId: number) => {
+      store.dispatch(`auth/${ActionTypes.SWITCH_TEAM}`, teamId);
+      store.dispatch(ActionTypes.FETCH_DATA);
+    });
+
     ipcRenderer.on("idle.stopActive", (_, idleSince: Date) => {
       store.dispatch(ActionTypes.STOP_ACTIVE_TIME_ENTRY, idleSince);
     });

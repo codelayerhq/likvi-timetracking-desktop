@@ -19,4 +19,5 @@ export enum ActionTypes {
   LOGIN = "LOGIN",
   LOGOUT = "LOGOUT",
   VALIDATE = "VALIDATE",
+  SWITCH_TEAM = "SWITCH_TEAM",
 }

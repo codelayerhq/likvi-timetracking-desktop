@@ -41,6 +41,10 @@ interface Actions<S = State, R = RootState> {
     commit,
     state,
   }: AugmentedActionContext<S, R>): Promise<User | null>;
+  [ActionTypes.SWITCH_TEAM](
+    { commit, state }: AugmentedActionContext<S, R>,
+    teamId: number
+  ): void;
 }
 
 const state: State = {
@@ -105,13 +109,34 @@ const actions: ActionTree<State, RootState> & Actions = {
       .then(() => {
         // @ts-ignore
         const ipcRenderer = window.ipcRenderer as IpcRenderer;
-        ipcRenderer.send("loggedIn", { email: state.user.email });
+        ipcRenderer.send(
+          "loggedIn",
+          JSON.stringify({ ...state.user }),
+          JSON.stringify([...(state.user?.teams?.data ?? [])]),
+          state.currentTeamId
+        );
 
         return Promise.resolve(state.user);
       })
       .catch(() => {
         return Promise.resolve(null);
       });
+  },
+
+  [ActionTypes.SWITCH_TEAM](
+    { commit }: ActionContext<State, RootState>,
+    teamId: number
+  ): void {
+    commit(MutationTypes.SET_CURRENT_TEAM_ID, teamId);
+
+    // @ts-ignore
+    const ipcRenderer = window.ipcRenderer as IpcRenderer;
+    ipcRenderer.send(
+      "loggedIn",
+      JSON.stringify({ ...state.user }),
+      JSON.stringify([...(state.user?.teams?.data ?? [])]),
+      state.currentTeamId
+    );
   },
 };
 

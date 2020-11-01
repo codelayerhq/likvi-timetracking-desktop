@@ -14,7 +14,7 @@ import {
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
-import { User } from "./api/types";
+import { Team, User } from "./api/types";
 import { autoUpdater } from "electron-updater";
 import { MenuItemConstructorOptions } from "electron/main";
 const isDevelopment = process.env.NODE_ENV !== "production";
@@ -34,12 +34,16 @@ interface AppState {
   loggedIn: boolean;
   hasRunningTimeEntry: boolean;
   user: User | null;
+  teams: Team[];
+  selectedTeamId: number | null;
 }
 
 const appState: AppState = {
   loggedIn: false,
   hasRunningTimeEntry: false,
   user: null,
+  teams: [],
+  selectedTeamId: null,
 };
 
 const trayParts: { [key: string]: () => MenuItemConstructorOptions } = {
@@ -80,11 +84,26 @@ const trayParts: { [key: string]: () => MenuItemConstructorOptions } = {
       }
     },
   }),
+  teamSelect: () => ({
+    label: "Aktuelles Team",
+    type: "submenu",
+    submenu: appState.teams.map((team) => ({
+      label: team.name,
+      type: "radio",
+      checked: team.id === appState.selectedTeamId,
+      click: () => {
+        if (win !== null) {
+          win.webContents.send("tray.switchTeam", team.id);
+        }
+      },
+    })),
+  }),
 };
 
 function buildTray(): MenuItemConstructorOptions[] {
   return [
     trayParts.loggedInUser(),
+    trayParts.teamSelect(),
     { type: "separator" },
     trayParts.startNewTimeEntry(),
     trayParts.stopCurrentTimeEntry(),
@@ -187,8 +206,10 @@ if (isDevelopment) {
   }
 }
 
-function handleLoggedIn(user: User) {
-  appState.user = user;
+function handleLoggedIn(user: string, teams: string, selectedTeamId: number) {
+  appState.user = JSON.parse(user);
+  appState.teams = JSON.parse(teams);
+  appState.selectedTeamId = selectedTeamId;
 
   if (tray !== null) {
     const contextMenu = Menu.buildFromTemplate(buildTray());
@@ -209,7 +230,11 @@ ipcMain.on("getIdle", (event) => {
   event.reply("getIdleResponse", powerMonitor.getSystemIdleTime());
 });
 
-ipcMain.on("loggedIn", (_, user: User) => handleLoggedIn(user));
+ipcMain.on(
+  "loggedIn",
+  (_, user: string, teams: string, selectedTeamId: number) =>
+    handleLoggedIn(user, teams, selectedTeamId)
+);
 
 ipcMain.on("loggedOut", () => handleLoggedOut());
 
