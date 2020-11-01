@@ -65,7 +65,14 @@ function createWindow() {
 }
 
 function createTray() {
-  tray = new Tray(path.join(__static, "trayTemplate.png"));
+  const image =
+    process.platform === "win32"
+      ? "tray.ico"
+      : process.platform === "darwin"
+      ? "trayTemplate.png"
+      : "tray.png";
+
+  tray = new Tray(path.join(__static, image));
 }
 
 // Quit when all windows are closed.
