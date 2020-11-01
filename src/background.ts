@@ -16,6 +16,7 @@ import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import path from "path";
 import { User } from "./api/types";
 import { autoUpdater } from "electron-updater";
+import { MenuItemConstructorOptions } from "electron/main";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window, idle window and tray object, if you don't, the window will
@@ -28,6 +29,69 @@ let idleWin: BrowserWindow | null = null;
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
+
+interface AppState {
+  loggedIn: boolean;
+  hasRunningTimeEntry: boolean;
+  user: User | null;
+}
+
+const appState: AppState = {
+  loggedIn: false,
+  hasRunningTimeEntry: false,
+  user: null,
+};
+
+const trayParts: { [key: string]: () => MenuItemConstructorOptions } = {
+  loggedInUser: () => ({
+    //@ts-ignore
+    label: appState.user ? appState.user.email : "",
+    type: "normal",
+    enabled: false,
+  }),
+  startNewTimeEntry: () => ({
+    // Todo: Translate
+    label: "Starte neuen Zeiteintrag",
+    accelerator: "CmdOrCtrl+N",
+    click: () => {
+      if (win !== null) {
+        win.webContents.send("tray.newTimeEntry");
+      }
+    },
+    enabled: !appState.hasRunningTimeEntry,
+  }),
+  stopCurrentTimeEntry: () => ({
+    // Todo: Translate
+    label: "Stoppe aktiven Zeiteintrag",
+    accelerator: "CmdOrCtrl+S",
+    click: () => {
+      if (win !== null) {
+        win.webContents.send("tray.stopActive");
+      }
+    },
+    enabled: appState.hasRunningTimeEntry,
+  }),
+  logOut: () => ({
+    // Todo: Translate
+    label: "Abmelden",
+    click: () => {
+      if (win !== null) {
+        win.webContents.send("tray.logOut");
+      }
+    },
+  }),
+};
+
+function buildTray(): MenuItemConstructorOptions[] {
+  return [
+    trayParts.loggedInUser(),
+    { type: "separator" },
+    trayParts.startNewTimeEntry(),
+    trayParts.stopCurrentTimeEntry(),
+    { type: "separator" },
+    trayParts.logOut(),
+  ];
+}
 
 function createWindow() {
   // Create the browser window.
@@ -124,42 +188,22 @@ if (isDevelopment) {
 }
 
 function handleLoggedIn(user: User) {
+  appState.user = user;
+
   if (tray !== null) {
-    const contextMenu = Menu.buildFromTemplate([
-      { label: user.email, type: "normal", enabled: false },
-      { type: "separator" },
-      {
-        // Todo: Translate
-        label: "Starte neuen Zeiteintrag",
-        accelerator: "CmdOrCtrl+N",
-        click: () => {
-          if (win !== null) {
-            win.webContents.send("tray.newTimeEntry");
-          }
-        },
-      },
-      { type: "separator" },
-      {
-        // Todo: Translate
-        label: "Abmelden",
-        click: () => {
-          if (win !== null) {
-            win.webContents.send("tray.logOut");
-          }
-        },
-      },
-    ]);
+    const contextMenu = Menu.buildFromTemplate(buildTray());
     tray.setContextMenu(contextMenu);
   }
 }
 
 function handleLoggedOut() {
+  appState.user = null;
+  appState.loggedIn = false;
+
   if (tray !== null) {
     tray.setContextMenu(null);
   }
 }
-
-let hasRunningTimeEntry = false;
 
 ipcMain.on("getIdle", (event) => {
   event.reply("getIdleResponse", powerMonitor.getSystemIdleTime());
@@ -170,11 +214,21 @@ ipcMain.on("loggedIn", (_, user: User) => handleLoggedIn(user));
 ipcMain.on("loggedOut", () => handleLoggedOut());
 
 ipcMain.on("activeTimeEntry", () => {
-  hasRunningTimeEntry = true;
+  appState.hasRunningTimeEntry = true;
+
+  if (tray !== null) {
+    const contextMenu = Menu.buildFromTemplate(buildTray());
+    tray.setContextMenu(contextMenu);
+  }
 });
 
 ipcMain.on("noActiveTimeEntry", () => {
-  hasRunningTimeEntry = false;
+  appState.hasRunningTimeEntry = false;
+
+  if (tray !== null) {
+    const contextMenu = Menu.buildFromTemplate(buildTray());
+    tray.setContextMenu(contextMenu);
+  }
 });
 
 ipcMain.on("idleWindow.removeStopped", (event, idleSince) => {
@@ -186,7 +240,7 @@ ipcMain.on("idleWindow.removeStopped", (event, idleSince) => {
 setInterval(() => {
   const idleTime = powerMonitor.getSystemIdleTime();
 
-  if (idleTime > 60 && idleWin === null && hasRunningTimeEntry) {
+  if (idleTime > 60 && idleWin === null && appState.hasRunningTimeEntry) {
     idleWin = new BrowserWindow({
       width: 350,
       height: 500,

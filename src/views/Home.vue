@@ -59,6 +59,10 @@ export default defineComponent({
       router.replace({ name: "login" });
     });
 
+    ipcRenderer.on("tray.stopActive", () => {
+      store.dispatch(ActionTypes.STOP_ACTIVE_TIME_ENTRY);
+    });
+
     ipcRenderer.on("idle.stopActive", (_, idleSince: Date) => {
       store.dispatch(ActionTypes.STOP_ACTIVE_TIME_ENTRY, idleSince);
     });
