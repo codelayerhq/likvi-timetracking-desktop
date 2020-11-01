@@ -94,12 +94,13 @@ export default defineComponent({
       autocompleteInstance = autocomplete<ProjectAutocompleteItem>({
         input: input.value,
         emptyMsg: t("projectSelect.noProjectsFound"),
-        minLength: 1,
+        minLength: 0,
+        showOnFocus: true,
         debounceWaitMs: 100,
         fetch: async (text, callback) => {
           const {
             data: { data: projects },
-          } = await new ProjectsService().search(text);
+          } = await new ProjectsService().suggest(text);
 
           const newData: ProjectAutocompleteItem[] = projects.map(
             (project: Project) => ({

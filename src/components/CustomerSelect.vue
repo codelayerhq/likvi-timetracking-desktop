@@ -76,12 +76,13 @@ export default defineComponent({
       autocompleteInstance = autocomplete<CustomerAutocompleteItem>({
         input: input.value,
         emptyMsg: t("customerSelect.noCustomersFound"),
-        minLength: 1,
+        minLength: 0,
+        showOnFocus: true,
         debounceWaitMs: 100,
         fetch: async (text, callback) => {
           const {
             data: { data: customers },
-          } = await new CustomersService().search(text);
+          } = await new CustomersService().suggest(text);
 
           const newData: CustomerAutocompleteItem[] = customers.map(
             (customer: Customer) => ({

@@ -62,6 +62,15 @@ export default class ProjectsService extends ApiService {
   }
 
   /**
+   * Suggest projects
+   */
+  suggest(query: string): AxiosPromise<ItemResponse<Project[]>> {
+    this.params.q = query;
+
+    return this.call("get", `${this.baseUrl}/suggest`);
+  }
+
+  /**
    * Get all open entries of the project
    */
   openEntries(projectId: number, mode: string): AxiosPromise {
