@@ -29,7 +29,7 @@ export default {
     noTimeEntriesFound: "No time entries found",
   },
   header: {
-    timespan: "Timespan",
+    jumpToCurrentWeek: "Jump to current week",
   },
   projectIndicator: {
     noProject: "No Project",
@@ -52,5 +52,10 @@ export default {
     minutes: "minutes",
     stopAndRemoveInaktive: "Stop and remove idle time",
     keepInaktive: "Keep idle time",
+  },
+  timeSpan: {
+    currentWeek: "This week",
+    weeksAgo: "One week ago | {n} weeks ago",
+    weeksAhead: "In one wekk | In {n} weeks",
   },
 };

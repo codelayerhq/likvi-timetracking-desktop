@@ -2,13 +2,21 @@
   <header class="z-10 px-8 py-6 bg-gray-100 shadow-sm">
     <div class="mb-8">
       <div class="text-sm leading-tight text-gray-700">
-        <label for="timeSpan block">{{ t("header.timespan") }}</label>
         <time-span
           :start-date="startDate"
           :end-date="endDate"
-          class="block mt-1 font-semibold"
+          class="block mt-1 font-semibold text-brand-dark"
           name="timeSpan"
         />
+        <span
+          v-show="!isCurrentWeek"
+          role="button"
+          class="block mt-1 text-xs text-gray-700 hover:text-gray-600 focus:outline-none focus:text-gray-600"
+          tabindex="0"
+          @click="handleJumpToCurrentWeek"
+        >
+          {{ t("header.jumpToCurrentWeek") }}
+        </span>
       </div>
     </div>
 
@@ -59,10 +67,11 @@ import { defineComponent, computed } from "vue";
 import TimeEntriesChart from "@/components/TimeEntriesChart.vue";
 import TimeSpan from "@/components/TimeSpan.vue";
 import { useStore } from "vuex";
-import { subWeeks, addWeeks } from "date-fns";
+import { subWeeks, addWeeks, differenceInCalendarWeeks } from "date-fns";
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
 import { useI18n } from "vue-i18n";
+import { endOfWeek, startOfWeek } from "date-fns/esm";
 
 export default defineComponent({
   name: "DefaultHeader",
@@ -75,6 +84,14 @@ export default defineComponent({
 
     const startDate = computed(() => store.state.startDate);
     const endDate = computed(() => store.state.endDate);
+
+    const isCurrentWeek = computed(
+      () =>
+        differenceInCalendarWeeks(
+          startDate.value,
+          startOfWeek(new Date(), { weekStartsOn: 1 })
+        ) === 0
+    );
 
     const handlePreviousWeek = () => {
       const newStartDate = subWeeks(startDate.value, 1);
@@ -94,12 +111,20 @@ export default defineComponent({
       store.dispatch(ActionTypes.FETCH_DATA);
     }
 
+    function handleJumpToCurrentWeek() {
+      const newStartDate = startOfWeek(new Date(), { weekStartsOn: 1 });
+      const newEndDate = endOfWeek(new Date(), { weekStartsOn: 1 });
+      fetchData(newStartDate, newEndDate);
+    }
+
     return {
       ...useI18n(),
       startDate,
       endDate,
       handlePreviousWeek,
       handleNextWeek,
+      handleJumpToCurrentWeek,
+      isCurrentWeek,
     };
   },
 });
