@@ -34,6 +34,15 @@ export default {
   projectIndicator: {
     noProject: "No Project",
   },
+  auth: {
+    email: "E-Mail Address",
+    password: "Password",
+    forgotPassword: "Forgot password?",
+    signIn: "Login",
+    otp: "One-Time-Password",
+    back: "Back",
+    loginFailed: "Login failed",
+  },
   timeEntriesEmptyState: {
     heading: "No Time Entries",
     text: "You did not track any time entries this week.",
