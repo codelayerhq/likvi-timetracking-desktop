@@ -1,11 +1,11 @@
 <template>
   <header class="z-10 px-8 py-6 bg-gray-100 shadow-sm">
     <div class="mb-8">
-      <div class="text-sm leading-tight text-gray-700">
+      <div class="h-10 text-sm leading-tight text-gray-700">
         <time-span
           :start-date="startDate"
           :end-date="endDate"
-          class="block mt-1 font-semibold text-brand-dark"
+          class="block mt-1 font-semibold"
           name="timeSpan"
         />
         <span
