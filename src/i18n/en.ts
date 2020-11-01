@@ -49,7 +49,7 @@ export default {
   },
   idle: {
     youAreIdleFor: "You are idle since",
-    minutes: "mnutes",
+    minutes: "minutes",
     stopAndRemoveInaktive: "Stop and remove idle time",
     keepInaktive: "Keep idle time",
   },
