@@ -1,6 +1,6 @@
 <template>
   <button
-    class="text-gray-600 border border-transparent rounded hover:text-gray-500 focus:outline-none focus:border-gray-700 active:text-gray-700 focus:shadow-outline-gray-500"
+    class="text-gray-600 border border-transparent rounded hover:text-gray-500 focus:outline-none active:text-gray-700 focus:shadow-outline-gray-500"
   >
     <slot />
   </button>
