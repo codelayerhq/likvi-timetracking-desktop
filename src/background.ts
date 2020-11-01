@@ -240,7 +240,7 @@ ipcMain.on("idleWindow.removeStopped", (event, idleSince) => {
 setInterval(() => {
   const idleTime = powerMonitor.getSystemIdleTime();
 
-  if (idleTime > 60 && idleWin === null && appState.hasRunningTimeEntry) {
+  if (idleTime > 60 * 5 && idleWin === null && appState.hasRunningTimeEntry) {
     idleWin = new BrowserWindow({
       width: 350,
       height: 500,
