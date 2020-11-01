@@ -45,7 +45,8 @@ export default {
   },
   timeEntriesEmptyState: {
     heading: "Keine Zeiteinträge",
-    text: "Diese Woche hast du noch keine Zeiteinträge erfasst.",
+    text:
+      "In dem ausgewählten Zeitraum hast du noch keine Zeiteinträge erfasst.",
   },
   idle: {
     youAreIdleFor: "Du bist inaktiv seit",
