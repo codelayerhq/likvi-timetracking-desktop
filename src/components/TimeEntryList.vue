@@ -1,7 +1,9 @@
 <template>
   <div v-if="hasTimeEntries">
     <div v-for="(groupedTimeEntries, day) in timeEntriesGrouped" :key="day">
-      <h2 class="px-2 py-2 text-xs font-semibold text-gray-700">{{ day }}</h2>
+      <h2 class="px-2 mt-3 mb-1 text-xs font-semibold text-gray-700">
+        {{ day }}
+      </h2>
       <section
         v-for="(timeEntries, description) in groupedTimeEntries"
         :key="`${day}_${description}`"
