@@ -11,8 +11,14 @@ module.exports = {
           entitlements: "build/entitlements.mac.plist",
           entitlementsInherit: "build/entitlements.mac.plist",
           category: "public.app-category.productivit",
+          publish: ["github"],
         },
-        publish: ["github"],
+        win: {
+          publish: ["github"],
+        },
+        linux: {
+          publish: ["github"],
+        },
       },
     },
   },
