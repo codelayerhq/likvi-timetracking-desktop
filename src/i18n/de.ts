@@ -59,4 +59,7 @@ export default {
     weeksAgo: "Vor einer Woche | Vor {n} Wochen",
     weeksAhead: "In einer Woche | In {n} Wochen",
   },
+  notification: {
+    switchedTeam: "Aktuelles Team wurde gewechselt",
+  },
 };

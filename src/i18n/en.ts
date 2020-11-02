@@ -58,4 +58,7 @@ export default {
     weeksAgo: "One week ago | {n} weeks ago",
     weeksAhead: "In one wekk | In {n} weeks",
   },
+  notifications: {
+    switchedTeam: "Switched active team",
+  },
 };

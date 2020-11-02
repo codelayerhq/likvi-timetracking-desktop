@@ -23,6 +23,8 @@ import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
 import { IpcRenderer, IpcRendererEvent } from "electron";
 import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
+import { useI18n } from "vue-i18n";
 
 // @ts-ignore
 const ipcRenderer = window.ipcRenderer as IpcRenderer;
@@ -38,6 +40,8 @@ export default defineComponent({
   setup() {
     const store = useStore<RootState>();
     const router = useRouter();
+    const toast = useToast();
+    const { t } = useI18n();
 
     store.dispatch(ActionTypes.FETCH_DATA);
 
@@ -66,6 +70,7 @@ export default defineComponent({
     ipcRenderer.on("tray.switchTeam", (_, teamId: number) => {
       store.dispatch(`auth/${ActionTypes.SWITCH_TEAM}`, teamId);
       store.dispatch(ActionTypes.FETCH_DATA);
+      toast.success(t("notification.switchedTeam"));
     });
 
     ipcRenderer.on("idle.stopActive", (_, idleSince: Date) => {
