@@ -4,6 +4,8 @@
     <img width="250" alt="likvi logo" src="./readme_assets/logo.svg">
 </p>
 
+![Lint](https://github.com/codelayerhq/likvi-timetracking-desktop/workflows/Lint/badge.svg)
+
 The likvi time tracking app is a standalone app for macOS, Windows, and Linux which allows you to conveniently track your working time.  
 It integrates into other likvi services so that you can easily create invoices and more out of your tracked time.  
 For more information about likvi visit [likvi.de](https://likvi.de) and for details about the time tracking app visit [our landing page](https://likvi.de/zeiterfassung-online).
