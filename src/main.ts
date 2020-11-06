@@ -8,6 +8,7 @@ import de from "@/i18n/de";
 import en from "@/i18n/en";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import focus from "./directives/autofocus";
 
 const app = createApp(App);
 
@@ -25,6 +26,8 @@ const i18n = createI18n({
 });
 
 app.use(store).use(router).use(i18n).use(Toast).mount("#app");
+
+app.directive("focus", focus);
 
 // Globally register all base components
 const requireComponent = require.context(

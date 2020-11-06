@@ -14,6 +14,7 @@
         <div>
           <input
             v-model="email"
+            v-focus
             :aria-label="t('auth.email')"
             name="email"
             type="email"
@@ -66,6 +67,7 @@
         <div>
           <input
             v-model="otp"
+            v-focus
             :aria-label="t('auth.otp')"
             name="otp"
             type="text"
