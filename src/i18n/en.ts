@@ -44,7 +44,7 @@ export default {
     loginFailed: "Login failed",
     welcomeText:
       "With this app you record your working hours and import them automatically into the likvi accounting tool.",
-    security_text:
+    securityText:
       "Your data will be sent encrypted and stored securly. We ensure GDPR compliant data privacy.",
   },
   timeEntriesEmptyState: {
