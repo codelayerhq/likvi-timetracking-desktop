@@ -69,3 +69,14 @@ In the future, we may consider building an offline version that does not require
 ### How can I switch my team?
 
 You can switch your team in the tray menu under `Team`
+
+## License 
+
+The likvi time tracking app is licensed under the GNU General Public License.  
+For more information see the [LICENSE file](./LICENSE).
+
+## Copyright
+
+likvi is a product of codelayer GmbH.  
+codelayer is a software company from Karlsruhe, Germany which specializes in web application development.  
+For more information about codelayer, visit our website at [codelayer.de](https://codelayer.de).
