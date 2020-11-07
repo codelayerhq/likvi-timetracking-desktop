@@ -8,6 +8,7 @@
   "repository": {
     "url": "https://github.com/codelayerhq/likvi-timetracking-desktop"
   },
+  "license": "GPL-3.0-or-later"
   "version": "1.0.0-rc.1",
   "private": true,
   "scripts": {
