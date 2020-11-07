@@ -1,6 +1,6 @@
 <template>
   <button
-    class="relative flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out border border-transparent rounded-md group focus:outline-none"
+    class="relative flex justify-center w-full px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out border border-transparent rounded-md select-none group focus:outline-none"
     :class="state.buttonClasses"
   >
     <slot>
