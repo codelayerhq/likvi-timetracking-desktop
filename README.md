@@ -70,12 +70,12 @@ In the future, we may consider building an offline version that does not require
 
 You can switch your team in the tray menu under `Team`
 
-## License 
+## License
 
 The likvi time tracking app is licensed under the GNU General Public License.  
 For more information see the [LICENSE file](./LICENSE).
 
-## Copyright
+## About us
 
 likvi is a product of codelayer GmbH.  
 codelayer is a software company from Karlsruhe, Germany which specializes in web application development.  
