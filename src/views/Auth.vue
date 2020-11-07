@@ -1,56 +1,54 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center min-h-screen px-4 py-6 bg-gradient-to-b from-brand to-brand-light"
+    class="flex flex-col items-center min-h-screen px-16 pt-20 pb-12 bg-white"
   >
-    <img src="@/assets/logo-font.svg" class="mb-20" />
+    <div class="flex flex-col items-center">
+      <img src="@/assets/logo-font.svg" />
+
+      <p class="px-5 mt-12 text-center text-brand-secondary-dark">
+        {{ t("auth.welcomeText") }}
+      </p>
+    </div>
+
     <form
       v-if="!showOTP"
       action="#"
       method="POST"
-      class="w-full max-w-md"
+      class="w-full max-w-md mx-auto mt-16"
       @submit.prevent="handleLogin"
     >
-      <div class="rounded-md shadow-sm">
-        <div>
-          <input
-            v-model="email"
-            v-focus
-            :aria-label="t('auth.email')"
-            name="email"
-            type="email"
-            required
-            class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-t-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-            :placeholder="t('auth.email')"
-          />
-        </div>
-        <div class="-mt-px">
-          <input
-            v-model="password"
-            :aria-label="t('auth.password')"
-            name="password"
-            type="password"
-            required
-            class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-none appearance-none rounded-b-md focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-            :placeholder="t('auth.password')"
-          />
-        </div>
-      </div>
+      <input
+        v-model="email"
+        v-focus
+        :aria-label="t('auth.email')"
+        name="email"
+        type="email"
+        class="relative block w-full px-3 py-3 text-gray-900 placeholder-gray-600 border border-transparent rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+        style="background-color: #f2f2f2"
+        required
+        :placeholder="t('auth.email')"
+      />
 
-      <div class="mt-6">
-        <base-button type="submit" color="brand-secondary">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <svg
-              class="w-5 h-5 text-white transition duration-150 ease-in-out"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </span>
+      <input
+        v-model="password"
+        :aria-label="t('auth.password')"
+        name="password"
+        type="password"
+        class="relative block w-full px-3 py-3 mt-3 text-gray-900 placeholder-gray-600 border border-transparent rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+        style="background-color: #f2f2f2"
+        required
+        :placeholder="t('auth.password')"
+      />
+
+      <div class="flex pl-6 mt-6">
+        <a
+          href="https://app.likvi.de/forgot"
+          target="_blank"
+          class="px-2 py-3 mr-4 text-sm whitespace-no-wrap"
+        >
+          {{ t("auth.forgotPassword") }}
+        </a>
+        <base-button type="submit" color="brand-secondary" class="px-2 py-3">
           {{ t("auth.signIn") }}
         </base-button>
       </div>
@@ -60,7 +58,7 @@
       v-else
       action="#"
       method="POST"
-      class="w-full max-w-md"
+      class="w-full max-w-md mx-auto mt-16"
       @submit.prevent="handleLogin"
     >
       <div class="rounded-md shadow-sm">
@@ -75,43 +73,33 @@
             pattern="[0-9]*"
             autocomplete="one-time-code"
             :placeholder="t('auth.otp')"
-            class="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+            class="relative block w-full px-3 py-3 mt-3 text-gray-900 placeholder-gray-600 border border-transparent rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+            style="background-color: #f2f2f2"
             required
           />
         </div>
       </div>
 
-      <div class="flex items-center justify-end mt-6">
-        <div class="text-sm leading-5">
-          <a
-            href="#"
-            class="font-medium transition duration-150 ease-in-out text-brand hover:text-brand-light focus:outline-none focus:underline"
-            @click="handleOTPBack"
-          >
-            {{ t("auth.back") }}
-          </a>
-        </div>
-      </div>
-
-      <div class="mt-6">
-        <base-button type="submit">
-          <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-            <svg
-              class="w-5 h-5 text-white transition duration-150 ease-in-out"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </span>
+      <div class="flex pl-6 mt-6">
+        <a
+          href="#"
+          class="px-2 py-3 mr-4 text-sm"
+          @click.prevent="handleOTPBack"
+        >
+          {{ t("auth.back") }}
+        </a>
+        <base-button type="submit" color="brand-secondary" class="px-2 py-3">
           {{ t("auth.signIn") }}
         </base-button>
       </div>
     </form>
+
+    <footer class="flex flex-col items-center mt-auto">
+      <img src="@/assets/padlock.svg" />
+      <p class="mt-4 text-xs text-center text-gray-900">
+        {{ t("auth.securityText") }}
+      </p>
+    </footer>
   </div>
 </template>
 

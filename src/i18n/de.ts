@@ -36,12 +36,16 @@ export default {
   },
   auth: {
     email: "E-Mail Adresse",
-    password: "Passwort",
+    password: "•••••••••••",
     forgotPassword: "Passwort vergessen?",
     signIn: "Anmelden",
     otp: "Einmalkennwort",
     back: "Zurück",
     loginFailed: "Anmedlung fehlgeschlagen",
+    welcomeText:
+      "Mit dieser App erfasst Du Deine Arbeitszeiten und importierst sie automatisch in das likvi Abrechnungstool.",
+    securityText:
+      "Deine Daten werden verschlüsselt abgeschickt und sicher gespeichert. Wir gewährleisten DSGVO konformen Datenschutz.",
   },
   timeEntriesEmptyState: {
     heading: "Keine Zeiteinträge",
