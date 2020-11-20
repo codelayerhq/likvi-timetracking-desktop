@@ -66,4 +66,13 @@ export default {
   notification: {
     switchedTeam: "Aktuelles Team wurde gewechselt",
   },
+  projectModal: {
+    project: "Projekt",
+    name: "Name",
+    colorHex: "Farbe",
+    startDate: "Startdatum",
+    endDate: "Enddatum",
+    add: "Hinzufügen",
+    projectCreated: "Projekt wurde erstellt",
+  },
 };

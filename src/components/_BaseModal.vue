@@ -1,6 +1,6 @@
 <template>
   <teleport to="body">
-    <dialog ref="dialog" v-bind="$attrs" class="rounded-lg">
+    <dialog ref="dialog" v-bind="$attrs" class="z-20 rounded-lg">
       <slot name="header" v-bind="{ open, close }" />
       <slot />
     </dialog>
@@ -12,7 +12,19 @@ import { defineComponent, ref, Ref } from "vue";
 
 export default defineComponent({
   name: "BaseModal",
-  setup() {
+  props: {
+    showModal: {
+      type: Boolean,
+      required: false,
+      defaul: false,
+    },
+    applyTransformStyles: {
+      type: Boolean,
+      required: false,
+      defaul: false,
+    },
+  },
+  setup(props) {
     const dialog = ref() as Ref<HTMLDialogElement>;
     const appElement = document.getElementById("app");
     const appElementModalOpendClasses = [
@@ -31,13 +43,23 @@ export default defineComponent({
 
     function open() {
       // Todo: dialog.value.showModal(); breaks the autocomplete component
-      dialog.value.show();
-      applyAppElementTransform();
+      if (props.showModal) {
+        dialog.value.showModal();
+      } else {
+        dialog.value.show();
+      }
+
+      if (props.applyTransformStyles) {
+        applyAppElementTransform();
+      }
     }
 
     function close() {
       dialog.value.close();
-      removeAppElementTransform();
+
+      if (props.applyTransformStyles) {
+        removeAppElementTransform();
+      }
     }
 
     function applyAppElementTransform() {

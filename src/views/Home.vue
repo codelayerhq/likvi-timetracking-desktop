@@ -10,6 +10,7 @@
   </div>
 
   <selected-time-entry-modal />
+  <add-project-modal />
 </template>
 
 <script lang="ts">
@@ -18,6 +19,7 @@ import DefaultHeader from "@/components/DefaultHeader.vue";
 import TimeEntryList from "@/components/TimeEntryList.vue";
 import ActionBar from "@/components/ActionBar.vue";
 import SelectedTimeEntryModal from "@/components/SelectedTimeEntryModal.vue";
+import AddProjectModal from "@/components/AddProjectModal.vue";
 import { useStore } from "vuex";
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
@@ -36,6 +38,7 @@ export default defineComponent({
     TimeEntryList,
     ActionBar,
     SelectedTimeEntryModal,
+    AddProjectModal,
   },
   setup() {
     const store = useStore<RootState>();

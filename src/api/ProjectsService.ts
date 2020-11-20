@@ -1,6 +1,11 @@
 import ApiService from "./ApiService";
 import { AxiosPromise } from "axios";
-import { CollectionResponse, ItemResponse, Project } from "./types";
+import {
+  CollectionResponse,
+  ItemResponse,
+  Project,
+  ProjectPayload,
+} from "./types";
 
 const BASE_URL = "projects";
 
@@ -24,7 +29,7 @@ export default class ProjectsService extends ApiService {
   /**
    * Create a new project
    */
-  create(data: unknown): AxiosPromise<ItemResponse<Project>> {
+  create(data: ProjectPayload): AxiosPromise<ItemResponse<Project>> {
     return this.call("post", this.baseUrl, data);
   }
 
@@ -33,7 +38,7 @@ export default class ProjectsService extends ApiService {
    */
   update(
     projectId: number,
-    data: unknown
+    data: ProjectPayload
   ): AxiosPromise<ItemResponse<Project>> {
     return this.call("patch", `${this.baseUrl}/${projectId}`, data);
   }

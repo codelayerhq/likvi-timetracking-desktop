@@ -3,6 +3,7 @@
     ref="modal"
     class="bottom-0 w-full px-8 py-6 bg-gray-50"
     style="height: 95vh"
+    apply-transform-styles
   >
     <template #header>
       <header class="absolute top-0 right-0 mt-4 mr-4">
@@ -37,7 +38,29 @@
           class="mb-4"
         />
 
-        <project-select v-model="formData.project" class="mb-4" />
+        <div class="flex items-end mb-4 space-x-2">
+          <project-select v-model="formData.project" class="w-full" />
+          <button
+            type="button"
+            class="w-8 h-12 btn-icon"
+            @click="handleAddProject"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+        </div>
 
         <customer-select v-model="formData.customer" class="mb-4" />
 
@@ -208,6 +231,10 @@ export default defineComponent({
       return format(parseISO(date), "yyyy-MM-dd'T'HH:mm");
     }
 
+    function handleAddProject() {
+      store.dispatch(ActionTypes.SET_ADD_PROJECT_MODAL_OPEN, true);
+    }
+
     watch(hasSelectedTimeEntry, function (hasSelectedTimeEntry) {
       if (hasSelectedTimeEntry && modal.value.getOpenState() !== true) {
         modal.value.open();
@@ -226,6 +253,7 @@ export default defineComponent({
       formData,
       handleSave,
       startedAtMax,
+      handleAddProject,
     };
   },
 });
