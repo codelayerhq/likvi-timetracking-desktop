@@ -23,8 +23,7 @@
         :aria-label="t('auth.email')"
         name="email"
         type="email"
-        class="text-input"
-        style="background-color: #f2f2f2"
+        class="bg-gray-100 text-input"
         required
         :placeholder="t('auth.email')"
       />
@@ -34,8 +33,7 @@
         :aria-label="t('auth.password')"
         name="password"
         type="password"
-        class="mt-3 text-input"
-        style="background-color: #f2f2f2"
+        class="mt-3 bg-gray-100 text-input"
         required
         :placeholder="t('auth.password')"
       />

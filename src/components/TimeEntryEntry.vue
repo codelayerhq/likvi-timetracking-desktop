@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-between h-16 py-2 pl-6 pr-4 space-x-2 bg-gray-100 border-b border-gray-200 cursor-pointer hover:bg-white focus:bg-white focus:outline-none"
+    class="flex items-center justify-between h-16 py-2 pl-6 pr-4 space-x-2 border-b border-gray-200 cursor-pointer bg-gray-50 hover:bg-white focus:bg-white focus:outline-none"
     tabindex="2"
     @click="handleTimeEntryEntryClick"
   >

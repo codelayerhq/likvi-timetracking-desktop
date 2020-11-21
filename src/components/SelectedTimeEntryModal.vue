@@ -1,7 +1,7 @@
 <template>
   <base-modal
     ref="modal"
-    class="bottom-0 w-full px-8 py-6"
+    class="bottom-0 w-full px-8 py-6 bg-gray-50"
     style="height: 95vh"
   >
     <template #header>

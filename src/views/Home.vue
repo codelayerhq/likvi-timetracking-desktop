@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid max-h-screen min-h-screen grid-cols-1 bg-gray-100 grid-rows-layout min-w-screen"
+    class="grid max-h-screen min-h-screen grid-cols-1 bg-gray-50 grid-rows-layout min-w-screen"
   >
     <default-header />
     <time-entry-list
