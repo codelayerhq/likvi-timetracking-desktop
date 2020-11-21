@@ -6,7 +6,7 @@
     >
       <div class="w-6">
         <button
-          class="w-6 h-6 text-sm font-bold text-gray-600 border border-gray-500 rounded hover:border-gray-600 focus:outline-none focus:border-gray-700 focus:shadow-outline-gray-500"
+          class="w-6 h-6 text-sm font-bold text-gray-600 border border-gray-500 rounded hover:border-gray-600 focus:outline-none focus:border-gray-700 focus:ring-gray-500"
           @click="handleShowDetailsClick"
         >
           {{ timeEntries.length }}
@@ -25,8 +25,8 @@
       </span>
 
       <div class="flex">
-        <base-icon-button
-          class="p-2"
+        <button
+          class="p-2 btn-icon"
           tabindex="2"
           @click.stop="handleResumeTimeEntryClick"
         >
@@ -50,7 +50,7 @@
               d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-        </base-icon-button>
+        </button>
       </div>
     </div>
 

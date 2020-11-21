@@ -9,7 +9,6 @@
       >
         <input
           type="radio"
-          class="form-radio"
           :name="name"
           :value="option.value"
           :checked="modelValue === option.value"

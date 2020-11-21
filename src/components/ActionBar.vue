@@ -10,6 +10,7 @@
     <div v-else class="w-full">
       <new-time-entry-input
         v-model="description"
+        class="bg-white text-input"
         @time-entry-selected="handleTimeEntrySelected"
       />
     </div>

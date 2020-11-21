@@ -2,6 +2,38 @@
 
 @tailwind components;
 
+@layer components {
+  .text-input {
+    @apply block w-full py-3 border-gray-300 rounded-md focus:border-gray-200 focus:ring-2 focus:ring-gray-500;
+  }
+
+  .btn {
+    @apply relative flex justify-center w-full px-4 py-4 text-sm font-medium leading-none rounded-md whitespace-nowrap;
+  }
+
+  .btn-flat {
+    @apply btn;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-gray-600;
+    @apply text-gray-900 bg-transparent border-0 hover:text-gray-800;
+  }
+
+  .btn-primary {
+    @apply btn;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-brand;
+    @apply text-white btn bg-brand hover:bg-brand-light;
+  }
+
+  .btn-secondary {
+    @apply btn;
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-white focus:ring-brand-secondary;
+    @apply text-white btn bg-brand-secondary hover:bg-brand-secondary-light;
+  }
+
+  .btn-icon {
+    @apply text-gray-600 border border-transparent rounded hover:text-gray-500 focus:text-gray-700 focus:outline-none;
+  }
+}
+
 @tailwind utilities;
 
 /* purgecss start ignore */

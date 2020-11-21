@@ -4,8 +4,9 @@
   </label>
   <input
     ref="input"
+    type="text"
     projectName="newTimeEntry"
-    class="block w-full placeholder-gray-600 bg-gray-300 form-input px-7 sm:text-sm sm:leading-5 focus:bg-white"
+    class="text-input"
     :placeholder="t('actionBar.what_are_you_working_on')"
     v-bind="$attrs"
     @input="handleInput"

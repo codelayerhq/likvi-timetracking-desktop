@@ -5,24 +5,24 @@
       class="block text-sm font-medium leading-5 text-gray-700"
     >
       {{ t("projectSelect.label") }}
+      <input
+        v-show="!hasProject"
+        id="project-select"
+        ref="input"
+        :value="modelValue ? modelValue.name : ''"
+        class="mt-1 text-input"
+        :placeholder="t('projectSelect.placeholder')"
+        type="search"
+      />
     </label>
-    <input
-      v-show="!hasProject"
-      id="project-select"
-      ref="input"
-      :value="modelValue ? modelValue.name : ''"
-      class="relative block w-full mt-1 rounded-md shadow-sm px-7 form-input sm:text-sm sm:leading-5"
-      :placeholder="t('projectSelect.placeholder')"
-      type="search"
-    />
     <div
       v-show="hasProject"
-      class="relative flex items-center justify-between w-full mt-1 rounded-md shadow-sm px-7 form-input sm:text-sm sm:leading-5"
+      class="flex items-center justify-between w-full px-4 mt-1 border text-input"
     >
       <project-indicator :project="modelValue" class="text-base" />
       <button
         type="button"
-        class="h-full p-1 text-gray-500 bg-transparent border-transparent form-item sm:text-sm sm:leading-5"
+        class="h-full p-1 text-gray-500 bg-transparent border-transparent sm:text-sm sm:leading-5"
         @click="handleReset"
       >
         <svg

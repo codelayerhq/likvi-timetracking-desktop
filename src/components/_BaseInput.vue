@@ -1,23 +1,17 @@
 <template>
-  <div>
-    <label
-      :for="name"
-      class="block text-sm font-medium leading-5 text-gray-700"
-    >
-      <slot name="label">
-        {{ label }}
-      </slot>
-    </label>
-    <div class="relative mt-1 rounded-md shadow-sm">
-      <input
-        :id="name"
-        class="block w-full form-input px-7 sm:text-sm sm:leading-5"
-        :value="modelValue"
-        v-bind="$attrs"
-        @input="handleInput"
-      />
-    </div>
-  </div>
+  <label :for="name" class="block text-sm font-medium leading-5 text-gray-700">
+    <slot name="label">
+      <span>{{ label }}</span>
+    </slot>
+    <input
+      :id="name"
+      type="text"
+      class="mt-1 text-input"
+      :value="modelValue"
+      v-bind="$attrs"
+      @input="handleInput"
+    />
+  </label>
 </template>
 
 <script lang="ts">
@@ -25,6 +19,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "BaseInput",
+  inheritAttrs: false,
   props: {
     modelValue: { type: null, required: true },
     name: { type: String, required: true },
