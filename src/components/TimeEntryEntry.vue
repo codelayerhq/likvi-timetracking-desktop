@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center justify-between h-16 py-2 pl-6 pr-4 space-x-2 bg-gray-100 border-b border-gray-200 cursor-pointer hover:bg-white focus:bg-white focus:outline-none"
+    class="flex items-center justify-between h-16 py-2 pl-6 pr-4 space-x-2 border-b border-gray-200 cursor-pointer bg-gray-50 hover:bg-white focus:bg-white focus:outline-none"
     tabindex="2"
     @click="handleTimeEntryEntryClick"
   >
@@ -16,8 +16,8 @@
     </span>
 
     <div class="flex">
-      <base-icon-button
-        class="p-2"
+      <button
+        class="p-2 btn-icon"
         tabindex="2"
         @click.stop="handleDeleteTimeEntryClick"
       >
@@ -35,10 +35,10 @@
             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
           />
         </svg>
-      </base-icon-button>
+      </button>
 
-      <base-icon-button
-        class="p-2"
+      <button
+        class="p-2 btn-icon"
         tabindex="2"
         @click.stop="handleResumeTimeEntryClick"
       >
@@ -62,7 +62,7 @@
             d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           />
         </svg>
-      </base-icon-button>
+      </button>
     </div>
   </div>
 </template>

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const colors = require("tailwindcss/colors");
+
 module.exports = {
   future: {
     removeDeprecatedGapUtilities: true,
@@ -6,23 +9,25 @@ module.exports = {
   purge: {
     content: ["./src/**/*.html", "./src/**/*.vue", "./src/**/*.jsx"],
     options: {
-      whitelist: [
+      safelist: [
         "hover:bg-gray-500",
         "bg-gray-600",
         "focus:border-gray-700",
         "active:bg-gray-700",
-        "focus:shadow-outline-gray-700",
+        "focus:ring-gray-700",
         "hover:bg-brand-secondary-light",
         "bg-brand-secondary",
         "focus:border-brand-secondary-dark",
         "active:bg-brand-secondary-dark",
-        "focus:shadow-outline-brand-secondary-dark",
+        "focus:ring-brand-secondary-dark",
       ],
     },
   },
   theme: {
     extend: {
       colors: {
+        gray: colors.coolGray,
+
         brand: "#F24C27",
         "brand-light": "#F56F52",
         "brand-dark": "#D8320D",
@@ -50,5 +55,5 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [require("@tailwindcss/custom-forms")],
+  plugins: [require("@tailwindcss/forms")],
 };

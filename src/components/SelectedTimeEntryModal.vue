@@ -1,12 +1,12 @@
 <template>
   <base-modal
     ref="modal"
-    class="bottom-0 w-full px-8 py-6"
+    class="bottom-0 w-full px-8 py-6 bg-gray-50"
     style="height: 95vh"
   >
     <template #header>
       <header class="absolute top-0 right-0 mt-4 mr-4">
-        <base-icon-button class="block ml-auto" @click="handleCloseClick">
+        <button class="block ml-auto btn-icon" @click="handleCloseClick">
           <svg viewBox="0 0 20 20" fill="currentColor" class="w-6 h-6 x">
             <path
               fill-rule="evenodd"
@@ -14,7 +14,7 @@
               clip-rule="evenodd"
             ></path>
           </svg>
-        </base-icon-button>
+        </button>
       </header>
     </template>
 
@@ -30,6 +30,7 @@
 
         <base-input
           v-model="formData.description"
+          type="text"
           name="description"
           :label="t('activeTimeEntryModal.description')"
           :placeholder="t('activeTimeEntryModal.description')"
@@ -72,9 +73,13 @@
       </form>
 
       <footer>
-        <base-button type="submit" form="selected-time-entry-form">
+        <button
+          type="submit"
+          form="selected-time-entry-form"
+          class="btn-primary"
+        >
           {{ t("activeTimeEntryModal.save") }}
-        </base-button>
+        </button>
       </footer>
     </div>
   </base-modal>

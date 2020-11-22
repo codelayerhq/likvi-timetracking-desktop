@@ -21,7 +21,7 @@
     </div>
 
     <div class="flex justify-between align-center">
-      <base-icon-button @click="handlePreviousWeek">
+      <button class="btn-icon" @click="handlePreviousWeek">
         <svg
           width="32"
           height="32"
@@ -36,13 +36,13 @@
             class="fill-current"
           />
         </svg>
-      </base-icon-button>
+      </button>
       <time-entries-chart
         :start-date="startDate"
         :end-date="endDate"
         :time-entries="[]"
       />
-      <base-icon-button @click="handleNextWeek">
+      <button class="btn-icon" @click="handleNextWeek">
         <svg
           width="32"
           height="32"
@@ -57,7 +57,7 @@
             class="fill-current"
           />
         </svg>
-      </base-icon-button>
+      </button>
     </div>
   </header>
 </template>

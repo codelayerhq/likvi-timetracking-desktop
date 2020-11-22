@@ -5,16 +5,16 @@
       class="block text-sm font-medium leading-5 text-gray-700"
     >
       {{ t("customerSelect.label") }}
+      <input
+        id="customer-select"
+        ref="input"
+        :value="displayValue"
+        class="mt-1 text-input"
+        :placeholder="t('customerSelect.placeholder')"
+        type="search"
+        @search="handleSearchEvent"
+      />
     </label>
-    <input
-      id="customer-select"
-      ref="input"
-      :value="displayValue"
-      class="relative block w-full mt-1 rounded-md shadow-sm px-7 form-input sm:text-sm sm:leading-5"
-      :placeholder="t('customerSelect.placeholder')"
-      type="search"
-      @search="handleSearchEvent"
-    />
   </div>
 </template>
 
@@ -120,6 +120,9 @@ export default defineComponent({
 #customer-select::-webkit-search-cancel-button {
   appearance: inherit;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23a0aec0' class='w-4 h-4' %3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12' /%3E%3C/svg%3E");
-  @apply w-4 h-4 opacity-100 cursor-pointer;
+  width: 1rem;
+  height: 1rem;
+  opacity: 100;
+  cursor: pointer;
 }
 </style>

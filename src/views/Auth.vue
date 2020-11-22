@@ -23,8 +23,7 @@
         :aria-label="t('auth.email')"
         name="email"
         type="email"
-        class="relative block w-full px-3 py-3 text-gray-900 placeholder-gray-600 border border-transparent rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-        style="background-color: #f2f2f2"
+        class="bg-gray-100 text-input"
         required
         :placeholder="t('auth.email')"
       />
@@ -34,23 +33,18 @@
         :aria-label="t('auth.password')"
         name="password"
         type="password"
-        class="relative block w-full px-3 py-3 mt-3 text-gray-900 placeholder-gray-600 border border-transparent rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-        style="background-color: #f2f2f2"
+        class="mt-3 bg-gray-100 text-input"
         required
         :placeholder="t('auth.password')"
       />
 
-      <div class="flex pl-6 mt-6">
-        <a
-          href="https://app.likvi.de/forgot"
-          target="_blank"
-          class="px-2 py-3 mr-4 text-sm whitespace-no-wrap"
-        >
+      <div class="flex pl-6 mt-6 space-x-2">
+        <a href="https://app.likvi.de/forgot" target="_blank" class="btn-flat">
           {{ t("auth.forgotPassword") }}
         </a>
-        <base-button type="submit" color="brand-secondary" class="px-2 py-3">
+        <button type="submit" class="btn-secondary">
           {{ t("auth.signIn") }}
-        </base-button>
+        </button>
       </div>
     </form>
 
@@ -73,14 +67,14 @@
             pattern="[0-9]*"
             autocomplete="one-time-code"
             :placeholder="t('auth.otp')"
-            class="relative block w-full px-3 py-3 mt-3 text-gray-900 placeholder-gray-600 border border-transparent rounded-md appearance-none focus:outline-none focus:shadow-outline-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+            class="relative block w-full px-3 py-3 mt-3 text-gray-900 placeholder-gray-600 border border-transparent rounded-md appearance-none focus:outline-none focus:ring-blue focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
             style="background-color: #f2f2f2"
             required
           />
         </div>
       </div>
 
-      <div class="flex pl-6 mt-6">
+      <div class="flex pl-6 mt-6 space-x-2">
         <a
           href="#"
           class="px-2 py-3 mr-4 text-sm"
@@ -88,9 +82,9 @@
         >
           {{ t("auth.back") }}
         </a>
-        <base-button type="submit" color="brand-secondary" class="px-2 py-3">
+        <button type="submit" class="btn-secondary">
           {{ t("auth.signIn") }}
-        </base-button>
+        </button>
       </div>
     </form>
 

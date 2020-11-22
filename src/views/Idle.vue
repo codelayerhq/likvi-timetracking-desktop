@@ -9,13 +9,13 @@
     </div>
 
     <div class="space-y-2 fle felx-col">
-      <base-button @click="handleStop">
+      <button class="btn-secondary" @click="handleStop">
         {{ t("idle.stopAndRemoveInaktive") }}
-      </base-button>
+      </button>
 
-      <base-button color="gray" @click="handleKeep">
+      <button class="btn-primary" @click="handleKeep">
         {{ t("idle.keepInaktive") }}
-      </base-button>
+      </button>
     </div>
   </div>
 </template>
