@@ -2,13 +2,13 @@ import { ActionContext, ActionTree, createStore, MutationTree } from "vuex";
 import auth from "./modules/auth";
 import { startOfWeek, endOfWeek, startOfDay, endOfDay } from "date-fns";
 import { Statistic, TimeEntry, TimeEntryPayload } from "@/api/types";
-import TimeEntriesService from "@/api/TimeEntriesService";
-import StatisticsService from "@/api/StatisticsService";
 import { toDateStr } from "@/utils/dateStr";
 import { MutationTypes } from "./mutation-types";
 import { ActionTypes } from "./actions";
 import { toDateTimeStrUTC } from "@/utils/dateTimeStrUTC";
 import { timeEntryToPayload } from "@/utils/timeEntryToPayload";
+import TimeEntriesService from "@/api/TimeEntriesService";
+import StatisticsService from "@/api/StatisticsService";
 
 const DEFAULT_INCLUDES = ["project", "user", "customer"];
 

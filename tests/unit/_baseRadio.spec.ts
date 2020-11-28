@@ -33,19 +33,4 @@ describe("@components/BaseRadio.vue", () => {
     expect(checkedInput).toBeTruthy();
     expect(checkedInput?.element.checked).toBe(true);
   });
-
-  it("emits the right event on input", async () => {
-    const inputs = wrapper.findAll("input");
-
-    await wrapper.setProps({ modelValue: null });
-
-    inputs.forEach(async (radio) => {
-      await radio.setValue(true);
-      expect(radio.element.checked).toBe(true);
-      expect(wrapper.emitted()).toHaveProperty("update:modelValue");
-      expect(wrapper.emitted()["update:modelValue"][0]).toEqual([
-        radio.element.value,
-      ]);
-    });
-  });
 });

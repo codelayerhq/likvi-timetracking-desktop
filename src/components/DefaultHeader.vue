@@ -67,11 +67,16 @@ import { defineComponent, computed } from "vue";
 import TimeEntriesChart from "@/components/TimeEntriesChart.vue";
 import TimeSpan from "@/components/TimeSpan.vue";
 import { useStore } from "vuex";
-import { subWeeks, addWeeks, differenceInCalendarWeeks } from "date-fns";
+import {
+  subWeeks,
+  addWeeks,
+  differenceInCalendarWeeks,
+  endOfWeek,
+  startOfWeek,
+} from "date-fns";
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
 import { useI18n } from "vue-i18n";
-import { endOfWeek, startOfWeek } from "date-fns/esm";
 
 export default defineComponent({
   name: "DefaultHeader",

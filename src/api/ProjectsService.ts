@@ -5,11 +5,7 @@ import { CollectionResponse, ItemResponse, Project } from "./types";
 const BASE_URL = "projects";
 
 export default class ProjectsService extends ApiService {
-  constructor() {
-    super();
-
-    this.baseUrl = `teams/${this.currentTeamId.value}/${BASE_URL}`;
-  }
+  baseUrl = `teams/${this.currentTeamId}/${BASE_URL}`;
 
   /**
    * Get a list of all projects for the current company

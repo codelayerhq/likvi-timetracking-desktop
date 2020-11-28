@@ -5,11 +5,7 @@ import { ItemResponse, Statistic } from "./types";
 const BASE_URL = "statistics";
 
 export default class StatisticsService extends ApiService {
-  constructor() {
-    super();
-
-    this.baseUrl = `teams/${this.currentTeamId.value}/${BASE_URL}`;
-  }
+  baseUrl = `teams/${this.currentTeamId}/${BASE_URL}`;
 
   /**
    * Get a list of all statistics for the current company
