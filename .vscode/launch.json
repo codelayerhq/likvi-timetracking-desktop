@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Tests",
+      "skipFiles": ["<node_internals>/**"],
+      "runtimeArgs": [
+        "--inspect-brk",
+        "./node_modules/.bin/vue-cli-service",
+        "test:unit"
+      ],
+      "cwd": "${workspaceFolder}",
+      "protocol": "inspector",
+      "disableOptimisticBPs": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "port": 9229,
+      "outFiles": ["${workspaceFolder}/src/**/*js"]
+    }
+  ]
+}

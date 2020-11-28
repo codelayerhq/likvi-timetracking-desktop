@@ -23,6 +23,7 @@ module.exports = {
     },
   },
   configureWebpack: {
+    devtool: "source-map",
     externals: {
       moment: "moment",
     },

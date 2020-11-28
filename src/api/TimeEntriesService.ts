@@ -10,11 +10,7 @@ import {
 const BASE_URL = "time-entries";
 
 export default class TimeEntriesService extends ApiService {
-  constructor() {
-    super();
-
-    this.baseUrl = `teams/${this.currentTeamId.value}/${BASE_URL}`;
-  }
+  baseUrl = `teams/${this.currentTeamId}/${BASE_URL}`;
 
   /**
    * Get a list of all time entries for the current company

@@ -17,7 +17,7 @@ type AugmentedActionContext<S, R> = {
   ): ReturnType<Mutations[K]>;
 } & Omit<ActionContext<S, R>, "commit">;
 
-interface State {
+export interface State {
   user: User;
   currentTeamId: number;
 }

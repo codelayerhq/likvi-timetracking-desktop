@@ -1,10 +1,5 @@
 import axios from "./axiosInstance";
-import { computed, ComputedRef } from "vue";
-import { Store } from "vuex";
 import { Method, AxiosPromise } from "axios";
-import store from "@/store";
-
-const CURRENT_TEAM_ID_GETTER = "auth/currentTeamId";
 
 interface Params {
   include?: string;
@@ -18,14 +13,16 @@ interface Params {
 
 export default class ApiService {
   baseUrl = "";
-  store: Store<unknown>;
-  currentTeamId: ComputedRef<number>;
   params: Params = {};
+  currentTeamId: number;
 
   constructor() {
-    this.store = store;
-    this.currentTeamId = computed(
-      () => this.store.getters[CURRENT_TEAM_ID_GETTER]
+    // Todo: Find better solution.
+    // If useing the store and a computed getter for the team the test break,
+    // because of a circular dependency that the ApiService import store and the store
+    // imports the Services which extend the ApiService.
+    this.currentTeamId = Number.parseInt(
+      window.localStorage.getItem("auth.currentTeamId") ?? "-1"
     );
   }
 
