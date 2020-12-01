@@ -29,9 +29,9 @@ export default function useTimeEntryData(
         : null
   );
   const durationInSec = computed((): number => {
-    const end = (stoppedAtDate.value !== null ? stoppedAtDate : now) as Ref<
-      Date
-    >;
+    const end = (stoppedAtDate.value !== null
+      ? stoppedAtDate
+      : now) as Ref<Date>;
     return differenceInSeconds(end.value, startedAtDate.value);
   });
   const durationHumanReadable = computed((): string =>
