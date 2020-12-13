@@ -47,7 +47,7 @@
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/jest": "^26.0.17",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
-    "@typescript-eslint/parser": "^4.7.0",
+    "@typescript-eslint/parser": "^4.9.1",
     "@vue/cli-plugin-babel": "~4.5.9",
     "@vue/cli-plugin-eslint": "~4.5.9",
     "@vue/cli-plugin-router": "~4.5.0",
