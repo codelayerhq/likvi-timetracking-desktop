@@ -45,7 +45,7 @@
   "devDependencies": {
     "@types/chart.js": "^2.9.28",
     "@types/electron-devtools-installer": "^2.2.0",
-    "@types/jest": "^26.0.17",
+    "@types/jest": "^26.0.19",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.10.0",
     "@vue/cli-plugin-babel": "~4.5.9",
