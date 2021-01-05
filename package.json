@@ -65,7 +65,7 @@
     "electron-icon-builder": "^2.0.1",
     "eslint": "^7.15.0",
     "eslint-plugin-prettier": "^3.2.0",
-    "eslint-plugin-vue": "^7.4.0",
+    "eslint-plugin-vue": "^7.4.1",
     "hygen": "^6.0.4",
     "prettier": "^2.2.1",
     "spectron": "^13.0.0",
