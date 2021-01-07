@@ -275,6 +275,18 @@ export interface Project {
   readonly expenses?: DataResponse<unknown>;
 }
 
+export interface ProjectPayload {
+  name: string;
+  color_hex: string;
+  customerId?: number | null;
+  start_date?: DateTimeStrUTC | null;
+  end_date?: DateTimeStrUTC | null;
+  project_type: ProjectType;
+  estimated_hours?: number | null;
+  rate?: number | null;
+  budget?: number | null;
+}
+
 export interface TimeEntry {
   readonly id: number;
   readonly team_id: number;

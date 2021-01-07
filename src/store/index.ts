@@ -1,13 +1,19 @@
 import { ActionContext, ActionTree, createStore, MutationTree } from "vuex";
 import auth from "./modules/auth";
 import { startOfWeek, endOfWeek, startOfDay, endOfDay } from "date-fns";
-import { Statistic, TimeEntry, TimeEntryPayload } from "@/api/types";
+import {
+  ProjectPayload,
+  Statistic,
+  TimeEntry,
+  TimeEntryPayload,
+} from "@/api/types";
+import TimeEntriesService from "@/api/TimeEntriesService";
+import ProjectsService from "@/api/ProjectsService";
 import { toDateStr } from "@/utils/dateStr";
 import { MutationTypes } from "./mutation-types";
 import { ActionTypes } from "./actions";
 import { toDateTimeStrUTC } from "@/utils/dateTimeStrUTC";
 import { timeEntryToPayload } from "@/utils/timeEntryToPayload";
-import TimeEntriesService from "@/api/TimeEntriesService";
 import StatisticsService from "@/api/StatisticsService";
 
 const DEFAULT_INCLUDES = ["project", "user", "customer"];
@@ -27,6 +33,7 @@ export interface RootState {
   timeEntries: TimeEntry[];
   statistics: Statistic[];
   systemIdleTime: number;
+  addProjectModalOpen: boolean;
 }
 
 interface Mutations<S = RootState> {
@@ -43,6 +50,7 @@ interface Mutations<S = RootState> {
   [MutationTypes.SET_TIME_ENTRIES](state: S, timeEntries: TimeEntry[]): void;
   [MutationTypes.SET_STATISTICS](state: S, statistics: Statistic[]): void;
   [MutationTypes.SET_SYSTEM_IDLE_TIME](state: S, idleSeconds: number): void;
+  [MutationTypes.SET_ADD_PROJECT_MODAL_OPEN](state: S, value: boolean): void;
 }
 
 interface Actions<S = RootState, R = RootState> {
@@ -103,6 +111,14 @@ interface Actions<S = RootState, R = RootState> {
     { state, dispatch }: AugmentedActionContext<S, R>,
     timeEntry: TimeEntry
   ): void;
+  [ActionTypes.SET_ADD_PROJECT_MODAL_OPEN](
+    { state, dispatch }: AugmentedActionContext<S, R>,
+    value: boolean
+  ): void;
+  [ActionTypes.CREATE_PROJECT](
+    { state, dispatch }: AugmentedActionContext<S, R>,
+    data: ProjectPayload
+  ): void;
 }
 
 const state: RootState = {
@@ -113,6 +129,7 @@ const state: RootState = {
   timeEntries: [],
   statistics: [],
   systemIdleTime: 0,
+  addProjectModalOpen: false,
 };
 
 const actions: ActionTree<RootState, RootState> & Actions = {
@@ -266,6 +283,12 @@ const actions: ActionTree<RootState, RootState> & Actions = {
 
     return dispatch(ActionTypes.FETCH_DATA);
   },
+  [ActionTypes.SET_ADD_PROJECT_MODAL_OPEN]({ commit }, value) {
+    return commit(MutationTypes.SET_ADD_PROJECT_MODAL_OPEN, value);
+  },
+  async [ActionTypes.CREATE_PROJECT](_, data) {
+    await new ProjectsService().create(data);
+  },
 };
 
 const mutations: MutationTree<RootState> & Mutations = {
@@ -295,6 +318,9 @@ const mutations: MutationTree<RootState> & Mutations = {
   },
   [MutationTypes.SET_SYSTEM_IDLE_TIME](state: RootState, idleSeconds: number) {
     state.systemIdleTime = idleSeconds;
+  },
+  [MutationTypes.SET_ADD_PROJECT_MODAL_OPEN](state: RootState, value: boolean) {
+    state.addProjectModalOpen = value;
   },
 };
 

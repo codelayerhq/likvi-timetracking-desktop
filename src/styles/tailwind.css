@@ -4,7 +4,7 @@
 
 @layer components {
   .text-input {
-    @apply block w-full py-3 text-gray-900 placeholder-gray-400 border-gray-300 rounded-md bg-gray-50 focus:border-gray-200 focus:ring-2 focus:ring-gray-500;
+    @apply block w-full py-3 text-gray-900 placeholder-gray-400 border border-gray-300 rounded-md bg-gray-50 focus:border-gray-200 focus:ring-2 focus:ring-gray-500;
   }
 
   .btn {
@@ -56,5 +56,26 @@
 
 .autocomplete > div.selected {
   @apply bg-gray-100;
+}
+
+dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+input[type="color"] {
+  height: 50px; /* ToDo: Auto height does not work */
+  @apply focus:outline-none;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+  justify-content: center;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  height: 1.25rem;
+  width: 1.25rem;
+  border: none;
+  border-radius: 100%;
+  flex: none;
 }
 /* purgecss end ignore */
