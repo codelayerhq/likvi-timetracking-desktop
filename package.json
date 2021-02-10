@@ -40,7 +40,7 @@
     "vue-i18n": "^9.0.0-rc.5",
     "vue-router": "^4.0.2",
     "vue-toastification": "^2.0.0-rc.1",
-    "vuex": "^4.0.0-rc.2"
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.28",
