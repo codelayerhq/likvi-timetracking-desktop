@@ -38,7 +38,7 @@
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
     "vue": "^3.0.5",
     "vue-i18n": "^9.0.0-rc.7",
-    "vue-router": "^4.0.2",
+    "vue-router": "^4.0.4",
     "vue-toastification": "^2.0.0-rc.1",
     "vuex": "^4.0.0"
   },
