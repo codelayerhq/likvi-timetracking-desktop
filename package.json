@@ -43,7 +43,7 @@
     "vuex": "^4.0.0"
   },
   "devDependencies": {
-    "@types/chart.js": "^2.9.28",
+    "@types/chart.js": "^2.9.32",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/jest": "^26.0.20",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
