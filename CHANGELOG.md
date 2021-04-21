@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Changed billable radio buttons to toggle switch
+
 ### Fixed
 
 - Fix bug where description was not cleared after time entries was stopped
+- Fix bug where `billable` would be overwritten without a change in UI
 
 ## [1.1.0] - 2021-01-07
 

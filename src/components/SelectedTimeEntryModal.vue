@@ -64,16 +64,33 @@
 
         <customer-select v-model="formData.customer" class="mb-4" />
 
-        <base-radio
-          v-model="formData.billable"
-          name="billable"
-          :label="t('activeTimeEntryModal.billable')"
-          class="mb-4"
-          :options="[
-            { label: t('activeTimeEntryModal.billable'), value: true },
-            { label: t('activeTimeEntryModal.notBillable'), value: false },
-          ]"
-        />
+        <SwitchGroup>
+          <SwitchLabel
+            as="span"
+            class="block text-sm font-medium leading-5 text-gray-700"
+          >
+            {{ t("activeTimeEntryModal.billable") }}
+          </SwitchLabel>
+
+          <Switch
+            v-model="formData.billable"
+            :class="[
+              formData.billable ? 'bg-brand' : 'bg-gray-200',
+              'relative inline-flex mb-4 flex-shrink-0 h-6 mt-2 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500',
+            ]"
+          >
+            <span class="sr-only">
+              {{ t("activeTimeEntryModal.billable") }}
+            </span>
+            <span
+              aria-hidden="true"
+              :class="[
+                formData.billable ? 'translate-x-5' : 'translate-x-0',
+                'pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200',
+              ]"
+            />
+          </Switch>
+        </SwitchGroup>
 
         <base-input
           v-model="formData.startedAt"
@@ -121,6 +138,7 @@ import { parseISO } from "date-fns";
 import ProjectSelect from "@/components/ProjectSelect.vue";
 import CustomerSelect from "@/components/CustomerSelect.vue";
 import { useI18n } from "vue-i18n";
+import { SwitchGroup, SwitchLabel, Switch } from "@headlessui/vue";
 
 interface InitialFormData {
   description: string | null;
@@ -138,6 +156,9 @@ export default defineComponent({
   components: {
     ProjectSelect,
     CustomerSelect,
+    SwitchGroup,
+    SwitchLabel,
+    Switch,
   },
   setup() {
     const modal = ref(_BaseModalVue);
@@ -208,7 +229,7 @@ export default defineComponent({
         description: formData.description,
         project_id: formData.project?.id ?? null,
         customer_id: formData.customer?.id ?? null,
-        billable: formData.billable === "true",
+        billable: !!formData.billable,
         started_at: formData.startedAt
           ? toDateTimeStrUTC(
               parse(formData.startedAt, "yyyy-MM-dd'T'HH:mm", new Date())
