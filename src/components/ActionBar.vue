@@ -45,6 +45,7 @@ export default defineComponent({
     function handleStartStop(): void {
       if (isRunning.value) {
         store.dispatch(ActionTypes.STOP_ACTIVE_TIME_ENTRY, null);
+        description.value = "";
       } else {
         store.dispatch(ActionTypes.START_NEW_TIME_ENTRY, description.value);
       }
