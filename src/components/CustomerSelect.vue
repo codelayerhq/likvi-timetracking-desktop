@@ -90,7 +90,6 @@ export default defineComponent({
               value: customer,
             })
           );
-
           callback(newData);
         },
         onSelect(item: CustomerAutocompleteItem) {

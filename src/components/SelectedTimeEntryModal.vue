@@ -39,7 +39,7 @@
         />
 
         <div class="flex items-end mb-4 space-x-2">
-          <project-select v-model="formData.project" class="w-full" />
+          <project-select v-model="formData" class="w-full" />
           <button
             type="button"
             class="w-8 h-12 btn-icon"

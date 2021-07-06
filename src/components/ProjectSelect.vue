@@ -9,7 +9,7 @@
         v-show="!hasProject"
         id="project-select"
         ref="input"
-        :value="modelValue ? modelValue.name : ''"
+        :value="modelValue.project ? modelValue.project.name : ''"
         class="mt-1 text-input"
         :placeholder="t('projectSelect.placeholder')"
         type="search"
@@ -19,7 +19,7 @@
       v-show="hasProject"
       class="flex items-center justify-between w-full px-4 mt-1 border text-input"
     >
-      <project-indicator :project="modelValue" class="text-base" />
+      <project-indicator :project="modelValue.project" class="text-base" />
       <button
         type="button"
         class="h-full p-1 text-gray-500 bg-transparent border-transparent sm:text-sm sm:leading-5"
@@ -57,13 +57,17 @@ import {
 } from "vue";
 import autocomplete, { AutocompleteResult } from "autocompleter";
 import ProjectsService from "@/api/ProjectsService";
+import CustomersService from "@/api/CustomersService";
+import { getCustomerName } from "@/utils/getCustomerName";
 import { Project } from "@/api/types";
+import { Customer } from "@/api/types";
 import ProjectIndicator from "@/components/ProjectIndicator.vue";
 import { useI18n } from "vue-i18n";
 
 interface ProjectAutocompleteItem {
   label: string;
   value: Project;
+  customerId: number;
 }
 
 export default defineComponent({
@@ -73,7 +77,7 @@ export default defineComponent({
   },
   props: {
     modelValue: {
-      type: Object as PropType<Project | null>,
+      type: Object,
       default: null,
     },
   },
@@ -82,12 +86,30 @@ export default defineComponent({
     const { t } = useI18n();
     const input = ref() as Ref<HTMLInputElement>;
     const inputValue = ref();
-    const hasProject = computed(() => props.modelValue !== null);
+    const hasProject = computed(() => props.modelValue.project !== null);
     let autocompleteInstance: AutocompleteResult;
 
+    const modelProxy = computed({
+      get() {
+        return props.modelValue;
+      },
+      set(value: any) {
+        emit("update:modelValue", value);
+      },
+    });
     function handleReset() {
-      emit("update:modelValue", null);
+      modelProxy.value.project = null;
       nextTick(() => input.value.focus());
+    }
+
+    async function getCustomer(customerId: number) {
+      const {
+        data: { data: customer },
+      } = await new CustomersService().get(customerId);
+
+      if (customer) {
+        modelProxy.value.customer = customer[0];
+      }
     }
 
     onMounted(() => {
@@ -106,9 +128,9 @@ export default defineComponent({
             (project: Project) => ({
               label: project.name,
               value: project,
+              customerId: project.customer_id,
             })
           );
-
           callback(newData);
         },
         render(item: ProjectAutocompleteItem): HTMLDivElement | undefined {
@@ -157,8 +179,13 @@ export default defineComponent({
           return wrapper;
         },
         onSelect(item: ProjectAutocompleteItem) {
-          emit("update:modelValue", item.value);
+          modelProxy.value.project = item.value;
+          modelProxy.value.customerId = item.customerId;
           inputValue.value = item.label;
+
+          if (item.customerId) {
+            getCustomer(item.customerId);
+          }
         },
       });
     });
