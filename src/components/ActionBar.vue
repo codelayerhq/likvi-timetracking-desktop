@@ -12,6 +12,7 @@
         v-model="description"
         class="bg-white text-input"
         @time-entry-selected="handleTimeEntrySelected"
+        @keyup.enter="handleStartStop"
       />
     </div>
   </div>
