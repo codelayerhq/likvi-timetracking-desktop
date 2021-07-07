@@ -58,9 +58,7 @@ import {
 import autocomplete, { AutocompleteResult } from "autocompleter";
 import ProjectsService from "@/api/ProjectsService";
 import CustomersService from "@/api/CustomersService";
-import { getCustomerName } from "@/utils/getCustomerName";
-import { Project } from "@/api/types";
-import { Customer } from "@/api/types";
+import { Project, InitialFormData } from "@/api/types";
 import ProjectIndicator from "@/components/ProjectIndicator.vue";
 import { useI18n } from "vue-i18n";
 
@@ -77,7 +75,7 @@ export default defineComponent({
   },
   props: {
     modelValue: {
-      type: Object,
+      type: Object as PropType<InitialFormData>,
       default: null,
     },
   },
@@ -93,7 +91,7 @@ export default defineComponent({
       get() {
         return props.modelValue;
       },
-      set(value: any) {
+      set(value: InitialFormData) {
         emit("update:modelValue", value);
       },
     });

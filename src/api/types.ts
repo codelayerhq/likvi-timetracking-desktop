@@ -361,3 +361,14 @@ export interface CollectionResponse<T> {
 export interface ItemResponse<T> {
   data: T;
 }
+
+export interface InitialFormData {
+  description: string | null;
+  projectId: number | null;
+  customerId: number | null;
+  billable: string | boolean | null;
+  startedAt: string | null;
+  stoppedAt: string | null;
+  project: Project | null;
+  customer: Customer | null;
+}
