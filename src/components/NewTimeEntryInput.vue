@@ -2,19 +2,30 @@
   <label for="newTimeEntry" class="sr-only">
     {{ t("actionBar.what_are_you_working_on") }}
   </label>
-  <input
-    ref="input"
-    type="text"
-    projectName="newTimeEntry"
+  <div
+    ref="div"
+    contenteditable
     class="text-input"
-    :placeholder="t('actionBar.what_are_you_working_on')"
-    v-bind="$attrs"
-    @input="handleInput"
-  />
+    projectName="newTimeEntry"
+    @keydown="handleInput($event)"
+    @click="handleInputClick($event)"
+    @focus="() => input.focus()"
+  >
+    <!-- {{ t("actionBar.what_are_you_working_on") }} -->
+  </div>
+  <input ref="input" :value="innerText" />
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, onMounted, onBeforeUnmount } from "vue";
+import {
+  defineComponent,
+  Ref,
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  computed,
+  watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import autocomplete, { AutocompleteResult } from "autocompleter";
 import { TimeEntry } from "@/api/types";
@@ -35,10 +46,27 @@ export default defineComponent({
   setup(_, { emit }) {
     const { t } = useI18n();
     const input = ref() as Ref<HTMLInputElement>;
+    const innerText = ref("");
+    const div = ref() as Ref<HTMLDivElement>;
+    const doc = document;
 
-    function handleInput(event: Event): void {
+    function handleInput(event: KeyboardEvent): void {
       const target = event.target as HTMLInputElement;
-      emit("update:modelValue", target.value);
+      innerText.value = target.innerText;
+      // input.value.focus();
+      console.log(event);
+
+      console.log("innertext value", innerText.value);
+      emit("update:modelValue", target.innerText);
+      // input.value.blur();
+      div.value.focus();
+      console.log(doc);
+    }
+
+    function handleInputClick(event: Event) {
+      const target = event.target as HTMLElement;
+
+      target.innerText = "";
     }
 
     let autocompleteInstance: AutocompleteResult;
@@ -91,6 +119,7 @@ export default defineComponent({
             "select-none",
             "text-gray-900",
             "text-sm",
+            "w-96",
           ].forEach((eleClass) => wrapper.classList.add(eleClass));
 
           [
@@ -133,23 +162,42 @@ export default defineComponent({
         },
         // Because the autocomplete plugion always places elements
         // at the bottom we use Popper.js to update its position.
-        customize: (input: HTMLInputElement, _, container: HTMLDivElement) => {
+        customize: (
+          input: HTMLInputElement,
+          // ToDo: clientRect is not defined
+          // inputRect: ClientRect | DOMRect,
+          inputRect,
+          container: HTMLDivElement,
+          maxHeight: number
+        ) => {
           // ToDo: using Popper.js in this way (destroying, creating) is not poptimal
-          if (popper !== undefined) {
-            popper.destroy();
+          // if (popper !== undefined) {
+          //   popper.destroy();
+          // }
+          container.style.width = "100%";
+          // container.style.visibility = "visible";
+          // container.style.zIndex = "1000";
+          // popper = createPopper(input, container, {
+          //   placement: "auto",
+          //   modifiers: [
+          //     {
+          //       name: "offset",
+          //       options: {
+          //         offset: [0, 10],
+          //       },
+          //     },
+          //   ],
+          // });
+          if (maxHeight < 100) {
+            container.style.top = "";
+            container.style.bottom =
+              window.innerHeight -
+              inputRect.bottom +
+              input.offsetHeight +
+              60 +
+              "px";
+            container.style.maxHeight = "200px";
           }
-
-          popper = createPopper(input, container, {
-            placement: "auto",
-            modifiers: [
-              {
-                name: "offset",
-                options: {
-                  offset: [0, 10],
-                },
-              },
-            ],
-          });
         },
       });
     });
@@ -160,7 +208,10 @@ export default defineComponent({
 
     return {
       input,
+      div,
       handleInput,
+      handleInputClick,
+      innerText,
       ...useI18n(),
     };
   },
