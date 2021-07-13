@@ -3,13 +3,11 @@
     {{ t("actionBar.what_are_you_working_on") }}
   </label>
   <div
-    ref="div"
     contenteditable
     class="text-input"
     projectName="newTimeEntry"
     @keydown="handleInput($event)"
     @click="handleInputClick($event)"
-    @focus="() => input.focus()"
   >
     <!-- {{ t("actionBar.what_are_you_working_on") }} -->
   </div>
@@ -59,8 +57,6 @@ export default defineComponent({
       console.log("innertext value", innerText.value);
       emit("update:modelValue", target.innerText);
       // input.value.blur();
-      div.value.focus();
-      console.log(doc);
     }
 
     function handleInputClick(event: Event) {
