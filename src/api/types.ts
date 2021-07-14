@@ -372,3 +372,9 @@ export interface InitialFormData {
   project: Project | null;
   customer: Customer | null;
 }
+
+export interface TaskData {
+  description: string;
+  projectId?: number | null;
+  customerId?: number | null;
+}

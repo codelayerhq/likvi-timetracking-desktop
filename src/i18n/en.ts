@@ -27,6 +27,7 @@ export default {
   },
   timeEntrySelect: {
     noTimeEntriesFound: "No time entries found",
+    remove: "remove",
   },
   header: {
     jumpToCurrentWeek: "Jump to current week",
