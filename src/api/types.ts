@@ -361,3 +361,9 @@ export interface CollectionResponse<T> {
 export interface ItemResponse<T> {
   data: T;
 }
+
+export interface TaskData {
+  description: string;
+  projectId?: number | null;
+  customerId?: number | null;
+}

@@ -2,16 +2,15 @@
   <label for="newTimeEntry" class="sr-only">
     {{ t("actionBar.what_are_you_working_on") }}
   </label>
-  <div
-    contenteditable
-    class="text-input"
+  <input
+    ref="input"
+    type="text"
     projectName="newTimeEntry"
-    @keydown="handleInput($event)"
-    @click="handleInputClick($event)"
-  >
-    <!-- {{ t("actionBar.what_are_you_working_on") }} -->
-  </div>
-  <input ref="input" :value="innerText" />
+    class="text-input"
+    :placeholder="t('actionBar.what_are_you_working_on')"
+    v-bind="$attrs"
+    @input="handleInput"
+  />
 </template>
 
 <script lang="ts">
@@ -22,139 +21,284 @@ import {
   onMounted,
   onBeforeUnmount,
   computed,
-  watch,
+  PropType,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import autocomplete, { AutocompleteResult } from "autocompleter";
-import { TimeEntry } from "@/api/types";
+import { Customer, Project, TimeEntry } from "@/api/types";
 import TimeEntriesService from "@/api/TimeEntriesService";
-import { createPopper, Instance as PopperInstance } from "@popperjs/core";
+// import { createPopper, Instance as PopperInstance } from "@popperjs/core";
+import ProjectsService from "@/api/ProjectsService";
+import CustomersService from "@/api/CustomersService";
+import { getCustomerName } from "@/utils/getCustomerName";
+import { TaskData } from "@/api/types";
 
 interface TimeEntryAutocompleteItem {
   label: string;
   value: TimeEntry;
 }
 
+interface ProjectAutocompleteItem {
+  label: string;
+  value: Project;
+  projectId: number;
+}
+
+interface CustomerAutocompleteItem {
+  label: string;
+  value: Customer;
+  customerId: number;
+}
+
 export default defineComponent({
   projectName: "NewTimeEntryInput",
   props: {
-    modelValue: { type: String, required: true },
+    modelValue: {
+      type: Object as PropType<TaskData>,
+      required: true,
+    },
   },
-  emits: ["update:modelValue", "time-entry-selected"],
-  setup(_, { emit }) {
+  emits: [
+    "update:modelValue",
+    "time-entry-selected",
+    "customer-selected",
+    "project-selected",
+  ],
+  setup(props, { emit }) {
     const { t } = useI18n();
     const input = ref() as Ref<HTMLInputElement>;
-    const innerText = ref("");
-    const div = ref() as Ref<HTMLDivElement>;
-    const doc = document;
 
-    function handleInput(event: KeyboardEvent): void {
+    const modelProxy = computed({
+      get() {
+        return props.modelValue;
+      },
+      set(value: TaskData) {
+        emit("update:modelValue", value);
+      },
+    });
+
+    function handleInput(event: Event): void {
       const target = event.target as HTMLInputElement;
-      innerText.value = target.innerText;
-      // input.value.focus();
-      console.log(event);
-
-      console.log("innertext value", innerText.value);
-      emit("update:modelValue", target.innerText);
-      // input.value.blur();
-    }
-
-    function handleInputClick(event: Event) {
-      const target = event.target as HTMLElement;
-
-      target.innerText = "";
+      modelProxy.value.description = target.value;
     }
 
     let autocompleteInstance: AutocompleteResult;
-    let popper: PopperInstance;
+    // let popper: PopperInstance;
 
     onMounted(() => {
-      autocompleteInstance = autocomplete<TimeEntryAutocompleteItem>({
+      autocompleteInstance = autocomplete<
+        | TimeEntryAutocompleteItem
+        | ProjectAutocompleteItem
+        | CustomerAutocompleteItem
+      >({
         input: input.value,
         emptyMsg: t("timeEntrySelect.noTimeEntriesFound"),
         minLength: 0,
         debounceWaitMs: 100,
         showOnFocus: true,
         fetch: async (text, callback) => {
-          const {
-            data: { data: customers },
-          } = await new TimeEntriesService().include("project").suggest(text);
+          let loadedData;
+          if (!text.endsWith("#") && !text.endsWith("@")) {
+            const {
+              data: { data: customers },
+            } = await new TimeEntriesService().include("project").suggest(text);
+            const newData: TimeEntryAutocompleteItem[] = customers.map(
+              (timeEntry: TimeEntry) => ({
+                label: timeEntry.description,
+                value: timeEntry,
+              })
+            );
 
-          const newData: TimeEntryAutocompleteItem[] = customers.map(
-            (timeEntry: TimeEntry) => ({
-              label: timeEntry.description,
-              value: timeEntry,
-            })
+            loadedData = newData;
+          } else if (text.endsWith("#")) {
+            const {
+              data: { data: projects },
+            } = await new ProjectsService().suggest(text);
+
+            const newData: ProjectAutocompleteItem[] = projects.map(
+              (project: Project) => ({
+                label: project.name,
+                value: project,
+                projectId: project.id,
+              })
+            );
+            console.log(newData);
+            loadedData = newData;
+          } else if (text.endsWith("@")) {
+            const {
+              data: { data: customers },
+            } = await new CustomersService().suggest(text);
+
+            const newData: CustomerAutocompleteItem[] = customers.map(
+              (customer: Customer) => ({
+                label: getCustomerName(customer),
+                value: customer,
+                customerId: customer.id,
+              })
+            );
+            console.log(newData);
+
+            loadedData = newData;
+          }
+          callback(
+            loadedData as
+              | false
+              | (
+                  | TimeEntryAutocompleteItem
+                  | ProjectAutocompleteItem
+                  | CustomerAutocompleteItem
+                )[]
           );
-
-          callback(newData);
         },
-        render(item: TimeEntryAutocompleteItem): HTMLDivElement | undefined {
-          const wrapper = document.createElement("div");
-          const svg = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "svg"
-          );
-          const circle = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "circle"
-          );
-          const timeEntrySpan = document.createElement("span");
-          const projectWrapper = document.createElement("div");
-          const projectSpan = document.createElement("span");
+        render(
+          // TODO find typing
+          // item: TimeEntryAutocompleteItem | ProjectAutocompleteItem
+          item: any
+        ): HTMLDivElement | undefined {
+          let returnedWrapper;
+          if (item.value?.description) {
+            const wrapper = document.createElement("div");
+            const svg = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "svg"
+            );
+            const circle = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "circle"
+            );
+            const timeEntrySpan = document.createElement("span");
+            const projectWrapper = document.createElement("div");
+            const projectSpan = document.createElement("span");
 
-          const projectName =
-            item.value?.project?.data.name || t("projectIndicator.noProject");
-          const color = item.value?.project?.data.color_hex || "#676767";
+            const projectName =
+              item.value?.project?.data.name || t("projectIndicator.noProject");
+            const color = item.value?.project?.data.color_hex || "#676767";
 
-          const timeEntryName = item.value.description;
+            const timeEntryName = item.value.description;
 
-          [
-            "flex",
-            "justify-between",
-            "select-none",
-            "text-gray-900",
-            "text-sm",
-            "w-96",
-          ].forEach((eleClass) => wrapper.classList.add(eleClass));
+            [
+              "flex",
+              "justify-between",
+              "select-none",
+              "text-gray-900",
+              "text-sm",
+              "w-full",
+            ].forEach((eleClass) => wrapper.classList.add(eleClass));
 
-          [
-            "flex",
-            "items-center",
-            "text-xs",
-            "select-none",
-          ].forEach((eleClass) => projectWrapper.classList.add(eleClass));
-          projectWrapper.style.color = color;
+            [
+              "flex",
+              "items-center",
+              "text-xs",
+              "select-none",
+            ].forEach((eleClass) => projectWrapper.classList.add(eleClass));
+            projectWrapper.style.color = color;
 
-          svg.setAttribute("width", "10");
-          svg.setAttribute("height", "10");
-          svg.setAttribute("viewBox", "0 0 10 10");
-          svg.setAttribute("fill", "none");
-          svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-          svg.classList.add("mr-2");
+            svg.setAttribute("width", "10");
+            svg.setAttribute("height", "10");
+            svg.setAttribute("viewBox", "0 0 10 10");
+            svg.setAttribute("fill", "none");
+            svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+            svg.classList.add("mr-2");
 
-          circle.setAttribute("cx", "5");
-          circle.setAttribute("cy", "5");
-          circle.setAttribute("r", "5");
-          circle.classList.add("fill-current");
+            circle.setAttribute("cx", "5");
+            circle.setAttribute("cy", "5");
+            circle.setAttribute("r", "5");
+            circle.classList.add("fill-current");
 
-          timeEntrySpan.textContent = timeEntryName;
-          timeEntrySpan.classList.add("block");
+            timeEntrySpan.textContent = timeEntryName;
+            timeEntrySpan.classList.add("block");
 
-          projectSpan.classList.add("block");
-          projectSpan.textContent = projectName;
+            projectSpan.classList.add("block");
+            projectSpan.textContent = projectName;
 
-          svg.appendChild(circle);
-          projectWrapper.appendChild(svg);
-          projectWrapper.appendChild(projectSpan);
+            svg.appendChild(circle);
+            projectWrapper.appendChild(svg);
+            projectWrapper.appendChild(projectSpan);
 
-          wrapper.appendChild(timeEntrySpan);
-          wrapper.appendChild(projectWrapper);
+            wrapper.appendChild(timeEntrySpan);
+            wrapper.appendChild(projectWrapper);
 
-          return wrapper;
+            returnedWrapper = wrapper;
+          } else if (item.value?.type === "person") {
+            const wrapper = document.createElement("div");
+            const customerSpan = document.createElement("span");
+            const customerWrapper = document.createElement("div");
+
+            const customerName = item.label;
+
+            [
+              "flex",
+              "justify-between",
+              "select-none",
+              "text-gray-900",
+              "text-sm",
+              "w-full",
+            ].forEach((eleClass) => wrapper.classList.add(eleClass));
+
+            [
+              "flex",
+              "items-center",
+              "text-xs",
+              "select-none",
+            ].forEach((eleClass) => customerWrapper.classList.add(eleClass));
+
+            customerSpan.textContent = customerName;
+            customerSpan.classList.add("block");
+
+            wrapper.appendChild(customerSpan);
+            wrapper.appendChild(customerWrapper);
+
+            returnedWrapper = wrapper;
+          } else if (item.value?.project_type) {
+            const wrapper = document.createElement("div");
+            const projectSpan = document.createElement("span");
+            const projectWrapper = document.createElement("div");
+
+            const projectName = item.label;
+
+            [
+              "flex",
+              "justify-between",
+              "select-none",
+              "text-gray-900",
+              "text-sm",
+              "w-full",
+            ].forEach((eleClass) => wrapper.classList.add(eleClass));
+
+            [
+              "flex",
+              "items-center",
+              "text-xs",
+              "select-none",
+            ].forEach((eleClass) => projectWrapper.classList.add(eleClass));
+
+            projectSpan.textContent = projectName;
+            projectSpan.classList.add("block");
+
+            wrapper.appendChild(projectSpan);
+            wrapper.appendChild(projectWrapper);
+
+            returnedWrapper = wrapper;
+          }
+          return returnedWrapper;
         },
-        onSelect(item: TimeEntryAutocompleteItem) {
-          emit("time-entry-selected", item.value);
+        onSelect(
+          // TODO find typing
+          // item:
+          //   | TimeEntryAutocompleteItem
+          //   | ProjectAutocompleteItem
+          //   | CustomerAutocompleteItem
+          item: any
+        ) {
+          if (item.value?.description) {
+            emit("time-entry-selected", item.value);
+          } else if (item.value?.type === "person") {
+            emit("customer-selected", item.value);
+            input.value.value.slice(0, -1);
+          } else if (item.value?.project_type) {
+            emit("project-selected", item.value);
+            input.value.innerText.slice(0, -1);
+          }
         },
         // Because the autocomplete plugion always places elements
         // at the bottom we use Popper.js to update its position.
@@ -170,9 +314,10 @@ export default defineComponent({
           // if (popper !== undefined) {
           //   popper.destroy();
           // }
-          container.style.width = "100%";
-          // container.style.visibility = "visible";
-          // container.style.zIndex = "1000";
+
+          container.style.width = `${inputRect.width}`;
+          container.style.visibility = "visible";
+          container.style.zIndex = "1000";
           // popper = createPopper(input, container, {
           //   placement: "auto",
           //   modifiers: [
@@ -187,11 +332,7 @@ export default defineComponent({
           if (maxHeight < 100) {
             container.style.top = "";
             container.style.bottom =
-              window.innerHeight -
-              inputRect.bottom +
-              input.offsetHeight +
-              60 +
-              "px";
+              window.innerHeight - inputRect.bottom + input.offsetHeight + "px";
             container.style.maxHeight = "200px";
           }
         },
@@ -204,10 +345,7 @@ export default defineComponent({
 
     return {
       input,
-      div,
       handleInput,
-      handleInputClick,
-      innerText,
       ...useI18n(),
     };
   },
