@@ -43,12 +43,18 @@ export default defineComponent({
     const activeTimeEntry = computed(() => store.state.activeTimeEntry);
     const isRunning = computed(() => !(activeTimeEntry.value === null));
 
-    function handleStartStop(): void {
+    async function handleStartStop() {
       if (isRunning.value) {
         store.dispatch(ActionTypes.STOP_ACTIVE_TIME_ENTRY, null);
         description.value = "";
       } else {
-        store.dispatch(ActionTypes.START_NEW_TIME_ENTRY, description.value);
+        const x = await store.dispatch(
+          ActionTypes.START_NEW_TIME_ENTRY,
+          description.value
+        );
+        // .then((data) => console.log(data))
+        // .catch((err) => console.log(err));
+        console.log(x);
       }
     }
 

@@ -60,7 +60,7 @@ export default {
   timeSpan: {
     currentWeek: "This week",
     weeksAgo: "One week ago | {n} weeks ago",
-    weeksAhead: "In one wekk | In {n} weeks",
+    weeksAhead: "In one week | In {n} weeks",
   },
   notification: {
     switchedTeam: "Switched active team",
