@@ -6,7 +6,7 @@
     ref="input"
     type="text"
     projectName="newTimeEntry"
-    class="text-input"
+    class="h-full text-input"
     :placeholder="t('actionBar.what_are_you_working_on')"
     v-bind="$attrs"
     @input="handleInput"
@@ -50,6 +50,10 @@ interface CustomerAutocompleteItem {
   customerId: number;
 }
 
+type AutocompleteItem = Partial<
+  CustomerAutocompleteItem & ProjectAutocompleteItem & TimeEntryAutocompleteItem
+>;
+
 export default defineComponent({
   projectName: "NewTimeEntryInput",
   props: {
@@ -86,11 +90,7 @@ export default defineComponent({
     // let popper: PopperInstance;
 
     onMounted(() => {
-      autocompleteInstance = autocomplete<
-        | TimeEntryAutocompleteItem
-        | ProjectAutocompleteItem
-        | CustomerAutocompleteItem
-      >({
+      autocompleteInstance = autocomplete<AutocompleteItem>({
         input: input.value,
         emptyMsg: t("timeEntrySelect.noTimeEntriesFound"),
         minLength: 0,
@@ -122,7 +122,7 @@ export default defineComponent({
                 projectId: project.id,
               })
             );
-            console.log(newData);
+
             loadedData = newData;
           } else if (text.endsWith("@")) {
             const {
@@ -136,25 +136,12 @@ export default defineComponent({
                 customerId: customer.id,
               })
             );
-            console.log(newData);
 
             loadedData = newData;
           }
-          callback(
-            loadedData as
-              | false
-              | (
-                  | TimeEntryAutocompleteItem
-                  | ProjectAutocompleteItem
-                  | CustomerAutocompleteItem
-                )[]
-          );
+          callback(loadedData as false | AutocompleteItem[]);
         },
-        render(
-          // TODO find typing
-          // item: TimeEntryAutocompleteItem | ProjectAutocompleteItem
-          item: any
-        ): HTMLDivElement | undefined {
+        render(item: AutocompleteItem): HTMLDivElement | undefined {
           let returnedWrapper;
           if (item.value?.description) {
             const wrapper = document.createElement("div");
@@ -242,7 +229,7 @@ export default defineComponent({
               "select-none",
             ].forEach((eleClass) => customerWrapper.classList.add(eleClass));
 
-            customerSpan.textContent = customerName;
+            customerSpan.textContent = customerName as string | null;
             customerSpan.classList.add("block");
 
             wrapper.appendChild(customerSpan);
@@ -272,7 +259,7 @@ export default defineComponent({
               "select-none",
             ].forEach((eleClass) => projectWrapper.classList.add(eleClass));
 
-            projectSpan.textContent = projectName;
+            projectSpan.textContent = projectName as string | null;
             projectSpan.classList.add("block");
 
             wrapper.appendChild(projectSpan);
@@ -282,22 +269,15 @@ export default defineComponent({
           }
           return returnedWrapper;
         },
-        onSelect(
-          // TODO find typing
-          // item:
-          //   | TimeEntryAutocompleteItem
-          //   | ProjectAutocompleteItem
-          //   | CustomerAutocompleteItem
-          item: any
-        ) {
+        onSelect(item: AutocompleteItem) {
           if (item.value?.description) {
             emit("time-entry-selected", item.value);
           } else if (item.value?.type === "person") {
             emit("customer-selected", item.value);
-            input.value.value.slice(0, -1);
+            input.value.value = input.value.value.slice(0, -1);
           } else if (item.value?.project_type) {
             emit("project-selected", item.value);
-            input.value.innerText.slice(0, -1);
+            input.value.value = input.value.value.slice(0, -1);
           }
         },
         // Because the autocomplete plugion always places elements
@@ -311,6 +291,7 @@ export default defineComponent({
           maxHeight: number
         ) => {
           // ToDo: using Popper.js in this way (destroying, creating) is not poptimal
+          // TODO: Remove Popper.js from here?
           // if (popper !== undefined) {
           //   popper.destroy();
           // }
