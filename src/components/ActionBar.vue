@@ -9,11 +9,11 @@
     />
     <div
       v-else
-      class="relative flex items-center w-full p-0 bg-white text-input"
+      class="relative flex items-center w-full h-full p-0 bg-white text-input"
     >
       <new-time-entry-input
         v-model="taskData"
-        class="border-0 text-input"
+        class="h-full m-0 border-0 text-input"
         @time-entry-selected="handleTimeEntrySelected"
         @customer-selected="handleCustomerSelected"
         @project-selected="handleProjectSelected"

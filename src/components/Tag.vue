@@ -1,15 +1,21 @@
 <template>
   <li
-    class="inline-flex items-center my-0.5 overflow-hidden text-sm rounded"
-    :class="selectType === 'customer' ? 'bg-blue-100' : 'bg-red-100'"
+    class="inline-flex items-center my-0.5 overflow-hidden text-sm rounded cursor-pointer"
+    tabindex="0"
+    :class="
+      selectType === 'customer'
+        ? 'bg-blue-100 focus:bg-blue-200 hover:bg-blue-200'
+        : 'bg-red-100 focus:bg-red-300 hover:bg-red-200'
+    "
   >
     <span class="max-w-xs px-1 ml-2 mr-1 leading-relaxed truncate">
       {{ title }}
     </span>
     <button
       class="inline-block w-6 h-6 text-gray-500 align-middle focus:outline-none"
-      :class="selectType === 'customer' ? 'bg-blue-100' : 'bg-red-100'"
-      :aria-label="`${t('timeEntrySelect.remove')} ${title}`"
+      :aria-label="`${t('timeEntrySelect.remove')} ${selectType} ${title} ${t(
+        'timeEntrySelect.fromTagList'
+      )}`"
       @click="handleRemoveClick"
     >
       <svg
@@ -51,7 +57,6 @@ export default defineComponent({
     function handleRemoveClick() {
       emit("removeTag", props.index);
     }
-    console.log(props.selectType);
 
     return {
       ...useI18n(),
