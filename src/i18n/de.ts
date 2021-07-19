@@ -75,4 +75,36 @@ export default {
     add: "Hinzufügen",
     projectCreated: "Projekt wurde erstellt",
   },
+  errors: {
+    error: "Fehler",
+    close: "Schließen",
+    ACTIVE_TIME_ENTRY_EXISTS:
+      "Es existiert bereits ein laufender Zeiteintrag. Bitte lade die Seite neu um diesen anzuzeigen.",
+    INSUFFICIENT_PERMISSION:
+      "Du hast keine ausreichenden Berechtigungen für diese Aktion.",
+    INVALID_CREDENTIALS:
+      "Diese Zugangsdaten wurden nicht in unserer Datenbank gefunden.",
+    INVALID_EMAIL:
+      "Es existiert kein Benutzer mit der angegebenen Email-Adresse.",
+    INVALID_PASSWORD_CONFIRMATION:
+      "Das eigegebene Passwort ist nicht korrekt. Bitte versuche es erneut.",
+    INVALID_VERIFICATION_TOKEN: "Ungültiger Verfizierungsschlüssel.",
+    MODEL_NOT_FOUND: "Objekt existiert nicht.",
+    NO_SUBSCRIPTION: "Bitte schließen zuerst ein Abonnement ab.",
+    NO_TOKEN: "Deine Sitzung ist ungültig. Bitte melde dich erneut an.",
+    RECENT_PASSWORD_CHANGE:
+      "Dein Passwort wurde vor kurzem geändert. Bitte melde dich erneut an.",
+    TOKEN_BLACKLISTED:
+      "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.",
+    TOKEN_EXPIRED: "Deine Sitzung ist abgelaufen. Bitte melde dich erneut an.",
+    TOKEN_INVALID: "Deine Sitzung ist ungültig. Bitte melde dich erneut an.",
+    TOO_MANY_ATTEMPTS: "Zu viele Anfragen in kurzer Zeit.",
+    UNKNOWN_ERROR:
+      "Ein unbekannter Fehler ist aufgetreten. Bitte versuche es später erneut.",
+    VALIDATION: "Die eingegebenen Daten sind ungültig/unvollständig.",
+    forbidden_error_text:
+      "Entschuldigung, du bist nicht berechtigt diesen Inhalt zu sehen.",
+    not_found_error_text:
+      "Entschuldigung, der Inhalt auf den du versuchst zuzugreifen konnte nicht gefunden werden.",
+  },
 };

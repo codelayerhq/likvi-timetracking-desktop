@@ -1,7 +1,8 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import createAuthRefreshInterceptor, {
   AxiosAuthRefreshRequestConfig,
 } from "axios-auth-refresh";
+import errorFromResponse from "@/utils/errorFromResponse";
 
 const instance = axios.create({
   baseURL: process.env.VUE_APP_API_BASE_URL,
@@ -23,6 +24,11 @@ instance.interceptors.request.use((request) => {
   request.headers["Authorization"] = `Bearer ${getAccessToken()}`;
   return request;
 });
+
+instance.interceptors.response.use(
+  (response: AxiosResponse) => response,
+  errorFromResponse
+);
 
 const refreshAuthLogic = async (failedRequest: AxiosError) => {
   const {

@@ -74,4 +74,25 @@ export default {
     add: "Add",
     projectCreated: "Project was created",
   },
+  errors: {
+    error: "Error",
+    close: "Close",
+    ACTIVE_TIME_ENTRY_EXISTS:
+      "There is already an active time entry. Please reload the page.",
+    INSUFFICIENT_PERMISSION: "you don't have permission for this action.",
+    INVALID_CREDENTIALS: "We did not find your login data in our database",
+    INVALID_EMAIL: "There is no existing user with that email.",
+    INVALID_PASSWORD_CONFIRMATION:
+      "The password is incorrect, please try again.",
+    INVALID_VERIFICATION_TOKEN: "Invalid verification token.",
+    MODEL_NOT_FOUND: "The object does not exist.",
+    NO_SUBSCRIPTION: "Please subscribe first.",
+    RECENT_PASSWORD_CHANGE: "Your password was changed. Please login again.",
+    TOO_MANY_ATTEMPTS: "Too many requests.",
+    UNKNOWN_ERROR: "An unknown error occured. Please try again later.",
+    VALIDATION: "The data is incomplete.",
+    forbidden_error_text: "Sorry, you are  nit allowed to see this content.",
+    not_found_error_text:
+      "Sorry, the content you tried to request does not exist.",
+  },
 };

@@ -11,6 +11,7 @@
 
   <selected-time-entry-modal />
   <add-project-modal />
+  <notification-container />
 </template>
 
 <script lang="ts">
@@ -20,6 +21,7 @@ import TimeEntryList from "@/components/TimeEntryList.vue";
 import ActionBar from "@/components/ActionBar.vue";
 import SelectedTimeEntryModal from "@/components/SelectedTimeEntryModal.vue";
 import AddProjectModal from "@/components/AddProjectModal.vue";
+import NotificationContainer from "@/components/NotificationContainer.vue";
 import { useStore } from "vuex";
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
@@ -39,6 +41,7 @@ export default defineComponent({
     ActionBar,
     SelectedTimeEntryModal,
     AddProjectModal,
+    NotificationContainer,
   },
   setup() {
     const store = useStore<RootState>();
