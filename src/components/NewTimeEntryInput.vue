@@ -27,7 +27,6 @@ import { useI18n } from "vue-i18n";
 import autocomplete, { AutocompleteResult } from "autocompleter";
 import { Customer, Project, TimeEntry } from "@/api/types";
 import TimeEntriesService from "@/api/TimeEntriesService";
-// import { createPopper, Instance as PopperInstance } from "@popperjs/core";
 import ProjectsService from "@/api/ProjectsService";
 import CustomersService from "@/api/CustomersService";
 import { getCustomerName } from "@/utils/getCustomerName";
@@ -81,13 +80,18 @@ export default defineComponent({
       },
     });
 
+    window.addEventListener("keydown", function (event: KeyboardEvent) {
+      if (event.key === "Enter") {
+        console.log(event);
+      }
+    });
+
     function handleInput(event: Event): void {
       const target = event.target as HTMLInputElement;
       modelProxy.value.description = target.value;
     }
 
     let autocompleteInstance: AutocompleteResult;
-    // let popper: PopperInstance;
 
     onMounted(() => {
       autocompleteInstance = autocomplete<AutocompleteItem>({
@@ -280,8 +284,6 @@ export default defineComponent({
             input.value.value = input.value.value.slice(0, -1);
           }
         },
-        // Because the autocomplete plugion always places elements
-        // at the bottom we use Popper.js to update its position.
         customize: (
           input: HTMLInputElement,
           // ToDo: clientRect is not defined
@@ -290,26 +292,10 @@ export default defineComponent({
           container: HTMLDivElement,
           maxHeight: number
         ) => {
-          // ToDo: using Popper.js in this way (destroying, creating) is not poptimal
-          // TODO: Remove Popper.js from here?
-          // if (popper !== undefined) {
-          //   popper.destroy();
-          // }
-
           container.style.width = `${inputRect.width}`;
           container.style.visibility = "visible";
           container.style.zIndex = "1000";
-          // popper = createPopper(input, container, {
-          //   placement: "auto",
-          //   modifiers: [
-          //     {
-          //       name: "offset",
-          //       options: {
-          //         offset: [0, 10],
-          //       },
-          //     },
-          //   ],
-          // });
+
           if (maxHeight < 100) {
             container.style.top = "";
             container.style.bottom =

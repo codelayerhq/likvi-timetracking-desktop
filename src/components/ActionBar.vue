@@ -17,7 +17,6 @@
         @time-entry-selected="handleTimeEntrySelected"
         @customer-selected="handleCustomerSelected"
         @project-selected="handleProjectSelected"
-        @keyup.enter="handleStartStop"
       />
       <ul class="flex flex-col items-start py-0.5 mx-1 list-none">
         <tag
