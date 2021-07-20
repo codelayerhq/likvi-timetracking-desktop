@@ -82,7 +82,10 @@ export default defineComponent({
         fetch: async (text, callback) => {
           const {
             data: { data: customers },
-          } = await new CustomersService().suggest(text);
+          } =
+            text === ""
+              ? await new CustomersService().suggest()
+              : await new CustomersService().search(text);
 
           const newData: CustomerAutocompleteItem[] = customers.map(
             (customer: Customer) => ({
