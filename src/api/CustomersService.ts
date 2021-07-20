@@ -60,9 +60,7 @@ export default class ProjectsService extends ApiService {
   /**
    * Suggest customers
    */
-  suggest(query: string): AxiosPromise<ItemResponse<Customer[]>> {
-    this.params.q = query;
-
+  suggest(): AxiosPromise<ItemResponse<Customer[]>> {
     return this.call("get", `${this.baseUrl}/suggest`);
   }
 }
