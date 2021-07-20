@@ -17,7 +17,7 @@ export default class ProjectsService extends ApiService {
   /**
    * Show the specified customers
    */
-  get(...id: number[]): AxiosPromise<ItemResponse<Customer>> {
+  get(...id: number[]): AxiosPromise<ItemResponse<Customer[]>> {
     return this.call("get", `${this.baseUrl}/${this.parseAndJoin(id)}`);
   }
 

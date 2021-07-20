@@ -39,7 +39,7 @@
         />
 
         <div class="flex items-end mb-4 space-x-2">
-          <project-select v-model="formData.project" class="w-full" />
+          <project-select v-model="formData" class="w-full" />
           <button
             type="button"
             class="w-8 h-12 btn-icon"
@@ -128,7 +128,7 @@
 <script lang="ts">
 import { defineComponent, watch, ref, reactive, computed } from "vue";
 import useSelectedTimeEntry from "@/composables/useSelectedTimeEntry";
-import { Customer, Project, TimeEntry, TimeEntryPayload } from "@/api/types";
+import { TimeEntry, TimeEntryPayload, InitialFormData } from "@/api/types";
 import { format, parse, subMinutes } from "date-fns";
 import _BaseModalVue from "./_BaseModal.vue";
 import store from "@/store";
@@ -139,17 +139,6 @@ import ProjectSelect from "@/components/ProjectSelect.vue";
 import CustomerSelect from "@/components/CustomerSelect.vue";
 import { useI18n } from "vue-i18n";
 import { SwitchGroup, SwitchLabel, Switch } from "@headlessui/vue";
-
-interface InitialFormData {
-  description: string | null;
-  projectId: number | null;
-  customerId: number | null;
-  billable: string | boolean | null;
-  startedAt: string | null;
-  stoppedAt: string | null;
-  project: Project | null;
-  customer: Customer | null;
-}
 
 export default defineComponent({
   name: "SelectedTimeEntryModal",
