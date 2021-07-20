@@ -98,34 +98,21 @@ export default defineComponent({
         showOnFocus: true,
         debounceWaitMs: 100,
         fetch: async (text, callback) => {
-          let loadedData;
-          if (text === "") {
-            const {
-              data: { data: projects },
-            } = await new ProjectsService().suggest(text);
+          const {
+            data: { data: projects },
+          } =
+            text === ""
+              ? await new ProjectsService().suggest()
+              : await new ProjectsService().search(text);
 
-            const newData: ProjectAutocompleteItem[] = projects.map(
-              (project: Project) => ({
-                label: project.name,
-                value: project,
-              })
-            );
-            loadedData = newData;
-          } else {
-            const {
-              data: { data: projects },
-            } = await new ProjectsService().search(text);
+          const newData: ProjectAutocompleteItem[] = projects.map(
+            (project: Project) => ({
+              label: project.name,
+              value: project,
+            })
+          );
 
-            const newData: ProjectAutocompleteItem[] = projects.map(
-              (project: Project) => ({
-                label: project.name,
-                value: project,
-              })
-            );
-            loadedData = newData;
-          }
-
-          callback(loadedData as false | ProjectAutocompleteItem[]);
+          callback(newData);
         },
         render(item: ProjectAutocompleteItem): HTMLDivElement | undefined {
           const wrapper = document.createElement("div");

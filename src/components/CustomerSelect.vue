@@ -80,36 +80,21 @@ export default defineComponent({
         showOnFocus: true,
         debounceWaitMs: 100,
         fetch: async (text, callback) => {
-          let loadedData;
-          if (text === "") {
-            const {
-              data: { data: customers },
-            } = await new CustomersService().suggest(text);
+          const {
+            data: { data: customers },
+          } =
+            text === ""
+              ? await new CustomersService().suggest()
+              : await new CustomersService().search(text);
 
-            const newData: CustomerAutocompleteItem[] = customers.map(
-              (customer: Customer) => ({
-                label: getCustomerName(customer),
-                value: customer,
-              })
-            );
+          const newData: CustomerAutocompleteItem[] = customers.map(
+            (customer: Customer) => ({
+              label: getCustomerName(customer),
+              value: customer,
+            })
+          );
 
-            loadedData = newData;
-          } else {
-            const {
-              data: { data: customers },
-            } = await new CustomersService().search(text);
-
-            const newData: CustomerAutocompleteItem[] = customers.map(
-              (customer: Customer) => ({
-                label: getCustomerName(customer),
-                value: customer,
-              })
-            );
-
-            loadedData = newData;
-          }
-
-          callback(loadedData as false | CustomerAutocompleteItem[]);
+          callback(newData);
         },
         onSelect(item: CustomerAutocompleteItem) {
           emit("update:modelValue", item.value);
