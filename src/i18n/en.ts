@@ -1,6 +1,7 @@
 export default {
   actionBar: {
     what_are_you_working_on: "What are you working on",
+    noResult: "No Result",
   },
   chart: {
     labels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],

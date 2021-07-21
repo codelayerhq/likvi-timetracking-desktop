@@ -9,7 +9,7 @@
     />
     <div
       v-else
-      class="relative flex items-center w-full h-full p-0 bg-white text-input"
+      class="relative flex items-center w-full h-full p-0 bg-white text-input group focus-within:border-blue-700"
     >
       <new-time-entry-input
         v-model="taskData"
@@ -25,7 +25,7 @@
           :title="tag.title"
           :select-type="tag.selectType"
           :index="index"
-          @remove-tag="handleRemoveTag"
+          @remove-tag="handleRemoveTag(index)"
         />
       </ul>
     </div>

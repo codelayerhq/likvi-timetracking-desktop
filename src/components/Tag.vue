@@ -53,9 +53,9 @@ export default defineComponent({
     },
   },
   emits: ["removeTag"],
-  setup(props, { emit }) {
+  setup(_, { emit }) {
     function handleRemoveClick() {
-      emit("removeTag", props.index);
+      emit("removeTag");
     }
 
     return {

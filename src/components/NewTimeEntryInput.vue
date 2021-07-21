@@ -70,6 +70,8 @@ export default defineComponent({
   setup(props, { emit }) {
     const { t } = useI18n();
     const input = ref() as Ref<HTMLInputElement>;
+    let spliceIndex: number;
+    let autocompleteInstance: AutocompleteResult;
 
     const modelProxy = computed({
       get() {
@@ -80,33 +82,31 @@ export default defineComponent({
       },
     });
 
-    window.addEventListener("keydown", function (event: KeyboardEvent) {
-      if (event.key === "Enter") {
-        console.log(event);
-      }
-    });
-
     function handleInput(event: Event): void {
       const target = event.target as HTMLInputElement;
       modelProxy.value.description = target.value;
     }
 
-    let autocompleteInstance: AutocompleteResult;
-
     onMounted(() => {
       autocompleteInstance = autocomplete<AutocompleteItem>({
         input: input.value,
-        emptyMsg: t("timeEntrySelect.noTimeEntriesFound"),
+        emptyMsg: t("actionBar.noResult"),
         minLength: 0,
         debounceWaitMs: 100,
         showOnFocus: true,
         fetch: async (text, callback) => {
           let loadedData;
-          if (!text.endsWith("#") && !text.endsWith("@")) {
+          if (text.search("#") < 0 && text.search("@") < 0) {
             const {
-              data: { data: customers },
-            } = await new TimeEntriesService().include("project").suggest(text);
-            const newData: TimeEntryAutocompleteItem[] = customers.map(
+              data: { data: timeEntries },
+            } =
+              text === ""
+                ? await new TimeEntriesService().include("project").suggest()
+                : await new TimeEntriesService()
+                    .include("project")
+                    .search(text);
+
+            const newData: TimeEntryAutocompleteItem[] = timeEntries.map(
               (timeEntry: TimeEntry) => ({
                 label: timeEntry.description,
                 value: timeEntry,
@@ -114,10 +114,15 @@ export default defineComponent({
             );
 
             loadedData = newData;
-          } else if (text.endsWith("#")) {
+          } else if (text.search("#") > text.search("@")) {
+            spliceIndex = text.search("#");
+
             const {
               data: { data: projects },
-            } = await new ProjectsService().suggest(text);
+            } =
+              text.length < spliceIndex || spliceIndex === 0
+                ? await new ProjectsService().suggest()
+                : await new ProjectsService().search(text);
 
             const newData: ProjectAutocompleteItem[] = projects.map(
               (project: Project) => ({
@@ -128,10 +133,16 @@ export default defineComponent({
             );
 
             loadedData = newData;
-          } else if (text.endsWith("@")) {
+          } else if (text.search("@") > text.search("#")) {
+            spliceIndex = text.search("@");
+            console.log("splice here", spliceIndex);
+            console.log("text length", text.length);
             const {
               data: { data: customers },
-            } = await new CustomersService().suggest(text);
+            } =
+              text.length < spliceIndex || spliceIndex === 0
+                ? await new CustomersService().suggest()
+                : await new CustomersService().search(text);
 
             const newData: CustomerAutocompleteItem[] = customers.map(
               (customer: Customer) => ({
@@ -160,11 +171,9 @@ export default defineComponent({
             const timeEntrySpan = document.createElement("span");
             const projectWrapper = document.createElement("div");
             const projectSpan = document.createElement("span");
-
             const projectName =
               item.value?.project?.data.name || t("projectIndicator.noProject");
             const color = item.value?.project?.data.color_hex || "#676767";
-
             const timeEntryName = item.value.description;
 
             [
@@ -214,7 +223,6 @@ export default defineComponent({
             const wrapper = document.createElement("div");
             const customerSpan = document.createElement("span");
             const customerWrapper = document.createElement("div");
-
             const customerName = item.label;
 
             [
@@ -244,7 +252,6 @@ export default defineComponent({
             const wrapper = document.createElement("div");
             const projectSpan = document.createElement("span");
             const projectWrapper = document.createElement("div");
-
             const projectName = item.label;
 
             [
@@ -278,16 +285,14 @@ export default defineComponent({
             emit("time-entry-selected", item.value);
           } else if (item.value?.type === "person") {
             emit("customer-selected", item.value);
-            input.value.value = input.value.value.slice(0, -1);
+            input.value.value = input.value.value.slice(0, spliceIndex);
           } else if (item.value?.project_type) {
             emit("project-selected", item.value);
-            input.value.value = input.value.value.slice(0, -1);
+            input.value.value = input.value.value.slice(0, spliceIndex);
           }
         },
         customize: (
           input: HTMLInputElement,
-          // ToDo: clientRect is not defined
-          // inputRect: ClientRect | DOMRect,
           inputRect,
           container: HTMLDivElement,
           maxHeight: number

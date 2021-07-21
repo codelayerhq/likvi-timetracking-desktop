@@ -120,7 +120,10 @@ export default defineComponent({
         fetch: async (text, callback) => {
           const {
             data: { data: projects },
-          } = await new ProjectsService().suggest(text);
+          } =
+            text === ""
+              ? await new ProjectsService().suggest()
+              : await new ProjectsService().search(text);
 
           const newData: ProjectAutocompleteItem[] = projects.map(
             (project: Project) => ({

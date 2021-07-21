@@ -56,7 +56,7 @@ export default class TimeEntriesService extends ApiService {
   /**
    * Search for time entries
    */
-  search(query: string): AxiosPromise<ItemResponse<TimeEntry>> {
+  search(query: string): AxiosPromise<CollectionResponse<TimeEntry>> {
     this.params.q = query;
 
     return this.call("get", `${this.baseUrl}/search`);
@@ -65,9 +65,7 @@ export default class TimeEntriesService extends ApiService {
   /**
    * Suggest time entries
    */
-  suggest(query: string): AxiosPromise<ItemResponse<TimeEntry[]>> {
-    this.params.q = query;
-
+  suggest(): AxiosPromise<ItemResponse<TimeEntry[]>> {
     return this.call("get", `${this.baseUrl}/suggest`);
   }
 
