@@ -1,6 +1,6 @@
 <template>
   <li
-    class="inline-flex items-center my-0.5 overflow-hidden text-sm rounded cursor-pointer"
+    class="inline-flex items-center my-0.5 px-0.5 overflow-hidden text-sm rounded cursor-pointer"
     tabindex="0"
     :class="
       selectType === 'customer'
@@ -8,7 +8,37 @@
         : 'bg-red-100 focus:bg-red-300 hover:bg-red-200'
     "
   >
-    <span class="max-w-xs px-1 ml-2 mr-1 leading-relaxed truncate">
+    <svg
+      v-if="selectType === 'project'"
+      xmlns="http://www.w3.org/2000/svg"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#6B7280"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"
+      ></path>
+      <line x1="7" y1="7" x2="7.01" y2="7"></line>
+    </svg>
+    <svg
+      v-else
+      xmlns="http://www.w3.org/2000/svg"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#6B7280"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </svg>
+    <span class="max-w-xs pl-1 leading-relaxed truncate">
       {{ title }}
     </span>
     <button
