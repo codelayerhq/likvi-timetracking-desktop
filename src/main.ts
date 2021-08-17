@@ -53,3 +53,5 @@ requireComponent.keys().forEach((fileName) => {
   // Globally register the component
   app.component(componentName, componentConfig.default || componentConfig);
 });
+
+export { app, i18n };

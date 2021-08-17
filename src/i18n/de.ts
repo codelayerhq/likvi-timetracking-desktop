@@ -1,6 +1,7 @@
 export default {
   actionBar: {
     what_are_you_working_on: "Woran arbeitest du?",
+    noResult: "Kein Ergebnis",
   },
   chart: {
     labels: ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"],
@@ -27,6 +28,8 @@ export default {
   },
   timeEntrySelect: {
     noTimeEntriesFound: "Keine Zeiteinträge gefunden",
+    remove: "Lösche",
+    fromTagList: "von der Tag Liste",
   },
   header: {
     jumpToCurrentWeek: "Zu aktueller Woche springen",

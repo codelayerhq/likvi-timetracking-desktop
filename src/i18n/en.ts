@@ -1,6 +1,7 @@
 export default {
   actionBar: {
     what_are_you_working_on: "What are you working on",
+    noResult: "No Result",
   },
   chart: {
     labels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
@@ -27,6 +28,8 @@ export default {
   },
   timeEntrySelect: {
     noTimeEntriesFound: "No time entries found",
+    remove: "Remove",
+    fromTagList: "from tag list",
   },
   header: {
     jumpToCurrentWeek: "Jump to current week",

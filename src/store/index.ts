@@ -6,6 +6,7 @@ import {
   Statistic,
   TimeEntry,
   TimeEntryPayload,
+  TaskData,
 } from "@/api/types";
 import TimeEntriesService from "@/api/TimeEntriesService";
 import ProjectsService from "@/api/ProjectsService";
@@ -89,7 +90,8 @@ interface Actions<S = RootState, R = RootState> {
   }: AugmentedActionContext<S, R>): void;
   [ActionTypes.START_NEW_TIME_ENTRY](
     { commit }: AugmentedActionContext<S, R>,
-    description: string
+    // description: string
+    taskData: TaskData
   ): void;
   [ActionTypes.UPDATE_SELECTED_TIME_ENTRY](
     { commit, state }: AugmentedActionContext<S, R>,
@@ -212,11 +214,13 @@ const actions: ActionTree<RootState, RootState> & Actions = {
       return dispatch(ActionTypes.FETCH_DATA);
     }
   },
-  async [ActionTypes.START_NEW_TIME_ENTRY]({ commit }, description: string) {
+  async [ActionTypes.START_NEW_TIME_ENTRY]({ commit }, taskData: TaskData) {
     const {
       data: { data: timeEntry },
     } = await new TimeEntriesService().include(...DEFAULT_INCLUDES).create({
-      description,
+      description: taskData.description,
+      customer_id: taskData.customerId,
+      project_id: taskData.projectId,
       started_at: toDateTimeStrUTC(new Date()),
     });
 

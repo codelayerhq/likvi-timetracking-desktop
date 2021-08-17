@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Start time entry on enter
+
+### Fixed
+
+- Fix bug where suggest endpoint was used instead of search
+
+### Added
+
+- Add feature to type @ or # and select project and customer directly in task input
+- Add feature to autoselect the matching customer when a project is selected
+
 ## [1.2.0] - 2021-04-21
 
 ### Changed
