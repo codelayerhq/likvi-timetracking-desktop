@@ -5,6 +5,8 @@ export function getCustomerName(customer: Customer): string {
     return customer.name;
   } else if (customer.type === "person") {
     return [customer.first_name, customer.last_name].join(" ").trim();
+  } else if (customer.type === "contact_person") {
+    return [customer.first_name, customer.last_name].join(" ").trim();
   }
 
   return "";

@@ -5,8 +5,8 @@
   <input
     ref="input"
     type="text"
-    projectName="newTimeEntry"
-    class="h-full text-input"
+    project-name="newTimeEntry"
+    class="w-full h-full py-3 text-gray-900 placeholder-gray-400 bg-transparent rounded-md focus:outline-none focus:ring-0"
     :placeholder="t('actionBar.what_are_you_working_on')"
     v-bind="$attrs"
     @input="handleInput"
@@ -31,27 +31,15 @@ import ProjectsService from "@/api/ProjectsService";
 import CustomersService from "@/api/CustomersService";
 import { getCustomerName } from "@/utils/getCustomerName";
 import { TaskData } from "@/api/types";
-
-interface TimeEntryAutocompleteItem {
-  label: string;
-  value: TimeEntry;
-}
-
-interface ProjectAutocompleteItem {
-  label: string;
-  value: Project;
-  projectId: number;
-}
-
-interface CustomerAutocompleteItem {
-  label: string;
-  value: Customer;
-  customerId: number;
-}
-
-type AutocompleteItem = Partial<
-  CustomerAutocompleteItem & ProjectAutocompleteItem & TimeEntryAutocompleteItem
->;
+import {
+  AutocompleteItem,
+  CustomerAutocompleteItem,
+  ProjectAutocompleteItem,
+  renderAutocompleteCustomerEntry,
+  renderAutocompleteProjectEntry,
+  renderAutocompleteTimeEntryEntry,
+  TimeEntryAutocompleteItem,
+} from "@/utils/renderAutocompleteItem";
 
 export default defineComponent({
   projectName: "NewTimeEntryInput",
@@ -70,7 +58,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const { t } = useI18n();
     const input = ref() as Ref<HTMLInputElement>;
-    let spliceIndex: number;
+    let spliceIndex: number | undefined;
     let autocompleteInstance: AutocompleteResult;
 
     const modelProxy = computed({
@@ -87,6 +75,77 @@ export default defineComponent({
       modelProxy.value.description = target.value;
     }
 
+    async function suggestTimeEntries(query: string) {
+      const {
+        data: { data: timeEntries },
+      } =
+        query === ""
+          ? await new TimeEntriesService().include("project").suggest()
+          : await new TimeEntriesService().include("project").search(query);
+
+      const newData: TimeEntryAutocompleteItem[] = timeEntries.map(
+        (timeEntry: TimeEntry) => ({
+          type: "time-entry",
+          label: timeEntry.description,
+          value: timeEntry,
+        })
+      );
+
+      return newData;
+    }
+
+    function getQuerySuggestion(text: string, stopWord: string) {
+      return text.match(new RegExp(`${stopWord}(\\w+)`));
+    }
+
+    async function suggestProject(text: string) {
+      const match = getQuerySuggestion(text, "#");
+
+      const query = match ? match[1] ?? "" : "";
+      spliceIndex = match ? match["index"] ?? spliceIndex : spliceIndex;
+
+      const {
+        data: { data: projects },
+      } =
+        query === ""
+          ? await new ProjectsService().suggest()
+          : await new ProjectsService().search(query);
+
+      const newData: ProjectAutocompleteItem[] = projects.map(
+        (project: Project) => ({
+          type: "project",
+          label: project.name,
+          value: project,
+        })
+      );
+
+      return newData;
+    }
+
+    async function suggestCustomer(text: string) {
+      const match = getQuerySuggestion(text, "@");
+
+      const query = match ? match[1] ?? "" : "";
+      spliceIndex = match ? match["index"] ?? spliceIndex : spliceIndex;
+
+      const {
+        data: { data: customers },
+      } =
+        query === ""
+          ? await new CustomersService().suggest()
+          : await new CustomersService().search(query);
+
+      const newData: CustomerAutocompleteItem[] = customers.map(
+        (customer: Customer) => ({
+          type: "customer",
+          label: getCustomerName(customer),
+          value: customer,
+        })
+      );
+
+      return newData;
+    }
+
     onMounted(() => {
       autocompleteInstance = autocomplete<AutocompleteItem>({
         input: input.value,
@@ -95,200 +154,46 @@ export default defineComponent({
         debounceWaitMs: 100,
         showOnFocus: true,
         fetch: async (text, callback) => {
-          let loadedData;
-          if (text.search("#") < 0 && text.search("@") < 0) {
-            const {
-              data: { data: timeEntries },
-            } =
-              text === ""
-                ? await new TimeEntriesService().include("project").suggest()
-                : await new TimeEntriesService()
-                    .include("project")
-                    .search(text);
-
-            const newData: TimeEntryAutocompleteItem[] = timeEntries.map(
-              (timeEntry: TimeEntry) => ({
-                label: timeEntry.description,
-                value: timeEntry,
-              })
-            );
-
-            loadedData = newData;
+          if (!text.includes("#") && !text.includes("@")) {
+            return callback(await suggestTimeEntries(text));
           } else if (text.search("#") > text.search("@")) {
-            spliceIndex = text.search("#");
-
-            const {
-              data: { data: projects },
-            } =
-              text.length < spliceIndex || spliceIndex === 0
-                ? await new ProjectsService().suggest()
-                : await new ProjectsService().search(text);
-
-            const newData: ProjectAutocompleteItem[] = projects.map(
-              (project: Project) => ({
-                label: project.name,
-                value: project,
-                projectId: project.id,
-              })
-            );
-
-            loadedData = newData;
-          } else if (text.search("@") > text.search("#")) {
-            spliceIndex = text.search("@");
-            console.log("splice here", spliceIndex);
-            console.log("text length", text.length);
-            const {
-              data: { data: customers },
-            } =
-              text.length < spliceIndex || spliceIndex === 0
-                ? await new CustomersService().suggest()
-                : await new CustomersService().search(text);
-
-            const newData: CustomerAutocompleteItem[] = customers.map(
-              (customer: Customer) => ({
-                label: getCustomerName(customer),
-                value: customer,
-                customerId: customer.id,
-              })
-            );
-
-            loadedData = newData;
+            return callback(await suggestProject(text));
+          } else {
+            return callback(await suggestCustomer(text));
           }
-          callback(loadedData as false | AutocompleteItem[]);
         },
         render(item: AutocompleteItem): HTMLDivElement | undefined {
-          let returnedWrapper;
-          if (item.value?.description) {
-            const wrapper = document.createElement("div");
-            const svg = document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "svg"
-            );
-            const circle = document.createElementNS(
-              "http://www.w3.org/2000/svg",
-              "circle"
-            );
-            const timeEntrySpan = document.createElement("span");
-            const projectWrapper = document.createElement("div");
-            const projectSpan = document.createElement("span");
-            const projectName =
-              item.value?.project?.data.name || t("projectIndicator.noProject");
-            const color = item.value?.project?.data.color_hex || "#676767";
-            const timeEntryName = item.value.description;
-
-            [
-              "flex",
-              "justify-between",
-              "select-none",
-              "text-gray-900",
-              "text-sm",
-              "w-full",
-            ].forEach((eleClass) => wrapper.classList.add(eleClass));
-
-            [
-              "flex",
-              "items-center",
-              "text-xs",
-              "select-none",
-            ].forEach((eleClass) => projectWrapper.classList.add(eleClass));
-            projectWrapper.style.color = color;
-
-            svg.setAttribute("width", "10");
-            svg.setAttribute("height", "10");
-            svg.setAttribute("viewBox", "0 0 10 10");
-            svg.setAttribute("fill", "none");
-            svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-            svg.classList.add("mr-2");
-
-            circle.setAttribute("cx", "5");
-            circle.setAttribute("cy", "5");
-            circle.setAttribute("r", "5");
-            circle.classList.add("fill-current");
-
-            timeEntrySpan.textContent = timeEntryName;
-            timeEntrySpan.classList.add("block");
-
-            projectSpan.classList.add("block");
-            projectSpan.textContent = projectName;
-
-            svg.appendChild(circle);
-            projectWrapper.appendChild(svg);
-            projectWrapper.appendChild(projectSpan);
-
-            wrapper.appendChild(timeEntrySpan);
-            wrapper.appendChild(projectWrapper);
-
-            returnedWrapper = wrapper;
-          } else if (item.value?.type === "person") {
-            const wrapper = document.createElement("div");
-            const customerSpan = document.createElement("span");
-            const customerWrapper = document.createElement("div");
-            const customerName = item.label;
-
-            [
-              "flex",
-              "justify-between",
-              "select-none",
-              "text-gray-900",
-              "text-sm",
-              "w-full",
-            ].forEach((eleClass) => wrapper.classList.add(eleClass));
-
-            [
-              "flex",
-              "items-center",
-              "text-xs",
-              "select-none",
-            ].forEach((eleClass) => customerWrapper.classList.add(eleClass));
-
-            customerSpan.textContent = customerName as string | null;
-            customerSpan.classList.add("block");
-
-            wrapper.appendChild(customerSpan);
-            wrapper.appendChild(customerWrapper);
-
-            returnedWrapper = wrapper;
-          } else if (item.value?.project_type) {
-            const wrapper = document.createElement("div");
-            const projectSpan = document.createElement("span");
-            const projectWrapper = document.createElement("div");
-            const projectName = item.label;
-
-            [
-              "flex",
-              "justify-between",
-              "select-none",
-              "text-gray-900",
-              "text-sm",
-              "w-full",
-            ].forEach((eleClass) => wrapper.classList.add(eleClass));
-
-            [
-              "flex",
-              "items-center",
-              "text-xs",
-              "select-none",
-            ].forEach((eleClass) => projectWrapper.classList.add(eleClass));
-
-            projectSpan.textContent = projectName as string | null;
-            projectSpan.classList.add("block");
-
-            wrapper.appendChild(projectSpan);
-            wrapper.appendChild(projectWrapper);
-
-            returnedWrapper = wrapper;
+          if (item.type === "time-entry") {
+            return renderAutocompleteTimeEntryEntry(item);
           }
-          return returnedWrapper;
+
+          if (item.type === "customer") {
+            return renderAutocompleteCustomerEntry(item);
+          }
+
+          if (item.type === "project") {
+            return renderAutocompleteProjectEntry(
+              item as ProjectAutocompleteItem
+            );
+          }
         },
         onSelect(item: AutocompleteItem) {
-          if (item.value?.description) {
+          if (item.type === "time-entry") {
             emit("time-entry-selected", item.value);
-          } else if (item.value?.type === "person") {
+          }
+
+          if (item.type === "customer") {
             emit("customer-selected", item.value);
-            input.value.value = input.value.value.slice(0, spliceIndex);
-          } else if (item.value?.project_type) {
+            input.value.value = input.value.value.slice(0, spliceIndex).trim();
+            modelProxy.value.description = input.value.value;
+            spliceIndex = undefined;
+          }
+
+          if (item.type === "project") {
             emit("project-selected", item.value);
-            input.value.value = input.value.value.slice(0, spliceIndex);
+            input.value.value = input.value.value.slice(0, spliceIndex).trim();
+            modelProxy.value.description = input.value.value;
+            spliceIndex = undefined;
           }
         },
         customize: (
@@ -297,7 +202,10 @@ export default defineComponent({
           container: HTMLDivElement,
           maxHeight: number
         ) => {
-          container.style.width = `${inputRect.width}`;
+          container.style.width = `${
+            input.parentElement?.getBoundingClientRect().width
+          }px`;
+
           container.style.visibility = "visible";
           container.style.zIndex = "1000";
 

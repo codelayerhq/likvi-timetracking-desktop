@@ -9,16 +9,19 @@
     />
     <div
       v-else
-      class="relative flex items-center w-full h-full p-0 bg-white text-input group focus-within:border-blue-700"
+      class="relative flex items-center w-full h-full p-0 border border-gray-300 rounded-md focus-within:ring-2 bg-gray-50 focus-within:border-gray-200 focus-within:ring-gray-500"
     >
       <new-time-entry-input
         v-model="taskData"
-        class="h-full m-0 border-0 text-input"
+        class="m-0 border-0"
         @time-entry-selected="handleTimeEntrySelected"
         @customer-selected="handleCustomerSelected"
         @project-selected="handleProjectSelected"
       />
-      <ul class="flex flex-col items-start py-0.5 mx-1 list-none">
+      <ul
+        v-if="tags.length"
+        class="flex flex-col items-start py-0.5 mx-1 list-none"
+      >
         <tag
           v-for="(tag, index) in tags"
           :key="tag.title"
