@@ -1,6 +1,6 @@
 import axios from "./axiosInstance";
 import { AxiosPromise } from "axios";
-import { ItemResponse, LoginResponse } from "./types";
+import { ItemResponse, LoginResponse, User } from "./types";
 import { AxiosAuthRefreshRequestConfig } from "axios-auth-refresh";
 
 export interface LogInDetails {
@@ -18,6 +18,14 @@ export function login({
   return axios.post("/authenticate", { email, password, otp }, {
     skipAuthRefresh: true,
   } as AxiosAuthRefreshRequestConfig);
+}
+
+export function getUser(): AxiosPromise<ItemResponse<User>> {
+  return axios.get("/users/me", {
+    params: {
+      include: "teams",
+    },
+  });
 }
 
 export function validate(): AxiosPromise<"pong"> {

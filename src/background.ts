@@ -10,6 +10,7 @@ import {
   ipcMain,
   Tray,
   Menu,
+  session,
 } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
@@ -17,6 +18,7 @@ import path from "path";
 import { Team, User } from "./api/types";
 import { autoUpdater } from "electron-updater";
 import { MenuItemConstructorOptions } from "electron/main";
+import { URL } from "url";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Keep a global reference of the window, idle window and tray object, if you don't, the window will
@@ -260,6 +262,48 @@ ipcMain.on("idleWindow.removeStopped", (event, idleSince) => {
   if (win !== null) {
     win.webContents.send("idle.stopActive", idleSince);
   }
+});
+
+ipcMain.on("oAuth", (event, provider) => {
+  let authWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    show: false,
+    "node-integration": false,
+    "web-security": false,
+  });
+
+  const authUrl = `${process.env.VUE_APP_API_BASE_URL}/oauth/${provider}`;
+
+  authWindow.loadURL(authUrl);
+  authWindow.show();
+
+  const redirectUri = "https://*/oauth-callback";
+  const filter = {
+    urls: [redirectUri + "*"],
+  };
+
+  session.defaultSession.webRequest.onBeforeRequest(
+    filter,
+    function (details, callback) {
+      const url = new URL(details.url);
+      const token = url.hash.split("#")[1];
+
+      if (win !== null) {
+        win.webContents.send("oauth.login", token);
+      }
+
+      callback({
+        cancel: true,
+      });
+
+      authWindow.close();
+    }
+  );
+
+  authWindow.on("closed", function () {
+    authWindow = null;
+  });
 });
 
 setInterval(() => {

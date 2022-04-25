@@ -19,6 +19,7 @@ export enum ActionTypes {
 
   // Auth
   LOGIN = "LOGIN",
+  LOGIN_FROM_TOKEN = "LOGIN_FROM_TOKEN",
   LOGOUT = "LOGOUT",
   VALIDATE = "VALIDATE",
   SWITCH_TEAM = "SWITCH_TEAM",

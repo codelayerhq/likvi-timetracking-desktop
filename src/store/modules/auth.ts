@@ -1,5 +1,5 @@
 import type { ActionContext, ActionTree, Module, MutationTree } from "vuex";
-import { LogInDetails, login, validate } from "@/api/AuthService";
+import { LogInDetails, login, getUser, validate } from "@/api/AuthService";
 import { User } from "@/api/types";
 import { RootState } from "..";
 import { MutationTypes } from "../mutation-types";
@@ -35,6 +35,10 @@ interface Actions<S = State, R = RootState> {
   [ActionTypes.LOGIN](
     { commit, dispatch, getters }: AugmentedActionContext<S, R>,
     logInDetails: LogInDetails
+  ): Promise<unknown>;
+  [ActionTypes.LOGIN_FROM_TOKEN](
+    { commit, dispatch, getters }: AugmentedActionContext<S, R>,
+    token: string
   ): Promise<unknown>;
   [ActionTypes.LOGOUT]({ commit }: AugmentedActionContext<S, R>): void;
   [ActionTypes.VALIDATE]({
@@ -86,6 +90,21 @@ const actions: ActionTree<State, RootState> & Actions = {
 
       return { result: "not ok" };
     }
+  },
+
+  async [ActionTypes.LOGIN_FROM_TOKEN](
+    { commit }: ActionContext<State, RootState>,
+    token: string
+  ): Promise<unknown> {
+    commit(MutationTypes.SET_TOKEN, token);
+    const {
+      data: { data: user },
+    } = await getUser();
+
+    commit(MutationTypes.SET_USER, user);
+    commit(MutationTypes.SET_CURRENT_TEAM_ID, user.current_team_id);
+
+    return;
   },
 
   [ActionTypes.LOGOUT]({ commit }: ActionContext<State, RootState>): void {

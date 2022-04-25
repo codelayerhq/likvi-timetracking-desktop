@@ -1,4 +1,14 @@
 export default {
+  common: {
+    terms: {
+      or: "oder",
+      google: "Google",
+      apple: "Apple",
+    },
+    texts: {
+      signUpWith: "Anmelden mit {service}",
+    },
+  },
   actionBar: {
     what_are_you_working_on: "Woran arbeitest du?",
     noResult: "Kein Ergebnis",
