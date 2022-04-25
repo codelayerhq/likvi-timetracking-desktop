@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2022-04-25
+
+### Added
+
+- Added feature to login in with OAuth
+
 ## [1.3.1] - 2021-11-18
 
 - Update CSC
