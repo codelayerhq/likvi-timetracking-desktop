@@ -35,13 +35,21 @@
               />
             </div>
 
-            <base-input
-              v-model="formData.colorHex"
-              name="colorHex"
-              :label="t('projectModal.colorHex')"
-              :placeholder="t('projectModal.colorHex')"
-              type="color"
-            />
+            <label
+              for="colorHex"
+              class="block text-sm font-medium leading-5 text-gray-700"
+            >
+              <span>{{ t("projectModal.colorHex") }}</span>
+
+              <color-select
+                v-model="formData.colorHex"
+                name="colorHex"
+                :label="t('projectModal.colorHex')"
+                :placeholder="t('projectModal.colorHex')"
+                type="color"
+                class="mt-1"
+              />
+            </label>
           </div>
 
           <!-- Todo: Customer Select breaks on modal due to stacking context
@@ -87,6 +95,7 @@ import { useI18n } from "vue-i18n";
 import { useToast } from "vue-toastification";
 import { useStore } from "vuex";
 import _BaseModalVue from "./_BaseModal.vue";
+import ColorSelect from "./ColorSelect.vue";
 
 interface InitialFormData {
   name: string;
@@ -102,6 +111,9 @@ interface InitialFormData {
 
 export default defineComponent({
   name: "AddProjectModal",
+  components: {
+    ColorSelect,
+  },
   setup() {
     const modal = ref(_BaseModalVue);
     const store = useStore();

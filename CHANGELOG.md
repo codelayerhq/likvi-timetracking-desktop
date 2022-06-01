@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add color picker with pre-selected colors when creating a project
+
+### Fixed
+
 - Fix that time entries were not scoped to logged in user and other team member time entries were displayed
 
 ## [1.4.0] - 2022-04-25
