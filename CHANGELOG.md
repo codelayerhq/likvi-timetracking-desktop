@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fix that time entries were not scoped to logged in user and other team member time entries were displayed
+
 ## [1.4.0] - 2022-04-25
 
 ### Added

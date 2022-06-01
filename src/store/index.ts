@@ -154,7 +154,7 @@ const actions: ActionTree<RootState, RootState> & Actions = {
   [ActionTypes.SET_SELECTED_TIME_ENTRY]({ commit }, timeEntry: TimeEntry) {
     commit(MutationTypes.SET_SELECTED_TIME_ENTRY, timeEntry);
   },
-  async [ActionTypes.FETCH_TIME_ENTRIES]({ commit, state }) {
+  async [ActionTypes.FETCH_TIME_ENTRIES]({ commit, state, rootGetters }) {
     let page = 1;
     let totalPages = 1;
     let timeEntriesResult: TimeEntry[] = [];
@@ -169,6 +169,7 @@ const actions: ActionTree<RootState, RootState> & Actions = {
           ["started_at", ">=", toDateStr(startOfDay(state.startDate))],
           ["started_at", "<=", toDateStr(endOfDay(state.endDate))],
           ["running", "=", "false"],
+          ["user_id", "=", rootGetters["auth/user"].id],
         ])
         .list();
 
@@ -242,29 +243,31 @@ const actions: ActionTree<RootState, RootState> & Actions = {
 
     return commit(MutationTypes.SET_SELECTED_TIME_ENTRY, timeEntry);
   },
-  async [ActionTypes.FETCH_STATISTICS]({ commit, state }) {
+  async [ActionTypes.FETCH_STATISTICS]({ commit, state, rootGetters }) {
     const {
       data: { data: statistics },
-    } = await new StatisticsService().list({
-      statistics: [
-        {
-          name: "time_entries",
-          options: {
-            unit: "day",
-            start_date: toDateStr(state.startDate),
-            end_date: toDateStr(state.endDate),
+    } = await new StatisticsService()
+      .filter([["user_id", "=", rootGetters["auth/user"].id]])
+      .list({
+        statistics: [
+          {
+            name: "time_entries",
+            options: {
+              unit: "day",
+              start_date: toDateStr(state.startDate),
+              end_date: toDateStr(state.endDate),
+            },
           },
-        },
-        {
-          name: "project_seconds",
-          options: {
-            unit: "day",
-            start_date: toDateStr(state.startDate),
-            end_date: toDateStr(state.endDate),
+          {
+            name: "project_seconds",
+            options: {
+              unit: "day",
+              start_date: toDateStr(state.startDate),
+              end_date: toDateStr(state.endDate),
+            },
           },
-        },
-      ],
-    });
+        ],
+      });
 
     commit(MutationTypes.SET_STATISTICS, statistics);
   },
