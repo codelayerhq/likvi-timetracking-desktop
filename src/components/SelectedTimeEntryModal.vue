@@ -29,14 +29,24 @@
           {{ t("activeTimeEntryModal.details") }}
         </h2>
 
-        <base-input
-          v-model="formData.description"
-          type="text"
-          name="description"
-          :label="t('activeTimeEntryModal.description')"
-          :placeholder="t('activeTimeEntryModal.description')"
-          class="mb-4"
-        />
+        <label
+          for="description"
+          class="block text-sm font-medium leading-5 text-gray-700"
+        >
+          <span>{{ t("activeTimeEntryModal.description") }}</span>
+          <time-entry-autocomplete-input
+            id="description"
+            v-model="formData.description"
+            type="text"
+            name="description"
+            :label="t('activeTimeEntryModal.description')"
+            :placeholder="t('activeTimeEntryModal.description')"
+            class="mb-4 mt-1 text-input"
+            @time-entry-selected="handleTimeEntrySelected"
+            @customer-selected="handleCustomerSelected"
+            @project-selected="handleProjectSelected"
+          />
+        </label>
 
         <div class="flex items-end mb-4 space-x-2">
           <project-select v-model="formData" class="w-full" />
@@ -128,7 +138,13 @@
 <script lang="ts">
 import { defineComponent, watch, ref, reactive, computed } from "vue";
 import useSelectedTimeEntry from "@/composables/useSelectedTimeEntry";
-import { TimeEntry, TimeEntryPayload, InitialFormData } from "@/api/types";
+import {
+  TimeEntry,
+  TimeEntryPayload,
+  InitialFormData,
+  Customer,
+  Project,
+} from "@/api/types";
 import { format, parse, subMinutes } from "date-fns";
 import _BaseModalVue from "./_BaseModal.vue";
 import store from "@/store";
@@ -139,6 +155,7 @@ import ProjectSelect from "@/components/ProjectSelect.vue";
 import CustomerSelect from "@/components/CustomerSelect.vue";
 import { useI18n } from "vue-i18n";
 import { SwitchGroup, SwitchLabel, Switch } from "@headlessui/vue";
+import TimeEntryAutocompleteInput from "@/components/TimeEntryAutocompleteInput.vue";
 
 export default defineComponent({
   name: "SelectedTimeEntryModal",
@@ -148,6 +165,7 @@ export default defineComponent({
     SwitchGroup,
     SwitchLabel,
     Switch,
+    TimeEntryAutocompleteInput,
   },
   setup() {
     const modal = ref(_BaseModalVue);
@@ -213,6 +231,29 @@ export default defineComponent({
       setSelectedTimeEntry(null);
     }
 
+    function handleCustomerSelected(customer: Customer) {
+      formData.customerId = customer.id;
+      formData.customer = customer;
+    }
+
+    function handleProjectSelected(project: Project) {
+      formData.projectId = project.id;
+      formData.project = project;
+    }
+
+    function handleTimeEntrySelected(timeEntry: TimeEntry) {
+      formData.description = timeEntry.description;
+      formData.projectId = timeEntry.project_id;
+      formData.customerId = timeEntry.customer_id;
+      formData.billable = timeEntry.billable;
+      formData.project = timeEntry.project
+        ? { ...timeEntry.project.data }
+        : null;
+      formData.customer = timeEntry?.customer
+        ? { ...timeEntry.customer.data }
+        : null;
+    }
+
     async function handleSave() {
       const data: TimeEntryPayload = {
         description: formData.description,
@@ -264,6 +305,9 @@ export default defineComponent({
       handleSave,
       startedAtMax,
       handleAddProject,
+      handleCustomerSelected,
+      handleProjectSelected,
+      handleTimeEntrySelected,
     };
   },
 });
