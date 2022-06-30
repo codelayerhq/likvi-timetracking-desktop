@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add time entry autocomplete to edit modal
+- Add display of weekly hours to header
 
 ## [1.5.0] - 2022-06-01
 

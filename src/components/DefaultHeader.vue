@@ -2,12 +2,15 @@
   <header class="z-10 px-8 py-6 bg-gray-100 shadow-sm">
     <div class="mb-8">
       <div class="h-10 text-sm leading-tight text-gray-700">
-        <time-span
-          :start-date="startDate"
-          :end-date="endDate"
-          class="block mt-1 font-semibold"
-          name="timeSpan"
-        />
+        <div class="flex items-center mt-1">
+          <time-span
+            :start-date="startDate"
+            :end-date="endDate"
+            class="block font-semibold"
+            name="timeSpan"
+          />
+          <span class="ml-2">{{ sumOffTimeEntriesHumanReadable }}</span>
+        </div>
         <span
           v-show="!isCurrentWeek"
           role="button"
@@ -77,6 +80,7 @@ import {
 import { ActionTypes } from "@/store/actions";
 import { RootState } from "@/store";
 import { useI18n } from "vue-i18n";
+import { secondsToHours } from "@/utils/format";
 
 export default defineComponent({
   name: "DefaultHeader",
@@ -110,6 +114,19 @@ export default defineComponent({
       fetchData(newStartDate, newEndDate);
     };
 
+    const timeEntriesStatistic = computed(
+      () => store.getters.timeEntriesStatistic
+    );
+    const sumOffTimeEntries = computed(() =>
+      timeEntriesStatistic.value.value.reduce(
+        (acc: number, curr: Record<string, any>) => acc + curr.value,
+        0
+      )
+    );
+    const sumOffTimeEntriesHumanReadable = computed(
+      () => `${secondsToHours(sumOffTimeEntries.value, false)}h`
+    );
+
     function fetchData(newStartDate: Date, newEndDate: Date) {
       store.dispatch(ActionTypes.SET_START_DATE, newStartDate);
       store.dispatch(ActionTypes.SET_END_DATE, newEndDate);
@@ -126,6 +143,7 @@ export default defineComponent({
       ...useI18n(),
       startDate,
       endDate,
+      sumOffTimeEntriesHumanReadable,
       handlePreviousWeek,
       handleNextWeek,
       handleJumpToCurrentWeek,
