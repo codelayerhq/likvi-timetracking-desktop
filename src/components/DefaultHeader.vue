@@ -118,7 +118,7 @@ export default defineComponent({
       () => store.getters.timeEntriesStatistic
     );
     const sumOffTimeEntries = computed(() =>
-      timeEntriesStatistic.value.value.reduce(
+      timeEntriesStatistic.value?.value?.reduce(
         (acc: number, curr: Record<string, any>) => acc + curr.value,
         0
       )
