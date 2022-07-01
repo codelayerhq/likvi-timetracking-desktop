@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.1] - 2022-07-01
+
 ### Fixed
 
 - Fix bug accessing statistics when not initialized 
