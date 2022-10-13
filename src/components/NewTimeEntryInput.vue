@@ -153,6 +153,7 @@ export default defineComponent({
         minLength: 0,
         debounceWaitMs: 100,
         showOnFocus: true,
+        disableAutoSelect: true,
         fetch: async (text, callback) => {
           if (!text.includes("#") && !text.includes("@")) {
             return callback(await suggestTimeEntries(text));
