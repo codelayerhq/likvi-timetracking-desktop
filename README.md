@@ -27,6 +27,8 @@ This application is built with Vue.js v3 and Electron to allow for easy cross-pl
 To get started with development, clone this repository, and run `yarn install` to install the required dependencies.  
 After you installed all the required dependencies you can run `yarn electron:serve` to spin up a local dev server and build the app with Electron.
 
+If you want to use the official likvi API while developing, you need to place a `.env` file in the root directory containing `VUE_APP_API_BASE_URL=https://app.likvi.de/api`. This allows you to log into the application using your existing likvi user credentials. Be careful using this option, as you may change settings in your live account.
+
 You can find the source for the application in the [src folder](src).  
 Here is a little rundown of what each folder inside the `src` folder is used for:
 
