@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.2] - 2022-10-13
+
+### Fixed
+
+- Fix time entry autocomple selects first entry on enter without manual focus 
+
 ## [1.6.1] - 2022-07-01
 
 ### Fixed
